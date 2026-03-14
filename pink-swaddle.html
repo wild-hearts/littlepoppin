@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Garden Dance — Pink Butterfly Swaddle | Little Poppin</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="nav nav--scrolled" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">
+        <img src="images/logo.jpg" alt="Little Poppin" />
+      </a>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#products">Our Swaddles</a></li>
+        <li><a href="index.html#features">Why Us</a></li>
+        <li><a href="index.html#gift">Perfect Gift</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="https://www.facebook.com/LittlePoppin" target="_blank" rel="noopener" class="nav__fb">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+          Facebook
+        </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== BREADCRUMB ===== -->
+  <div class="breadcrumb">
+    <div class="container">
+      <a href="index.html">Home</a>
+      <span>›</span>
+      <a href="index.html#products">Our Swaddles</a>
+      <span>›</span>
+      <span>The Garden Dance</span>
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT ===== -->
+  <section class="product-page">
+    <div class="container">
+      <div class="product-page__grid">
+
+        <!-- IMAGE GALLERY -->
+        <div class="product-gallery">
+          <div class="product-gallery__main">
+            <img src="images/pink-design.jpg" alt="The Garden Dance — Pink Butterfly Swaddle design" id="mainImage" />
+          </div>
+          <div class="product-gallery__thumbs">
+            <button class="thumb thumb--active" onclick="setImage('images/pink-design.jpg', this)">
+              <img src="images/pink-design.jpg" alt="Design flat lay" />
+            </button>
+            <button class="thumb" onclick="setImage('images/lifestyle-pink.jpg', this)">
+              <img src="images/lifestyle-pink.jpg" alt="In use on stroller" />
+            </button>
+            <button class="thumb" onclick="setImage('images/hero-pink.jpg', this)">
+              <img src="images/hero-pink.jpg" alt="Lifestyle shot" />
+            </button>
+            <button class="thumb" onclick="setImage('images/pink-2.jpg', this)">
+              <img src="images/pink-2.jpg" alt="Second lifestyle shot" />
+            </button>
+          </div>
+        </div>
+
+        <!-- PRODUCT INFO -->
+        <div class="product-page__info">
+          <span class="product-card__badge">Pink Butterfly</span>
+          <h1 class="product-page__title">The Garden Dance</h1>
+          <div class="product-page__price">$15.00 <span>AUD</span></div>
+
+          <p class="product-page__desc">A romantic flourish of butterflies, blossoms and heart-shaped branches rendered in soft pinks and rose tones. Effortlessly beautiful — this swaddle stands apart from anything else in the market and is the perfect choice for your little girl or as an unforgettable baby shower gift.</p>
+
+          <div class="product-page__meta">
+            <div class="product-meta-row">
+              <span class="meta-label">Material</span>
+              <span class="meta-value">70% Bamboo Rayon / 30% Cotton</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="meta-label">Size</span>
+              <span class="meta-value">47 × 47 inches (120 × 120 cm)</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="meta-label">Care</span>
+              <span class="meta-value">Machine wash cold, tumble dry low</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="meta-label">Origin</span>
+              <span class="meta-value">Imported — sold from Canberra, Australia</span>
+            </div>
+          </div>
+
+          <!-- STRIPE BUY BUTTON -->
+          <!-- Replace the href below with your Stripe Payment Link URL -->
+          <!-- Create one at: dashboard.stripe.com → Payment Links → + New -->
+          <a href="https://buy.stripe.com/fZueVebXieNA9Ro9d2es000"
+             class="btn btn--primary btn--lg product-buy-btn">
+            Buy Now — $15.00 AUD
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+
+          <p class="product-page__stripe-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            Secure checkout powered by Stripe. All major cards accepted.
+          </p>
+
+          <div class="product-page__uses">
+            <p class="uses-title">6 ways to use your swaddle</p>
+            <div class="uses-grid">
+              <div class="use-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Swaddle wrap
+              </div>
+              <div class="use-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Nursing cover
+              </div>
+              <div class="use-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Change mat
+              </div>
+              <div class="use-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Stroller cover
+              </div>
+              <div class="use-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Burp cloth
+              </div>
+              <div class="use-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Tummy time blanket
+              </div>
+            </div>
+          </div>
+
+          <div class="product-page__charity">
+            🌿 A portion of this sale goes to a children's charity making a difference for disadvantaged kids worldwide.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ALSO LOVE ===== -->
+  <section class="also-love">
+    <div class="container">
+      <div class="section-label">You Might Also Love</div>
+      <h2 class="section-title">The Wild Garden</h2>
+      <div class="also-love__grid">
+        <div class="also-love__images">
+          <img src="images/green-design.jpg" alt="The Wild Garden — Teal Botanical design" />
+          <img src="images/lifestyle-green.jpg" alt="The Wild Garden in use" />
+        </div>
+        <div class="also-love__content">
+          <span class="product-card__badge product-card__badge--green">Teal Botanical</span>
+          <p>An elegant sweep of botanical vines, hummingbirds and butterflies in rich teal and forest green. A sophisticated gender-neutral design loved by parents with an eye for style.</p>
+          <div class="also-love__price">$15.00 AUD</div>
+          <a href="green-swaddle.html" class="btn btn--outline-dark">View The Wild Garden →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <img src="images/logo.jpg" alt="Little Poppin" class="footer__logo" />
+          <p>Premium bamboo baby swaddles.<br/>Made with love in Canberra, Australia.</p>
+        </div>
+        <div class="footer__links">
+          <nav aria-label="Footer navigation">
+            <a href="index.html#about">About</a>
+            <a href="index.html#products">Our Swaddles</a>
+            <a href="index.html#features">Why Us</a>
+            <a href="index.html#gift">Perfect Gift</a>
+            <a href="index.html#contact">Contact</a>
+          </nav>
+        </div>
+        <div class="footer__social">
+          <a href="https://www.facebook.com/LittlePoppin" target="_blank" rel="noopener" class="footer__fb">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            Follow on Facebook
+          </a>
+          <p class="footer__charity">🌿 A portion of every sale supports children's charities worldwide.</p>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2025 Little Poppin. All rights reserved. Canberra, ACT, Australia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function setImage(src, btn) {
+      document.getElementById('mainImage').src = src;
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('thumb--active'));
+      btn.classList.add('thumb--active');
+    }
+
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('nav__links--open');
+      toggle.classList.toggle('nav__toggle--open');
+    });
+  </script>
+</body>
+</html>
