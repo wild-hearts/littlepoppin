@@ -5,19 +5,21 @@ products (no-inventory print-on-demand). Use the fixed style block + the per-pro
 table so every prompt comes out print-ready at the right size. (MJ plan = paid tier, commercial use OK.)
 
 ## 1. Brand style block — paste into EVERY prompt (swap the bracketed bits)
-**Direction: soft, dreamy, whimsical storybook — childlike, tender and magical. NOT polished-elegant.**
+**Direction: soft, dreamy, whimsical storybook NURSERY DECOR — childlike, tender, magical. Reads as calming nursery wall art (above-the-crib). NOT polished-elegant.**
 ```
-soft dreamy watercolour nursery illustration, [MOTIF], gentle [COLOURWAY] pastel palette,
-whimsical magical storybook feel, tender childlike wonder, soft glowing dreamy light,
-airy with cloud-soft edges, sweet and cozy baby nursery art, no text, no logos
+soft dreamy nursery wall art illustration, [MOTIF], gentle [COLOURWAY] pastel palette,
+whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle
+glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for
+above the crib, no text, no logos
 ```
-- Single-motif items, add: `, centred on soft white background`
+- Single-motif items, add: `, centred on soft white background` (or `, soft arched scene` for trendy arch prints)
+- For APPAREL/bibs (not wall art): drop "wall art" + "above the crib" → `soft dreamy nursery illustration, … sweet baby art`
 - All-over items, add: `, seamless repeating pattern --tile`
-- Always end with: `--stylize 400`  (NO `--style raw` — let MJ stay painterly/dreamy; push `--stylize 400→700` for dreamier, lower for cleaner)
+- Always end with: `--stylize 400`  (NO `--style raw`; push `--stylize 400→700` for dreamier, lower for cleaner)
 
-**MOTIF library (lean cute & sweet):** baby butterflies + floating blossoms; tiny hummingbirds in
-a magical garden; sweet meadow wildflowers; sleepy baby woodland animals (bunny, fawn, hedgehog);
-dream clouds, stars & a sleepy moon; cuddly baby safari animals; eucalyptus gum blossoms & a little wren.
+**MOTIF library (nursery classics, cute & sweet):** sleepy baby animals (bunny, fawn, elephant, fox, bear);
+soft florals & butterflies; hummingbirds in a magical garden; meadow wildflowers; sleepy moon & stars;
+hot air balloons; pastel rainbows & clouds; eucalyptus gum blossoms & a little wren.
 
 **COLOURWAY system** (name collections so they stay cohesive; ≤4 soft pastels each):
 Rose Garden (rose/blush pink) · Wild Garden (soft teal/green) · Sage Meadow · Buttercream ·
