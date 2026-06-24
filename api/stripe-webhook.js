@@ -105,8 +105,10 @@ async function notifyOrder(session, sku, qty) {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      // NOTE: the "from" domain must be verified in Resend, e.g. orders@littlepoppin.com
-      from: 'Little Poppin Orders <orders@littlepoppin.com>',
+      // ORDER_FROM_EMAIL lets you start with Resend's onboarding sender (works immediately,
+      // only delivers to your own Resend account email) and switch to a verified domain
+      // address like "Little Poppin Orders <orders@littlepoppin.com>" once DNS is set up.
+      from: process.env.ORDER_FROM_EMAIL || 'Little Poppin Orders <onboarding@resend.dev>',
       to: [to],
       subject: `New order — ${product?.name || sku} x${qty} ($${amount})`,
       text: body,
