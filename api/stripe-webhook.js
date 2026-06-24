@@ -38,12 +38,17 @@ export default async function handler(req, res) {
   }
 
   if (event.type === 'checkout.session.completed') {
-    try {
-      await onOrderPaid(event.data.object);
-    } catch (err) {
-      // The payment already succeeded — never 500 here or Stripe will retry the whole event.
-      // Log loudly so a failed notice/stock update can be reconciled by hand.
-      console.error('Fulfilment handling error:', err);
+    const session = event.data.object;
+    // This Stripe account is shared across Wild Hearts brands, so every brand's webhook
+    // receives every checkout event. Only act on Little Poppin orders, ignore the rest.
+    if (session.metadata?.brand === 'little_poppin') {
+      try {
+        await onOrderPaid(session);
+      } catch (err) {
+        // The payment already succeeded — never 500 here or Stripe will retry the whole event.
+        // Log loudly so a failed notice/stock update can be reconciled by hand.
+        console.error('Fulfilment handling error:', err);
+      }
     }
   }
 
