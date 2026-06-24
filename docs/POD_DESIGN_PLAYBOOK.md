@@ -43,6 +43,12 @@ copyrighted characters (e.g. don't reference "Gumnut Babies" / May Gibbs — use
 | Nursery print A3 / 11×14 / 16×20 | 4:5 or 3:4 | no | 3300×4200 → 4800×6000 | ❌ external upscale (Topaz/Gigapixel) | framed art |
 | Muslin swaddle / wrap (all-over) | 1:1 | **YES** | ~6000×6000+ | ❌ make tile, repeat in Canva/PS | ADVANCED — later |
 | Wrapping paper (all-over) | 1:1 | **YES** | large | ❌ tile + repeat | ADVANCED — later |
+| Notebook / journal cover | 3:4 | no | ~1800×2400 | ✅ | front-cover art, full-bleed |
+| Sticker sheet / die-cut sticker | 1:1 | no | ~1500×1500 | ✅ + cutout | single subject, transparent bg |
+| Postcard / gift tag | 5:7 | no | 1500×2100 | ✅ | art + space |
+| Canvas / large framed print | 4:5 or 2:3 | no | 4800×6000+ | ❌ external upscale | full-bleed scene |
+| Wall decal | varies | no | high + transparent | ✅ + cutout | single subject, clean edges, transparent bg |
+| Removable wallpaper / mural (Spoonflower) | 1:1 | **YES** | very large | ❌ seamless tile + Spoonflower | ADVANCED — repeat pattern |
 
 **Rule of thumb:** small print-area items (apparel, bibs, cards, A4 prints) = Midjourney alone
 is fine. Large prints = upscale externally to 300 DPI at full size. All-over (swaddles, wrap) =
@@ -61,3 +67,27 @@ is fine. Large prints = upscale externally to 300 DPI at full size. All-over (sw
 paid order) → ④ digital downloads → ⑤ gift cards (branded voucher + redemption logic; manual to
 start). Use an AU/nearby Printify print provider per product. Price for POD base cost + the
 children's-charity cut.
+
+**Product ladder (one art library, zero inventory):** swaddles → nursery prints → stationery
+(notebooks, journals, cards, stickers, gift tags) → kids' bedroom art → wall decals → wallpaper/murals.
+
+## 5. Decals, wallpaper & big prints — extra rules
+- **Wall decals & die-cut stickers:** prompt a SINGLE subject and add `, die-cut sticker, isolated
+  on plain white background, clean crisp edges` — then knock the background out (Canva / remove.bg)
+  for a transparent PNG. Avoid full scenes.
+- **Removable wallpaper & murals:** seamless `--tile` patterns at large scale. Printify is weak here —
+  use **Spoonflower** (peel-and-stick wallpaper + fabric, ships to AU). Same tile workflow as swaddles:
+  make the seamless tile, repeat to size.
+- **Canvas / large prints & murals:** always **external upscale** (Topaz/Gigapixel) to 300 DPI at full
+  size — Midjourney alone won't hold up large.
+
+## 6. "Big-kid" bedroom style variant (older kids — bolder + adventurous, still dreamy)
+Swap §1's opener for the kids-room version (a touch more colour & story):
+```
+soft dreamy watercolour kids bedroom wall art illustration, [MOTIF], gentle [COLOURWAY] palette,
+whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light,
+calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos
+```
+**Big-kid MOTIF library:** space & rockets · mermaids & under-the-sea · cute dinosaurs · unicorns ·
+fairy gardens · jungle explorers · magical woodland · hot air balloons · fairytale castles.
+Ready prompts: COLLECTION-02-KIDS-BEDROOM-PROMPTS.md.
