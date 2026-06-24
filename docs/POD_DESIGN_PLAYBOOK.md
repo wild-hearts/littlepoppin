@@ -5,24 +5,26 @@ products (no-inventory print-on-demand). Use the fixed style block + the per-pro
 table so every prompt comes out print-ready at the right size. (MJ plan = paid tier, commercial use OK.)
 
 ## 1. Brand style block — paste into EVERY prompt (swap the bracketed bits)
+**Direction: soft, dreamy, whimsical storybook — childlike, tender and magical. NOT polished-elegant.**
 ```
-delicate hand-painted watercolour illustration, [MOTIF], soft [COLOURWAY] palette,
-elegant whimsical nursery aesthetic, airy with generous negative space, refined
-botanical linework, premium artisan baby brand, no text, no logos
+soft dreamy watercolour nursery illustration, [MOTIF], gentle [COLOURWAY] pastel palette,
+whimsical magical storybook feel, tender childlike wonder, soft glowing dreamy light,
+airy with cloud-soft edges, sweet and cozy baby nursery art, no text, no logos
 ```
-- Single-motif items, add: `, centred composition on clean white background`
+- Single-motif items, add: `, centred on soft white background`
 - All-over items, add: `, seamless repeating pattern --tile`
-- Always end with: `--style raw --stylize 250`  (raw + moderate stylize = elegant, not over-AI)
+- Always end with: `--stylize 400`  (NO `--style raw` — let MJ stay painterly/dreamy; push `--stylize 400→700` for dreamier, lower for cleaner)
 
-**MOTIF library:** butterflies + blossoms + heart-branch botanicals (pink line); botanical
-vines + hummingbirds + butterflies (teal line); meadow florals; gentle woodland animals;
-clouds & stars; soft safari animals; Australian gum leaves & native birds.
+**MOTIF library (lean cute & sweet):** baby butterflies + floating blossoms; tiny hummingbirds in
+a magical garden; sweet meadow wildflowers; sleepy baby woodland animals (bunny, fawn, hedgehog);
+dream clouds, stars & a sleepy moon; cuddly baby safari animals; eucalyptus gum blossoms & a little wren.
 
-**COLOURWAY system** (name collections so they stay cohesive; ≤4 colours each):
-Rose Garden (rose/blush pink) · Wild Garden (teal/forest) · Sage Meadow · Buttercream ·
+**COLOURWAY system** (name collections so they stay cohesive; ≤4 soft pastels each):
+Rose Garden (rose/blush pink) · Wild Garden (soft teal/green) · Sage Meadow · Buttercream ·
 Lavender Dream · Cloud Neutral (greige).
 
-**Avoid:** harsh/neon colour, cartoonish, cluttered, embedded text/letters, copyrighted characters.
+**Avoid:** harsh/neon colour, sharp/sophisticated linework, cluttered, embedded text/letters,
+copyrighted characters (e.g. don't reference "Gumnut Babies" / May Gibbs — use generic gum blossoms).
 
 ## 2. Per-product print spec table
 | Product | `--ar` | Seamless `--tile`? | Target px @300 DPI | MJ enough? | Layout |
@@ -46,14 +48,14 @@ is fine. Large prints = upscale externally to 300 DPI at full size. All-over (sw
 
 ## 3. Repeatable workflow (per design)
 1. Pick the product → read its row (ar / tile / target px / upscale).
-2. Prompt = `[motif]` + style block (§1) + `--ar [from table]` (+ `--tile` if seamless) + `--style raw --stylize 250`.
+2. Prompt = `[motif]` + style block (§1) + `--ar [from table]` (+ `--tile` if seamless) + `--stylize 400`.
 3. Generate → upscale in Midjourney.
 4. If "external upscale" flagged → Topaz/Gigapixel up to target px @300 DPI.
 5. Export PNG/JPG at target px → upload to Printify product → check Printify's print preview.
 
 ## 4. Build sequence
-① Printify with the 2 existing designs OR a first new collection on 3–4 small-print products →
-② expand collections → ③ automate Stripe→Printify fulfilment (extend the existing LP webhook to
-call Printify's API on paid order) → ④ digital downloads → ⑤ gift cards (branded voucher +
-redemption logic; manual to start). Use an AU/nearby Printify print provider per product. Price
-for POD base cost + the children's-charity cut.
+① Printify with a first new collection on 3–4 small-print products → ② expand collections →
+③ automate Stripe→Printify fulfilment (extend the existing LP webhook to call Printify's API on
+paid order) → ④ digital downloads → ⑤ gift cards (branded voucher + redemption logic; manual to
+start). Use an AU/nearby Printify print provider per product. Price for POD base cost + the
+children's-charity cut.
