@@ -1,0 +1,10 @@
+{
+  "name": "littlepoppin-store",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Little Poppin storefront — static HTML site + Vercel serverless Stripe Checkout.",
+  "dependencies": {
+    "stripe": "^22.2.3"
+  }
+}

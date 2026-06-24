@@ -59,7 +59,7 @@
       <p class="hero__sub">Softer than cotton. Breathable. Beautifully designed.</p>
       <div class="hero__cta">
         <a href="#products" class="btn btn--primary">Discover Our Swaddles</a>
-        <a href="https://www.facebook.com/LittlePoppin" target="_blank" rel="noopener" class="btn btn--outline">Find Us on Facebook</a>
+        <a href="#products" class="btn btn--outline">Shop the Collection</a>
       </div>
     </div>
   </section>
@@ -248,7 +248,7 @@
             Contributes to children's charity
           </div>
         </div>
-        <a href="https://www.facebook.com/LittlePoppin" target="_blank" rel="noopener" class="btn btn--white">Shop on Facebook</a>
+        <button type="button" data-sku="bundle" class="btn btn--white">Shop the Bundle — $27</button>
       </div>
       <div class="gift__image">
         <img src="images/pink-2.jpg" alt="Little Poppin as a gift" />
@@ -299,7 +299,7 @@
       <h2 class="section-title">We'd Love to Hear from You</h2>
       <div class="contact__grid">
         <div class="contact__info">
-          <p class="contact__lead">Little Poppin is proudly Canberra-made and available online via our Facebook page. For enquiries about purchasing or anything else, reach out anytime.</p>
+          <p class="contact__lead">Little Poppin is proudly Canberra-made and available to buy securely online. For enquiries about purchasing or anything else, reach out anytime.</p>
           <div class="contact__details">
             <div class="contact__item">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
@@ -317,11 +317,11 @@
 
           <div class="shop-online">
             <h4>Shop Online</h4>
-            <p>Our swaddles are available exclusively through our Facebook page. Click below to browse, enquire or place an order.</p>
-            <a href="https://www.facebook.com/LittlePoppin" target="_blank" rel="noopener" class="btn btn--primary" style="margin-top:16px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-              Visit Our Facebook Page
-            </a>
+            <p>Buy securely online with card — checkout is powered by Stripe and your swaddle ships Australia-wide.</p>
+            <div class="shop-online__buttons">
+              <a href="pink-swaddle.html" class="btn btn--primary" style="margin-top:16px;">Shop The Garden Dance →</a>
+              <a href="green-swaddle.html" class="btn btn--outline-dark" style="margin-top:16px;">Shop The Wild Garden →</a>
+            </div>
           </div>
         </div>
 
@@ -359,6 +359,12 @@
         </div>
       </div>
       <div class="footer__bottom">
+        <nav class="footer__legal" aria-label="Legal">
+          <a href="shipping.html">Shipping</a>
+          <a href="refunds.html">Refunds &amp; Returns</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </nav>
         <p>&copy; 2025 Little Poppin. All rights reserved. Canberra, ACT, Australia.</p>
       </div>
     </div>
@@ -412,5 +418,6 @@
       observer.observe(el);
     });
   </script>
+  <script src="store.js" defer></script>
 </body>
 </html>

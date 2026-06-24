@@ -1234,3 +1234,58 @@ a.product-card {
   .product-gallery__thumbs { grid-template-columns: repeat(4, 1fr); }
   .uses-grid { grid-template-columns: 1fr; }
 }
+
+/* ===========================
+   STORE ADDITIONS (Stripe Checkout)
+   =========================== */
+
+/* Buy-button states */
+.btn[disabled], .product-buy-btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+.product-buy-btn.is-loading, .btn.is-loading { opacity: 0.8; cursor: progress; }
+.btn.is-soldout, .product-buy-btn.is-soldout {
+  background: var(--mid-grey); border-color: var(--mid-grey); color: #fff; cursor: not-allowed;
+}
+
+/* Contact "Shop Online" buttons */
+.shop-online__buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Footer legal links */
+.footer__legal { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; margin-bottom: 14px; }
+.footer__legal a { color: var(--mid-grey); font-size: 0.85rem; text-decoration: none; transition: color var(--transition); }
+.footer__legal a:hover { color: var(--cream); }
+
+/* Narrow container for legal/status pages */
+.container--narrow { max-width: 760px; }
+
+/* Status pages (success / cancel) */
+.status-page { padding: 140px 0 100px; min-height: 70vh; display: flex; align-items: center; }
+.status-card {
+  max-width: 600px; margin: 0 auto; text-align: center; background: #fff;
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 56px 40px;
+}
+.status-card h1 { font-family: var(--font-serif); font-size: 2.4rem; font-weight: 600; margin-bottom: 14px; }
+.status-card__lead { color: var(--mid-grey); font-size: 1.05rem; margin-bottom: 18px; }
+.status-card__meta { font-size: 0.9rem; color: var(--charcoal); margin-bottom: 18px; min-height: 1.2em; }
+.status-card__icon {
+  width: 76px; height: 76px; border-radius: 50%; margin: 0 auto 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+.status-card__icon svg { width: 38px; height: 38px; }
+.status-card__icon--success { background: var(--teal-light); color: var(--green-mid); }
+.status-card__icon--neutral { background: var(--light-grey); color: var(--mid-grey); }
+.status-card__charity {
+  background: var(--cream); border-radius: var(--radius); padding: 14px 18px;
+  font-size: 0.9rem; color: var(--green); margin: 8px 0 26px;
+}
+.status-card__buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Legal pages */
+.legal { padding: 140px 0 100px; }
+.legal__back { display: inline-block; color: var(--mid-grey); text-decoration: none; margin-bottom: 24px; font-size: 0.9rem; }
+.legal__back:hover { color: var(--red); }
+.legal h1 { font-family: var(--font-serif); font-size: 2.6rem; font-weight: 600; margin-bottom: 6px; }
+.legal__updated { color: var(--mid-grey); font-size: 0.85rem; margin-bottom: 36px; }
+.legal h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; margin: 32px 0 10px; }
+.legal p, .legal li { color: var(--charcoal); margin-bottom: 12px; }
+.legal ul, .legal ol { margin: 0 0 12px 22px; }
+.legal a { color: var(--red); }
