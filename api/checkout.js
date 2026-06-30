@@ -33,19 +33,25 @@ export default async function handler(req, res) {
       const origin = baseUrl(req);
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
-        line_items: [{
-          quantity: 1,
-          price_data: {
-            currency: CURRENCY,
-            unit_amount: digital.price,
-            product_data: {
-              name: digital.name,
-              description: digital.description,
-              ...(digital.preview ? { images: [digital.preview] } : {}),
-              metadata: { sku: digital.sku, brand: 'little_poppin', type: 'digital' },
-            },
-          },
-        }],
+        line_items: [
+          digital.stripePriceId
+            // Use the Stripe Product/Price if this print has been loaded onto Stripe...
+            ? { price: digital.stripePriceId, quantity: 1 }
+            // ...otherwise build the price inline (absolute image URL required by Stripe).
+            : {
+                quantity: 1,
+                price_data: {
+                  currency: CURRENCY,
+                  unit_amount: digital.price,
+                  product_data: {
+                    name: digital.name,
+                    description: digital.description,
+                    ...(digital.preview ? { images: [digital.preview.startsWith('http') ? digital.preview : `${origin}${digital.preview}`] } : {}),
+                    metadata: { sku: digital.sku, brand: 'little_poppin', type: 'digital' },
+                  },
+                },
+              },
+        ],
         success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cancel.html`,
         metadata: { brand: 'little_poppin', sku: digital.sku, type: 'digital' },
