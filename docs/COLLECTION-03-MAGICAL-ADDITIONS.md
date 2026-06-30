@@ -1,59 +1,58 @@
-# Little Poppin — Collection 03: Magical Additions (the 11 new designs)
+# Little Poppin — Collection 03 — FULL MAGIC (magical additions)
 
-Completes the Whimsical & Magical master series (DESIGN-SERIES.md). Same dreamy watercolour style.
-All `--ar 4:5`, nursery-wall-art framing (works as prints, stationery, bedroom art).
+Enchanted, glowing, immersive fairytale style. All `--ar 4:5 --stylize 500`. Completes the 30-design series.
 
 ### 4. Fairy Blossom
 ```
-soft dreamy nursery wall art illustration, a tiny sweet sleepy fairy nestled among soft blossoms with gentle sparkles, gentle blush pink and warm gold pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a sweet sleepy fairy nestled among glowing blossoms with floating fairy lights and stardust, glowing magical lights, floating sparkles, luminous dreamy magical glow, soft blush pink and gold pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 5. Mushroom Hollow
 ```
-soft dreamy nursery wall art illustration, a cluster of sweet toadstools with a tiny ladybird and glowing fireflies in a soft hollow, gentle sage green and soft red pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a magical hollow of glowing luminous toadstools with drifting fireflies and a tiny ladybird, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft sage green and warm gold pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 9. Dreamy Bear Cub
 ```
-soft dreamy nursery wall art illustration, an adorable sleepy baby bear cub curled up beneath twinkling stars, gentle soft brown and cream pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a sleepy baby bear cub curled on a glowing cloud beneath a sparkling starry sky, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft brown and cream pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 10. Sleepy Lamb on a Cloud
 ```
-soft dreamy nursery wall art illustration, a fluffy little lamb dozing on a soft fluffy cloud with tiny stars, gentle cream and dusty blue pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a fluffy little lamb dozing on a glowing cloud among twinkling stars and drifting stardust, glowing magical lights, floating sparkles, luminous dreamy magical glow, soft cream and dusty blue pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 13. Sunshine Smile
 ```
-soft dreamy nursery wall art illustration, a gentle smiling sun with soft warm rays and a few little clouds, gentle buttercream and soft peach pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a gentle glowing smiling sun radiating warm magical light among soft sparkling clouds, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft buttercream and gold pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 14. Star Catcher
 ```
-soft dreamy nursery wall art illustration, a sweet little child in pyjamas reaching up to catch falling stars with a tiny net, gentle indigo and soft peach pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a sweet little child in pyjamas catching glowing falling stars with a net of stardust in a magical night sky, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft indigo and peach pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 15. Cloud Dreams
 ```
-soft dreamy nursery wall art illustration, soft sleepy clouds gently raining tiny twinkling stars, gentle dusty blue and blush pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, glowing dream clouds raining tiny twinkling stars in a magical starlit sky, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft dusty blue and blush pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 19. Baby Dragon
 ```
-soft dreamy nursery wall art illustration, a friendly cute baby dragon with tiny wings and a sweet smile among soft clouds, gentle sage green and warm gold pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a friendly cute baby dragon breathing tiny sparkles among glowing clouds and stars, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft sage green and warm gold pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 20. Pegasus in the Clouds
 ```
-soft dreamy nursery wall art illustration, a gentle baby pegasus winged pony drifting among soft clouds and stars, gentle lavender and blush pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a gentle baby pegasus soaring through a sparkling magical sky with glowing aurora and stardust, glowing magical lights, floating sparkles, luminous dreamy magical glow, soft lavender and blush pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 24. Little Sailboat
 ```
-soft dreamy nursery wall art illustration, a tiny sweet sailboat on a calm dreamy sea with a friendly little whale peeking up, gentle soft blue and cream pastel palette, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a tiny glowing sailboat on a magical starlit sea with a friendly whale and sparkling reflections, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft blue and cream pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
-### 25. Up & Away
+### 25. Up and Away
 ```
-soft dreamy nursery wall art illustration, a sweet little child flying a kite among soft fluffy clouds and a gentle breeze, gentle soft pastel palette of peach mint and blue, whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for above the crib, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a sweet child flying a glowing kite among magical sparkling clouds and drifting stardust, glowing magical lights, floating sparkles, luminous dreamy magical glow, soft pastel palette of peach mint and blue, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```

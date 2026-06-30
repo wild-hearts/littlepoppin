@@ -1,61 +1,53 @@
-# Little Poppin — Collection 02: Kids' Bedroom (bolder-but-dreamy)
+# Little Poppin — Collection 02 — FULL MAGIC (enchanted adventures & creatures)
 
-Ready-to-paste Midjourney prompts for "big-kid" bedroom wall art — more adventurous themes,
-same dreamy watercolour DNA. Built from POD_DESIGN_PLAYBOOK.md §6. All `--ar 4:5`.
-Great as framed/canvas prints, posters, notebook covers, and (seamless versions) wallpaper.
-Tip: push `--stylize` to 500–700 for more vivid; large canvas/murals need external upscale to 300 DPI.
+Enchanted, glowing, immersive fairytale style. All `--ar 4:5 --stylize 500`. Best for prints/posters/wallpaper.
 
 ### 1. Dreamy Space Adventure
 ```
-soft dreamy watercolour kids bedroom wall art illustration, a sweet little astronaut floating among planets rockets and twinkling stars, gentle indigo lavender and soft peach palette, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a sweet little astronaut floating among glowing planets and a sparkling galaxy of stars, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft indigo lavender and peach pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 2. Mermaid Lagoon
 ```
-soft dreamy watercolour kids bedroom wall art illustration, a sweet little mermaid with seahorses shells and soft seaweed, gentle aqua coral and soft pink palette, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a little mermaid in a glowing enchanted underwater lagoon with luminous coral and sparkling bubbles, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft aqua coral and pink pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 3. Little Dinosaurs
 ```
-soft dreamy watercolour kids bedroom wall art illustration, adorable cute baby dinosaurs among soft ferns and tiny gentle volcanoes, gentle sage green soft peach and cream palette, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, cute baby dinosaurs in a glowing prehistoric jungle with fireflies and a magical glow, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft sage green peach and cream pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 4. Unicorn Dreams
 ```
-soft dreamy watercolour kids bedroom wall art illustration, a sweet magical baby unicorn with a flowing pastel mane stars and soft clouds, gentle pastel rainbow palette of blush lavender and mint, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a magical baby unicorn leaping through a sparkling starry sky with trailing stardust, glowing magical lights, floating sparkles, luminous dreamy magical glow, soft pastel rainbow palette of blush lavender and mint, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 5. Enchanted Fairy Garden
 ```
-soft dreamy watercolour kids bedroom wall art illustration, tiny sweet fairies among toadstools wildflowers and glowing fireflies, gentle blush pink soft green and warm gold palette, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, tiny glowing fairies among luminous toadstools and drifting fireflies in an enchanted garden, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft blush pink green and gold pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 6. Jungle Explorers
 ```
-soft dreamy watercolour kids bedroom wall art illustration, cute baby jungle animals a little monkey toucan and tiger cub among soft leafy foliage, gentle warm green and golden palette, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, cute baby jungle animals in a glowing magical jungle with fireflies and shafts of golden light, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft warm green and golden pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 7. Under the Sea
 ```
-soft dreamy watercolour kids bedroom wall art illustration, a gentle baby whale with little fish coral and rising bubbles in a dreamy ocean, gentle teal aqua and soft blue palette, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a gentle glowing baby whale in a magical luminous ocean with sparkling bubbles and stars, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft teal aqua and gold pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 8. Magical Woodland
 ```
-soft dreamy watercolour kids bedroom wall art illustration, sweet woodland friends a little fox owl and hedgehog among glowing fireflies and tall soft trees, gentle forest green and warm gold palette, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a sweet fox owl and hedgehog in a glowing enchanted woodland with fireflies and luminous mushrooms, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft forest green and warm gold pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 9. Hot Air Balloon Voyage
 ```
-soft dreamy watercolour kids bedroom wall art illustration, colourful little hot air balloons drifting over soft rolling hills and clouds, gentle pastel sky palette of peach blue and mint, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, colourful glowing hot air balloons drifting over a magical starlit landscape, glowing magical lights, floating sparkles and stardust, luminous dreamy magical glow, soft pastel sky and indigo palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
 
 ### 10. Dream Castle in the Clouds
 ```
-soft dreamy watercolour kids bedroom wall art illustration, a magical little fairytale castle floating among soft clouds with stars and a rainbow, gentle pastel palette of lavender blush and sky blue, whimsical magical storybook adventure, playful childlike wonder, soft glowing dreamy light, calming modern kids room decor, airy with cloud-soft edges, sweet and magical, no text, no logos, centred on soft white background --ar 4:5 --stylize 400
+enchanted magical nursery illustration, a glowing fairytale castle floating in a magical sky with stars a rainbow and drifting stardust, glowing magical lights, floating sparkles, luminous dreamy magical glow, soft lavender blush and gold pastel palette, whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence, sweet and tender, no text, no logos --ar 4:5 --stylize 500
 ```
-
----
-**Reuse across products:** these print as framed/canvas wall art, posters, notebook covers and gift wrap.
-For **wallpaper/murals**, rebuild the motif as a seamless pattern (add `seamless repeating pattern --tile`,
-use Spoonflower). For **decals/stickers**, isolate a single subject on a transparent background.

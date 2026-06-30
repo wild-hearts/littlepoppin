@@ -5,17 +5,19 @@ products (no-inventory print-on-demand). Use the fixed style block + the per-pro
 table so every prompt comes out print-ready at the right size. (MJ plan = paid tier, commercial use OK.)
 
 ## 1. Brand style block — paste into EVERY prompt (swap the bracketed bits)
-**Direction: soft, dreamy, whimsical storybook NURSERY DECOR — childlike, tender, magical. Reads as calming nursery wall art (above-the-crib). NOT polished-elegant.**
+**Direction: FULL MAGIC — enchanted, glowing, immersive fairytale scenes. Sparkles, stardust, fairy lights, luminous magical glow, soft watercolour. Sweet & tender, never dark. (The earlier clean "nursery decor" version read too plain — magic is the house style.)**
 ```
-soft dreamy nursery wall art illustration, [MOTIF], gentle [COLOURWAY] pastel palette,
-whimsical magical storybook feel, tender childlike wonder, soft watercolour with gentle
-glowing light, calming modern nursery decor, airy with cloud-soft edges, sweet art for
-above the crib, no text, no logos
+enchanted magical nursery illustration, [SUBJECT in a MAGICAL SETTING], glowing magical lights,
+floating sparkles and stardust, luminous dreamy magical glow, soft [COLOURWAY] pastel palette,
+whimsical fairytale wonder, ethereal twinkling light, soft watercolour with magical luminescence,
+sweet and tender, no text, no logos
 ```
-- Single-motif items, add: `, centred on soft white background` (or `, soft arched scene` for trendy arch prints)
-- For APPAREL/bibs (not wall art): drop "wall art" + "above the crib" → `soft dreamy nursery illustration, … sweet baby art`
+- Write [SUBJECT in a MAGICAL SETTING] as an IMMERSIVE SCENE — e.g. "a sleepy bunny in a glowing
+  enchanted meadow beneath the stars" — NOT an isolated subject on white. The scene + glow is the magic.
 - All-over items, add: `, seamless repeating pattern --tile`
-- Always end with: `--stylize 400`  (NO `--style raw`; push `--stylize 400→700` for dreamier, lower for cleaner)
+- Always end with: `--ar 4:5 --stylize 500`  (push `--stylize 600–700` for more painterly)
+- Cleaner CUTOUT variant for apparel/decals: use a single subject + `, on soft white background`, drop
+  the immersive scene/heavy glow.
 
 **MOTIF library (nursery classics, cute & sweet):** sleepy baby animals (bunny, fawn, elephant, fox, bear);
 soft florals & butterflies; hummingbirds in a magical garden; meadow wildflowers; sleepy moon & stars;
