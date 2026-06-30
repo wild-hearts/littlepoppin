@@ -28,6 +28,8 @@ export default async function handler(req, res) {
     // --- Digital download: no shipping/phone; delivered as a gated link after payment ---
     const digital = getDigital(sku);
     if (digital) {
+      // Safety: never take money for a print whose high-res file isn't hosted yet.
+      if (!digital.file) return res.status(409).json({ error: 'This print isn’t available for download yet — check back soon.' });
       const origin = baseUrl(req);
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
