@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Little Poppin storefront — static HTML site + Vercel serverless Stripe Checkout.",
   "dependencies": {
+    "@vercel/blob": "^2.5.0",
     "stripe": "^22.2.3"
   }
 }

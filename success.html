@@ -26,6 +26,7 @@
         <h1>Thank you for your order!</h1>
         <p class="status-card__lead">Your payment was successful and your order is confirmed. We’ll get your swaddle on its way and email you if we need anything.</p>
         <p class="status-card__meta" id="orderMeta"></p>
+        <div class="status-card__download" id="downloadArea"></div>
         <div class="status-card__charity">🌿 A portion of your purchase supports children’s charities worldwide. Thank you for making a difference.</div>
         <a href="index.html" class="btn btn--primary">Back to Little Poppin</a>
       </div>
@@ -57,6 +58,16 @@
           if (o && o.paid && o.amount_total != null) {
             var amount = '$' + (o.amount_total / 100).toFixed(2) + ' ' + (o.currency || 'aud').toUpperCase();
             meta.textContent = 'Order confirmed — ' + amount + (o.email ? ' · receipt sent to ' + o.email : '');
+          }
+          if (o && o.paid && o.type === 'digital' && o.sku) {
+            var dl = document.getElementById('downloadArea');
+            if (dl) {
+              var a = document.createElement('a');
+              a.href = '/api/download?session_id=' + encodeURIComponent(id) + '&sku=' + encodeURIComponent(o.sku);
+              a.className = 'btn btn--primary';
+              a.textContent = '⬇  Download your print';
+              dl.appendChild(a);
+            }
           }
         })
         .catch(function () {});

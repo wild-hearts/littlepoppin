@@ -5,7 +5,7 @@
 //   Event: checkout.session.completed
 // Copy that endpoint's signing secret into STRIPE_WEBHOOK_SECRET.
 import Stripe from 'stripe';
-import { getProduct } from '../lib/products.js';
+import { getProduct, getDigital } from '../lib/products.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -64,8 +64,12 @@ async function onOrderPaid(session) {
     expand: ['line_items'],
   });
 
-  await notifyOrder(full, sku, qty);   // 1) email Naomi so she can ship it
-  await decrementStock(sku, qty);      // 2) reduce stock (see TODO below)
+  await notifyOrder(full, sku, qty);   // 1) email Naomi so she can fulfil it
+  if (session.metadata?.type === 'digital') {
+    await emailDownloadLink(full, sku); // 2a) email the buyer their download link
+  } else {
+    await decrementStock(sku, qty);     // 2b) reduce stock (physical only; see TODO)
+  }
 }
 
 // --- 1) Order notification --------------------------------------------------
@@ -115,6 +119,37 @@ async function notifyOrder(session, sku, qty) {
     }),
   });
   if (!resp.ok) console.error('Resend error:', resp.status, await resp.text());
+}
+
+// --- 1b) Digital download link to the buyer ---------------------------------
+async function emailDownloadLink(session, sku) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = session.customer_details?.email;
+  const product = getDigital(sku);
+  if (!to || !product) return;
+  const origin = (process.env.SITE_URL || 'https://www.littlepoppin.com').replace(/\/$/, '');
+  const link = `${origin}/api/download?session_id=${session.id}&sku=${encodeURIComponent(sku)}`;
+  const text = [
+    'Thank you for your Little Poppin order!',
+    '',
+    `Your digital print "${product.name}" is ready to download:`,
+    link,
+    '',
+    'Tip: download and save the file to your device — the link is tied to your order.',
+  ].join('\n');
+
+  if (!apiKey) { console.log('[digital download link — set RESEND_API_KEY to email it]\n' + link); return; }
+  const resp = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: process.env.ORDER_FROM_EMAIL || 'Little Poppin <onboarding@resend.dev>',
+      to: [to],
+      subject: `Your Little Poppin download — ${product.name}`,
+      text,
+    }),
+  });
+  if (!resp.ok) console.error('Resend (download) error:', resp.status, await resp.text());
 }
 
 // --- 2) Stock ---------------------------------------------------------------

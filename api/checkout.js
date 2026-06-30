@@ -2,7 +2,7 @@
 // Creates a Stripe Checkout Session for a single SKU and returns its hosted URL.
 // The storefront POSTs { sku, quantity } and then redirects the buyer to session.url.
 import Stripe from 'stripe';
-import { getProduct, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
+import { getProduct, getDigital, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -24,6 +24,32 @@ export default async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     const sku = String(body.sku || '');
     const quantity = Math.max(1, Math.min(10, parseInt(body.quantity, 10) || 1));
+
+    // --- Digital download: no shipping/phone; delivered as a gated link after payment ---
+    const digital = getDigital(sku);
+    if (digital) {
+      const origin = baseUrl(req);
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: CURRENCY,
+            unit_amount: digital.price,
+            product_data: {
+              name: digital.name,
+              description: digital.description,
+              ...(digital.preview ? { images: [digital.preview] } : {}),
+              metadata: { sku: digital.sku, brand: 'little_poppin', type: 'digital' },
+            },
+          },
+        }],
+        success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/cancel.html`,
+        metadata: { brand: 'little_poppin', sku: digital.sku, type: 'digital' },
+      });
+      return res.status(200).json({ url: session.url });
+    }
 
     const product = getProduct(sku);
     if (!product) return res.status(400).json({ error: 'Unknown product' });

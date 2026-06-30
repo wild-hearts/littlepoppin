@@ -1289,3 +1289,7 @@ a.product-card {
 .legal p, .legal li { color: var(--charcoal); margin-bottom: 12px; }
 .legal ul, .legal ol { margin: 0 0 12px 22px; }
 .legal a { color: var(--red); }
+
+/* Digital download button on success page */
+.status-card__download { margin: 4px 0 22px; }
+.status-card__download .btn { text-decoration: none; }

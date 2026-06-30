@@ -15,6 +15,8 @@ export default async function handler(req, res) {
       email: s.customer_details?.email || null,
       amount_total: s.amount_total,
       currency: s.currency,
+      type: s.metadata?.type || 'physical',
+      sku: s.metadata?.sku || null,
     });
   } catch {
     return res.status(404).json({ error: 'Order not found' });
