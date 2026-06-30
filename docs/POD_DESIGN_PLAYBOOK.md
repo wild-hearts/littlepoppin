@@ -93,3 +93,40 @@ calming modern kids room decor, airy with cloud-soft edges, sweet and magical, n
 **Big-kid MOTIF library:** space & rockets · mermaids & under-the-sea · cute dinosaurs · unicorns ·
 fairy gardens · jungle explorers · magical woodland · hot air balloons · fairytale castles.
 Ready prompts: COLLECTION-02-KIDS-BEDROOM-PROMPTS.md.
+
+## 7. MYSTIC line — products, specs & starter drop
+The Mystic designs (`collection-04`) suit a grown-up celestial/boho audience and go on far more than nursery items.
+
+### Product specs (additions to §2)
+| Product | Platform | `--ar` / file | Seamless? | Notes |
+|---|---|---|---|---|
+| Digital download print | your Stripe | 4:5 (offer A-series + 8×10 crops) | no | instant, ~100% margin, no POD cost |
+| Art print / poster | Printify | 4:5 | no | external upscale for > A3 |
+| Canvas | Printify | 4:5 | no | external upscale to 300 DPI |
+| Mug (11/15oz) | Printify | ~2:1 wrap panel | no | centre key art on the wrap |
+| Journal / notebook ("moon journal") | Printify | 3:4 front | no | strong seller for this aesthetic |
+| Sticker sheet / die-cut | Printify | 1:1 | no | single subject, transparent bg |
+| Tote bag | Printify | 4:5 | optional | centred |
+| Throw pillow | Printify | 1:1 | optional | crop to square |
+| Phone case | Printify | ~9:19 tall | no | recompose tall, subject centred |
+| Jigsaw puzzle | Printify | 4:5 or 3:2 | no | upscale; busy art works great |
+| Candle (label) | Printify/local | small label panel | no | small crop |
+| Tapestry / wall hanging | Printify | 1:1 or 4:5 | no | external upscale (large) |
+| Leggings / all-over apparel | Printify | all-over | **YES** | seamless or very large art |
+| Bedding / duvet | Spoonflower/Printify | all-over | **YES** | seamless, very large |
+| Removable wallpaper | Spoonflower | tile | **YES** | seamless `--tile` |
+
+### Starter drop — indicative AUD (confirm vs your Printify provider)
+| Product | Est. POD base | Suggested retail | ~Margin |
+|---|---|---|---|
+| Digital download print | $0 | $9–15 | ~$9–14 (less Stripe fee) |
+| Art print (A4 / 8×10) | $6–9 | $29 | ~$20 |
+| Moon journal | $11–14 | $32 | ~$18–21 |
+| Mug | $8–10 | $26 | ~$16–18 |
+| Tote bag | $11–14 | $34 | ~$20–23 |
+| Sticker sheet | $2–3 | $9 | ~$6–7 |
+
+Pricing logic: physical ≈ **3–4× base cost**; digital is near-pure profit. Bundle 3 prints as a "gallery set"
+at a small discount to lift order value. Build the children's-charity cut into the margin. Numbers are
+indicative — verify against the actual Printify provider before publishing.
+
