@@ -1321,3 +1321,26 @@ a.product-card {
 .print-card__img--set img { object-fit: contain; padding: 6px; }
 .print-card__badge-save { display: inline-block; background: var(--green); color: #fff; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
 .prints--sets { background: var(--cream); padding-top: 50px; }
+
+/* ===== Prints shop v2: jump-nav, lightbox, FAQ ===== */
+.prints-jumpnav { position: sticky; top: 0; z-index: 40; background: rgba(253,250,247,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--light-grey); }
+.prints-jumpnav .container { display: flex; gap: 6px 22px; flex-wrap: wrap; justify-content: center; padding-top: 12px; padding-bottom: 12px; }
+.prints-jumpnav a { color: var(--charcoal); text-decoration: none; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; transition: color var(--transition); }
+.prints-jumpnav a:hover { color: var(--red); }
+
+/* card image is a button (opens lightbox) */
+button.print-card__img { border: 0; padding: 0; width: 100%; display: block; background: var(--light-grey); cursor: zoom-in; }
+
+.lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(20,15,15,0.88); display: flex; align-items: center; justify-content: center; padding: 30px; }
+.lightbox figure { max-width: min(640px, 92vw); text-align: center; }
+.lightbox img { max-height: 82vh; width: auto; max-width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+.lightbox figcaption { color: #fff; font-family: var(--font-serif); font-size: 1.3rem; margin-top: 12px; }
+.lightbox__close { position: absolute; top: 18px; right: 26px; background: none; border: 0; color: #fff; font-size: 2.4rem; cursor: pointer; line-height: 1; }
+
+.prints-faq { padding: 70px 0 90px; background: var(--cream); }
+.faq details { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 12px; padding: 18px 22px; }
+.faq summary { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; cursor: pointer; }
+.faq details p { margin-top: 10px; color: var(--mid-grey); font-size: 0.95rem; }
+.faq a { color: var(--red); }
+
+.buy-note { font-size: 0.82rem; color: var(--green-mid); margin-top: 8px; }

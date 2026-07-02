@@ -15,15 +15,27 @@
         body: JSON.stringify({ sku: sku, quantity: 1 }),
       });
       const data = await res.json().catch(function () { return {}; });
-      if (!res.ok || !data.url) throw new Error(data.error || 'Checkout failed');
+      if (!res.ok || !data.url) { showNote(btn, data.error, res.status); throw new Error(data.error || 'Checkout failed'); }
       window.location.href = data.url;
     } catch (err) {
       btn.disabled = false;
       btn.classList.remove('is-loading');
       btn.innerHTML = original;
-      alert('Sorry — we couldn’t start checkout. Please try again, or contact us to order.');
       console.error(err);
     }
+  }
+
+  // Friendly inline message under the button instead of a browser alert.
+  function showNote(btn, message, status) {
+    var note = btn.parentNode.querySelector('.buy-note');
+    if (!note) {
+      note = document.createElement('p');
+      note.className = 'buy-note';
+      btn.parentNode.insertBefore(note, btn.nextSibling);
+    }
+    note.textContent = status === 409
+      ? (message || 'This one isn’t quite ready — check back soon! ✨')
+      : 'Sorry — checkout hiccuped. Please try again, or contact us to order.';
   }
 
   function markSoldOut(btn) {
