@@ -5,7 +5,7 @@
 //   Event: checkout.session.completed
 // Copy that endpoint's signing secret into STRIPE_WEBHOOK_SECRET.
 import Stripe from 'stripe';
-import { getProduct, getDigital } from '../lib/products.js';
+import { getProduct, getDigital, getCustom } from '../lib/products.js';
 import { getPrintOption, submitPrintifyOrder } from '../lib/printify.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -65,6 +65,10 @@ async function onOrderPaid(session) {
     expand: ['line_items'],
   });
 
+  if (session.metadata?.type === 'custom') {
+    await handleCustomOrder(full, sku);  // made-to-order: brief to Naomi + confirmation to buyer
+    return;
+  }
   await notifyOrder(full, sku, qty);   // 1) email Naomi so she can fulfil it
   if (session.metadata?.type === 'digital') {
     await emailDownloadLink(full, sku); // 2a) email the buyer their download link
@@ -145,6 +149,55 @@ async function notifyOrder(session, sku, qty) {
     }),
   });
   if (!resp.ok) console.error('Resend error:', resp.status, await resp.text());
+}
+
+// --- Made-to-order custom products: emailed brief + buyer confirmation -------
+async function handleCustomOrder(session, sku) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const product = getCustom(sku);
+  const d = session.customer_details || {};
+  const amount = ((session.amount_total || 0) / 100).toFixed(2);
+  const brief = (session.custom_fields || [])
+    .map((f) => `  ${f.label?.custom || f.key}: ${f.text?.value || '(blank)'}`)
+    .join('\n');
+
+  const naomiText = [
+    `🎨 CUSTOM ORDER — ${product?.name || sku}`,
+    '',
+    `Paid: $${amount} AUD`,
+    `Buyer: ${d.name || ''} <${d.email || ''}>`,
+    '',
+    'THE BRIEF:',
+    brief || '  (no fields captured)',
+    '',
+    `Deliver by email within 5 days to: ${d.email || ''}`,
+    `Stripe session: ${session.id}`,
+  ].join('\n');
+
+  const buyerText = [
+    `Thank you for your order! 🌙`,
+    '',
+    `We've received your brief for "${product?.name || sku}" and we're getting started.`,
+    'Your finished creation will arrive at this email address within 5 days.',
+    '',
+    'A portion of your purchase supports children\'s charities worldwide — thank you.',
+    '— Little Poppin',
+  ].join('\n');
+
+  if (!apiKey) { console.log('[custom order — set RESEND_API_KEY]\n' + naomiText); return; }
+  const from = process.env.ORDER_FROM_EMAIL || 'Little Poppin <onboarding@resend.dev>';
+  const send = (payload) => fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const r1 = await send({ from, to: [process.env.ORDER_NOTIFY_EMAIL], subject: `🎨 Custom order — ${product?.name || sku} ($${amount})`, text: naomiText });
+  if (!r1.ok) console.error('Resend (custom brief) error:', r1.status, await r1.text());
+  await new Promise((r) => setTimeout(r, 700)); // Resend 2 req/s limit
+  if (d.email) {
+    const r2 = await send({ from, to: [d.email], subject: 'Your Little Poppin custom order is underway 🌙', text: buyerText });
+    if (!r2.ok) console.error('Resend (custom confirm) error:', r2.status, await r2.text());
+  }
 }
 
 // --- 1b) Digital download link to the buyer ---------------------------------

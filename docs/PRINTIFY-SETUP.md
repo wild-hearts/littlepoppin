@@ -49,3 +49,22 @@ Printify API token.
   to your Printify account, which needs your token. Everything else is ready.
 - Shipping is charged at checkout ($9.95 AU, free over $80 — shared with swaddles). Adjust in
   lib/products.js SHIPPING if print shipping should differ.
+
+## Expanded product line-up (add as formats in CHOICES — the code supports any number)
+The checkout/webhook already handle arbitrary formats generically. Recommended, in order of
+margin & fit for the art (discover each blueprint the same way as posters):
+| Format key | Product | Why |
+|---|---|---|
+| poster / framed / canvas | wall art | core line |
+| mug | ceramic mug 11/15oz | huge gifting seller, art wraps beautifully |
+| journal | hardcover journal / notebook | perfect for academia + mystic art |
+| tote | tote bag | everyday visibility, good margin |
+| pillow | throw pillow 18" | nursery decor upsell |
+| puzzle | jigsaw 500/1000pc | magical scenes are ideal puzzle art |
+| card | greeting card packs | zodiac + festive = birthday/Christmas cards |
+| sticker | kiss-cut stickers | pocket-money price point, kids love them |
+| phonecase | phone case | zodiac + mystic art audience |
+| blanket | velveteen plush blanket | premium nursery gift |
+| ornament | ceramic ornament | festive collection, seasonal spike |
+Future: per-order personalised POD (child's name printed on the zodiac art) — the webhook can
+create a one-off Printify product per order via the API; build after the base line-up is live.

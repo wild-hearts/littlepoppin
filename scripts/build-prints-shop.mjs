@@ -234,6 +234,7 @@ const page = `<!DOCTYPE html>
       <ul class="nav__links">
         <li><a href="index.html#products">Swaddles</a></li>
         <li><a href="prints.html">Art Prints</a></li>
+        <li><a href="custom.html">Made for You</a></li>
         <li><a href="index.html#contact">Contact</a></li>
       </ul>
     </div>

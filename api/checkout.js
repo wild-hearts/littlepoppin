@@ -2,7 +2,7 @@
 // Creates a Stripe Checkout Session for a single SKU and returns its hosted URL.
 // The storefront POSTs { sku, quantity } and then redirects the buyer to session.url.
 import Stripe from 'stripe';
-import { getProduct, getDigital, isDeliverable, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
+import { getProduct, getDigital, getCustom, isDeliverable, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
 import { getPrintOption } from '../lib/printify.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -25,6 +25,38 @@ export default async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     const sku = String(body.sku || '');
     const quantity = Math.max(1, Math.min(10, parseInt(body.quantity, 10) || 1));
+
+    // --- Made-to-order custom product: brief collected via Stripe custom fields ---
+    const custom = getCustom(sku);
+    if (custom) {
+      const origin = baseUrl(req);
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: CURRENCY,
+            unit_amount: custom.price,
+            product_data: {
+              name: custom.name,
+              description: custom.description,
+              images: [`${origin}${custom.preview}`],
+              metadata: { sku: custom.sku, brand: 'little_poppin', type: 'custom' },
+            },
+          },
+        }],
+        custom_fields: custom.fields.map((f) => ({
+          key: f.key,
+          label: { type: 'custom', custom: f.label.slice(0, 50) },
+          type: 'text',
+          optional: !!f.optional,
+        })),
+        success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/cancel.html`,
+        metadata: { brand: 'little_poppin', sku: custom.sku, type: 'custom' },
+      });
+      return res.status(200).json({ url: session.url });
+    }
 
     // --- Physical print via Printify: body { sku (art), format, size } ---
     if (body.format && body.size) {
