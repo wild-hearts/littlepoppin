@@ -172,6 +172,24 @@ const jsonLd = JSON.stringify({
   })),
 });
 
+// --- FAQPage structured data (AEO: answer engines read these Q&As directly) ---
+const faqLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'What do I get when I buy a Little Poppin art print?',
+      acceptedAnswer: { '@type': 'Answer', text: 'A high-resolution digital file (4:5 ratio, around 300 DPI) delivered instantly — a download button appears the moment payment completes, and the link is also emailed. Nothing is posted, so there is no shipping cost or wait.' } },
+    { '@type': 'Question', name: 'What sizes can Little Poppin digital prints be printed at?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The 4:5 ratio prints beautifully at 4×5″, 8×10″ and 16×20″, and fits A4 or A3 frames with a small trim or mat. Local print shops can print directly from the file for larger sizes.' } },
+    { '@type': 'Question', name: 'How do I print a digital art print?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Print at home on good photo paper, upload the file to an online print service such as Officeworks, Kmart Photos or Snapfish, or take it to any local print shop. Matte paper suits the soft watercolour style best.' } },
+    { '@type': 'Question', name: 'Can I resell or share a Little Poppin digital print?',
+      acceptedAnswer: { '@type': 'Answer', text: 'No — downloads are licensed for personal use: print them for your home, nursery, or as a gift. They cannot be resold, shared, or used commercially.' } },
+    { '@type': 'Question', name: 'Are refunds available on digital downloads?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Change-of-mind refunds are not available once a digital file has been downloaded, but if anything is wrong with a file Little Poppin will make it right. Australian Consumer Law guarantees always apply.' } },
+  ],
+});
+
 // --- jump nav ---
 const jumpNav = navLinks.map(n => `<a href="#${n.id}">${n.nav}</a>`).join('\n      ');
 
@@ -196,6 +214,7 @@ const page = `<!DOCTYPE html>
   <meta name="twitter:description" content="Dreamy nursery art and enchanted magical prints, delivered instantly as high-resolution downloads." />
   <meta name="twitter:image" content="${SITE}/images/prints/10-dream-castle-in-the-clouds.jpg" />
   <script type="application/ld+json">${jsonLd}</script>
+  <script type="application/ld+json">${faqLd}</script>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
