@@ -1313,3 +1313,4 @@ a.product-card {
 .prints-section__title { font-family: var(--font-serif); font-size: 2rem; font-weight: 600; text-align: center; margin: 20px 0 4px; }
 .prints-section__blurb { text-align: center; color: var(--mid-grey); max-width: 560px; margin: 0 auto 30px; }
 .prints + .prints { padding-top: 0; }
+.print-card__desc { color: var(--mid-grey); font-size: 0.85rem; line-height: 1.5; margin-bottom: 10px; min-height: 2.5em; }
