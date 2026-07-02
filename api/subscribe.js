@@ -3,22 +3,31 @@
 // signup, then adds each contact. POST { email } -> { ok: true }.
 
 const AUDIENCE_NAME = 'Little Poppin';
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+let cachedAudienceId = null; // survives warm invocations, avoids the list call
 
+// Resend allows only 2 requests/second — retry once on 429 after a pause.
 async function resend(pathname, opts = {}) {
-  const r = await fetch('https://api.resend.com' + pathname, {
-    ...opts,
-    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json', ...(opts.headers || {}) },
-  });
-  const data = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(`Resend ${r.status}: ${JSON.stringify(data).slice(0, 200)}`);
-  return data;
+  for (let attempt = 0; ; attempt++) {
+    const r = await fetch('https://api.resend.com' + pathname, {
+      ...opts,
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json', ...(opts.headers || {}) },
+    });
+    if (r.status === 429 && attempt < 2) { await sleep(800); continue; }
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(`Resend ${r.status}: ${JSON.stringify(data).slice(0, 200)}`);
+    return data;
+  }
 }
 
 async function audienceId() {
+  if (cachedAudienceId) return cachedAudienceId;
   const list = await resend('/audiences');
   const found = (list.data || []).find((a) => a.name === AUDIENCE_NAME);
-  if (found) return found.id;
+  if (found) { cachedAudienceId = found.id; return found.id; }
+  await sleep(600); // stay under the 2 req/s limit before the next call
   const created = await resend('/audiences', { method: 'POST', body: JSON.stringify({ name: AUDIENCE_NAME }) });
+  cachedAudienceId = created.id;
   return created.id;
 }
 
@@ -35,6 +44,7 @@ export default async function handler(req, res) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return res.status(400).json({ error: 'That email doesn’t look right — mind checking it?' });
 
     const id = await audienceId();
+    await sleep(600); // rate-limit spacing
     await resend(`/audiences/${id}/contacts`, { method: 'POST', body: JSON.stringify({ email, unsubscribed: false }) });
     return res.status(200).json({ ok: true });
   } catch (err) {
