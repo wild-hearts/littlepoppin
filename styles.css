@@ -1367,3 +1367,11 @@ button.print-card__img { border: 0; padding: 0; width: 100%; display: block; bac
 .sign-finder__row { display: flex; gap: 10px; justify-content: center; }
 .sign-finder input { padding: 10px 14px; border: 1px solid var(--light-grey); border-radius: 10px; font-family: var(--font-sans); }
 .print-card--highlight { outline: 3px solid var(--red); outline-offset: 3px; }
+
+/* Nav: keep 7 items on one line at tablet widths (hamburger takes over ≤768px) */
+.nav__links a { white-space: nowrap; }
+@media (min-width: 769px) and (max-width: 1120px) {
+  .nav__links { gap: 0; }
+  .nav__links a { font-size: 0.76rem; padding: 8px 8px; letter-spacing: 0.02em; }
+  .nav__fb { padding: 8px 12px !important; }
+}
