@@ -1375,3 +1375,5 @@ button.print-card__img { border: 0; padding: 0; width: 100%; display: block; bac
   .nav__links a { font-size: 0.76rem; padding: 8px 8px; letter-spacing: 0.02em; }
   .nav__fb { padding: 8px 12px !important; }
 }
+/* FIX: the lightbox must actually hide — author display:flex overrides the UA [hidden] rule */
+.lightbox[hidden] { display: none; }
