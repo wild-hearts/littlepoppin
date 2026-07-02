@@ -2,7 +2,7 @@
 // Creates a Stripe Checkout Session for a single SKU and returns its hosted URL.
 // The storefront POSTs { sku, quantity } and then redirects the buyer to session.url.
 import Stripe from 'stripe';
-import { getProduct, getDigital, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
+import { getProduct, getDigital, isDeliverable, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -28,8 +28,8 @@ export default async function handler(req, res) {
     // --- Digital download: no shipping/phone; delivered as a gated link after payment ---
     const digital = getDigital(sku);
     if (digital) {
-      // Safety: never take money for a print whose high-res file isn't hosted yet.
-      if (!digital.file) return res.status(409).json({ error: 'This print isn’t available for download yet — check back soon.' });
+      // Safety: never take money for a print (or set) whose high-res file(s) aren't hosted yet.
+      if (!isDeliverable(digital)) return res.status(409).json({ error: 'This print isn’t available for download yet — check back soon.' });
       const origin = baseUrl(req);
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',

@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(os.homedir(), 'Downloads', 'LittlePoppin-Designs');
-const COLLS = ['collection-01', 'collection-02', 'collection-03', 'collection-05'];
+const COLLS = ['collection-01', 'collection-02', 'collection-03', 'collection-05', 'collection-06'];
 const GEN = path.join(REPO, 'lib', 'digital-products.generated.js');
 
 function token() {
