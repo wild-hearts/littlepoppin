@@ -3,6 +3,7 @@
 // The storefront POSTs { sku, quantity } and then redirects the buyer to session.url.
 import Stripe from 'stripe';
 import { getProduct, getDigital, isDeliverable, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
+import { getPrintOption } from '../lib/printify.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -24,6 +25,45 @@ export default async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     const sku = String(body.sku || '');
     const quantity = Math.max(1, Math.min(10, parseInt(body.quantity, 10) || 1));
+
+    // --- Physical print via Printify: body { sku (art), format, size } ---
+    if (body.format && body.size) {
+      const opt = getPrintOption(sku, String(body.format), String(body.size));
+      if (!opt) return res.status(409).json({ error: 'That print option isn’t available yet — check back soon.' });
+      const art = getDigital(sku);
+      const origin = baseUrl(req);
+      const subtotal = opt.price;
+      const shipAmount = shippingFor(subtotal);
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: CURRENCY,
+            unit_amount: opt.price,
+            product_data: {
+              name: `${art?.title || sku} — ${opt.label}`,
+              ...(art?.preview ? { images: [`${origin}${art.preview}`] } : {}),
+              metadata: { sku, brand: 'little_poppin', type: 'print', format: String(body.format), size: String(body.size) },
+            },
+          },
+        }],
+        shipping_address_collection: { allowed_countries: SHIPPING.allowedCountries },
+        phone_number_collection: { enabled: true },
+        shipping_options: [{
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            display_name: shipAmount === 0 ? 'Free shipping' : 'Standard shipping (Australia)',
+            fixed_amount: { amount: shipAmount, currency: CURRENCY },
+            delivery_estimate: { minimum: { unit: 'business_day', value: 5 }, maximum: { unit: 'business_day', value: 12 } },
+          },
+        }],
+        success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/cancel.html`,
+        metadata: { brand: 'little_poppin', type: 'print', fulfil: 'printify', sku, format: String(body.format), size: String(body.size) },
+      });
+      return res.status(200).json({ url: session.url });
+    }
 
     // --- Digital download: no shipping/phone; delivered as a gated link after payment ---
     const digital = getDigital(sku);

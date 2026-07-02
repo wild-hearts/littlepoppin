@@ -6,6 +6,7 @@
 // Copy that endpoint's signing secret into STRIPE_WEBHOOK_SECRET.
 import Stripe from 'stripe';
 import { getProduct, getDigital } from '../lib/products.js';
+import { getPrintOption, submitPrintifyOrder } from '../lib/printify.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -67,8 +68,33 @@ async function onOrderPaid(session) {
   await notifyOrder(full, sku, qty);   // 1) email Naomi so she can fulfil it
   if (session.metadata?.type === 'digital') {
     await emailDownloadLink(full, sku); // 2a) email the buyer their download link
+  } else if (session.metadata?.fulfil === 'printify') {
+    await fulfilPrintify(full);         // 2b) send physical print to Printify for production
   } else {
-    await decrementStock(sku, qty);     // 2b) reduce stock (physical only; see TODO)
+    await decrementStock(sku, qty);     // 2c) reduce stock (physical swaddles; see TODO)
+  }
+}
+
+// --- Printify fulfilment for physical prints ---
+async function fulfilPrintify(session) {
+  const { sku, format, size } = session.metadata || {};
+  const opt = getPrintOption(sku, format, size);
+  if (!opt) { console.error('Printify: no option for', sku, format, size); return; }
+  const d = session.customer_details || {};
+  const ship = session.shipping_details || {};
+  const addr = ship.address || d.address || {};
+  try {
+    const order = await submitPrintifyOrder({
+      externalId: session.id,
+      productId: opt.productId,
+      variantId: opt.variantId,
+      address: { name: ship.name || d.name, ...addr },
+      email: d.email,
+      phone: d.phone,
+    });
+    console.log('Printify order created:', order.id || JSON.stringify(order).slice(0, 120));
+  } catch (err) {
+    console.error('Printify fulfilment error (reconcile by hand):', err.message);
   }
 }
 
