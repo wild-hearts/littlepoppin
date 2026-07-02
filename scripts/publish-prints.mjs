@@ -48,9 +48,11 @@ for (const mm of matches) {
   if (!src) { console.log(`  ✗ ${sku} — original not found (${base}.png)`); missing++; continue; }
   try {
     const blob = await put('prints/' + base + '.png', fs.readFileSync(src), {
-      access: 'public', token: tok, addRandomSuffix: true, contentType: 'image/png',
+      access: 'private', token: tok, addRandomSuffix: true, contentType: 'image/png',
     });
-    gen = gen.replace(new RegExp(`('${sku}':\\s*\\{[^}]*?file:\\s*)null`), `$1'${blob.url}'`);
+    // Store the PATHNAME (not URL): the store is private, so /api/download mints a
+    // short-lived presigned URL from this pathname at delivery time.
+    gen = gen.replace(new RegExp(`('${sku}':\\s*\\{[^}]*?file:\\s*)null`), `$1'${blob.pathname}'`);
     done++; process.stdout.write('.');
   } catch (e) { console.log(`\n  ✗ ${sku} — ${e.message}`); }
 }
