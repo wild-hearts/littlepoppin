@@ -403,6 +403,13 @@
       <div class="container">
         <h2 class="prints-section__title">⭐ Little Zodiac</h2>
         <p class="prints-section__blurb">A magical print for every star sign — the personalised gift for every new arrival.</p>
+        <div class="sign-finder">
+          <label for="signDate">When was (or is) your little one due? 🌟</label>
+          <div class="sign-finder__row">
+            <input type="date" id="signDate" aria-label="Baby's birthday" />
+            <button type="button" class="btn btn--primary" id="signGo">Find their star sign</button>
+          </div>
+        </div>
         <div class="print-grid">
           <article class="print-card">
             <button type="button" class="print-card__img lightbox-open" data-full="/images/prints/01-little-aries.jpg" data-title="Little Aries · 21 Mar – 19 Apr" aria-label="View Little Aries · 21 Mar – 19 Apr larger"><img src="/images/prints/01-little-aries.jpg" alt="Little Aries · 21 Mar – 19 Apr — magical art print by Little Poppin" loading="lazy" /></button>
@@ -772,6 +779,31 @@
         if (!lb.hidden && (e.target === lb || e.target.closest('.lightbox__close'))) close();
       });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
+
+    // Zodiac sign finder — birthday -> highlight that sign's print.
+    (function () {
+      var go = document.getElementById('signGo');
+      if (!go) return;
+      var SIGNS = [
+        ['capricorn', 119], ['aquarius', 218], ['pisces', 320], ['aries', 419], ['taurus', 520],
+        ['gemini', 620], ['cancer', 722], ['leo', 822], ['virgo', 922], ['libra', 1022],
+        ['scorpio', 1121], ['sagittarius', 1221], ['capricorn', 1231],
+      ];
+      go.addEventListener('click', function () {
+        var v = document.getElementById('signDate').value;
+        if (!v) return;
+        var d = new Date(v + 'T00:00:00');
+        var mmdd = (d.getMonth() + 1) * 100 + d.getDate();
+        var sign = 'capricorn';
+        for (var i = 0; i < SIGNS.length; i++) { if (mmdd <= SIGNS[i][1]) { sign = SIGNS[i][0]; break; } }
+        var btn = document.querySelector('[data-sku="print-little-' + sign + '"]');
+        if (!btn) return;
+        var card = btn.closest('.print-card');
+        document.querySelectorAll('.print-card--highlight').forEach(function (c) { c.classList.remove('print-card--highlight'); });
+        card.classList.add('print-card--highlight');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
     })();
   </script>
   <script src="store.js" defer></script>

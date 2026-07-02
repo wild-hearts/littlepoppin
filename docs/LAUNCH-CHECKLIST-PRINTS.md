@@ -1,8 +1,10 @@
 # Launch checklist — Little Poppin Art Prints (digital downloads)
 
-Everything is built and deployed; the shop page (`prints.html`) exists with 31 enchanted nursery
-prints, but it is **NOT yet linked from the homepage** and **checkout is blocked** until the
-high-res files are hosted — so nothing can be bought-without-delivery. Three short steps to go live:
+Everything is built and deployed. The shop (`prints.html`, 63 prints + 4 gallery sets) is now
+**browsable and linked from the homepage** (nav + "Magical Art Prints" showcase with a
+"Launching soon" ribbon + email signup). **Checkout stays blocked** until the high-res files are
+hosted — buy buttons show a friendly "check back soon" — so nothing can be bought-without-delivery.
+Steps to go live:
 
 ## 1. Enable Vercel Blob (~1 min)
 Vercel → **littlepoppin → Storage → Create → Blob → connect**. Vercel adds `BLOB_READ_WRITE_TOKEN`
@@ -19,16 +21,14 @@ node scripts/publish-prints.mjs
 This uploads all 31 high-res originals to Blob and fills their `file:` URLs into
 `lib/digital-products.generated.js` (checkout unblocks automatically for each).
 
-## 3. Commit, deploy & link it
+## 3. Commit, deploy & flip the ribbon
 ```
 git add -A && git commit -m "Launch Art Prints shop" && git push origin main
 ```
-Then add the shop to the homepage nav so customers can find it — in `index.html`, add to the
-`<ul class="nav__links">`:
-```html
-<li><a href="prints.html">Art Prints</a></li>
-```
-(Optional: add a "Shop Art Prints" button in a homepage section too.) Commit + push again.
+The homepage nav + showcase are already live. At launch, in `index.html` change the ribbon:
+`<span class="prints-teaser__ribbon">✨ Launching soon</span>` → `✨ Now available` (and update the
+teaser copy from "the moment they launch" to "the moment you buy"). Then email the signup list
+(Resend → Audiences → "Little Poppin") their promised free printable + launch note.
 
 ## 4. Test one purchase
 Buy a print with your own card → you should hit the success page with a **Download** button, and

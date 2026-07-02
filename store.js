@@ -51,6 +51,38 @@
       btn.addEventListener('click', function () { startCheckout(btn); });
     });
 
+    // Mailing-list signup (homepage prints teaser).
+    var form = document.getElementById('subscribeForm');
+    if (form) {
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var input = form.querySelector('input[name="email"]');
+        var note = form.querySelector('.subscribe__note');
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        try {
+          var res = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: input.value }),
+          });
+          var data = await res.json().catch(function () { return {}; });
+          note.hidden = false;
+          if (res.ok) {
+            note.textContent = 'You’re on the list! We’ll be in touch the moment prints launch. ✨';
+            form.querySelector('.subscribe__row').hidden = true;
+          } else {
+            note.textContent = data.error || 'Something hiccuped — please try again.';
+            btn.disabled = false;
+          }
+        } catch (err) {
+          note.hidden = false;
+          note.textContent = 'Something hiccuped — please try again.';
+          btn.disabled = false;
+        }
+      });
+    }
+
     // Reflect live stock — disable + relabel any sold-out SKU.
     fetch('/api/stock')
       .then(function (r) { return r.ok ? r.json() : null; })

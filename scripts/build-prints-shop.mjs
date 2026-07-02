@@ -83,10 +83,18 @@ for (const sec of SECTIONS) {
               <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Download Print — $${(it.price / 100).toFixed(0)}</button>
             </div>
           </article>`).join('\n');
+  const finder = sec.id === 'zodiac' ? `
+        <div class="sign-finder">
+          <label for="signDate">When was (or is) your little one due? 🌟</label>
+          <div class="sign-finder__row">
+            <input type="date" id="signDate" aria-label="Baby's birthday" />
+            <button type="button" class="btn btn--primary" id="signGo">Find their star sign</button>
+          </div>
+        </div>` : '';
   sectionCards.push(`    <section class="prints" id="${sec.id}">
       <div class="container">
         <h2 class="prints-section__title">${sec.title}</h2>
-        <p class="prints-section__blurb">${sec.blurb}</p>
+        <p class="prints-section__blurb">${sec.blurb}</p>${finder}
         <div class="print-grid">
 ${cards}
         </div>
@@ -290,6 +298,31 @@ ${sectionCards.join('\n\n')}
         if (!lb.hidden && (e.target === lb || e.target.closest('.lightbox__close'))) close();
       });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
+
+    // Zodiac sign finder — birthday -> highlight that sign's print.
+    (function () {
+      var go = document.getElementById('signGo');
+      if (!go) return;
+      var SIGNS = [
+        ['capricorn', 119], ['aquarius', 218], ['pisces', 320], ['aries', 419], ['taurus', 520],
+        ['gemini', 620], ['cancer', 722], ['leo', 822], ['virgo', 922], ['libra', 1022],
+        ['scorpio', 1121], ['sagittarius', 1221], ['capricorn', 1231],
+      ];
+      go.addEventListener('click', function () {
+        var v = document.getElementById('signDate').value;
+        if (!v) return;
+        var d = new Date(v + 'T00:00:00');
+        var mmdd = (d.getMonth() + 1) * 100 + d.getDate();
+        var sign = 'capricorn';
+        for (var i = 0; i < SIGNS.length; i++) { if (mmdd <= SIGNS[i][1]) { sign = SIGNS[i][0]; break; } }
+        var btn = document.querySelector('[data-sku="print-little-' + sign + '"]');
+        if (!btn) return;
+        var card = btn.closest('.print-card');
+        document.querySelectorAll('.print-card--highlight').forEach(function (c) { c.classList.remove('print-card--highlight'); });
+        card.classList.add('print-card--highlight');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
     })();
   </script>
   <script src="store.js" defer></script>
