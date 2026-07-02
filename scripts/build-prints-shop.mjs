@@ -17,16 +17,16 @@ const SITE = 'https://www.littlepoppin.com';
 const SECTIONS = [
   { id: 'nursery', title: 'Nursery Art Prints', nav: 'Nursery',
     blurb: 'Dreamy, magical nursery art — delivered instantly, ready to print and frame.',
-    colls: ['collection-01', 'collection-02', 'collection-03'], price: 1200 },
+    colls: ['collection-01', 'collection-02', 'collection-03', 'collection-08'], price: 1200 },
   { id: 'zodiac', title: '⭐ Little Zodiac', nav: 'Zodiac',
     blurb: 'A magical print for every star sign — the personalised gift for every new arrival.',
     colls: ['collection-07'], price: 1200 },
   { id: 'academia', title: '✨ Magical Academia', nav: 'Academia',
     blurb: 'Enchanted, candlelit, wizarding-inspired wall art for magic lovers of every age.',
-    colls: ['collection-05'], price: 1200 },
+    colls: ['collection-05', 'collection-09'], price: 1200 },
   { id: 'festive', title: '🎄 Festive Magic', nav: 'Festive',
     blurb: 'Enchanted Christmas prints — glowing trees, sleepy reindeer and candlelit windows.',
-    colls: ['collection-06'], price: 1200 },
+    colls: ['collection-06', 'collection-10'], price: 1200 },
 ];
 
 // Curated gallery sets — 3 matching prints for $30 (save $6 vs 3 × $12).

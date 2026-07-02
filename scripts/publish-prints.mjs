@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(os.homedir(), 'Downloads', 'LittlePoppin-Designs');
-const COLLS = ['collection-01', 'collection-02', 'collection-03', 'collection-05', 'collection-06', 'collection-07'];
+const COLLS = ['collection-01', 'collection-02', 'collection-03', 'collection-05', 'collection-06', 'collection-07', 'collection-08', 'collection-09', 'collection-10'];
 const GEN = path.join(REPO, 'lib', 'digital-products.generated.js');
 
 function token() {
@@ -37,7 +37,8 @@ const tok = token();
 if (!tok) { console.error('Set BLOB_READ_WRITE_TOKEN in .env.local (Vercel → Storage → Blob).'); process.exit(1); }
 
 let gen = fs.readFileSync(GEN, 'utf8');
-const matches = [...gen.matchAll(/'(?<sku>[^']+)':\s*\{[^}]*preview:\s*'(?<preview>[^']+)'[^}]*\}/g)];
+const matches = [...gen.matchAll(/'(?<sku>[^']+)':\s*\{[^}]*preview:\s*'(?<preview>[^']+)'[^}]*file:\s*(?<file>null|'[^']*')/g)]
+  .filter((m) => m.groups.file === 'null'); // skip already-published entries
 console.log(`Publishing ${matches.length} prints to Vercel Blob...\n`);
 
 let done = 0, missing = 0;
