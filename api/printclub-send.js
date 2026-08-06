@@ -36,8 +36,16 @@ async function activeMembers() {
 }
 
 export default async function handler(req, res) {
+  // FAIL CLOSED. This endpoint emails every paying member and spends Resend quota, so an
+  // unset CRON_SECRET must disable it rather than leave it open to the world — the
+  // tempting `if (secret && ...)` form does exactly the wrong thing when the env var is
+  // missing, which is precisely when you are least likely to notice.
   const secret = process.env.CRON_SECRET;
-  if (secret && req.headers.authorization !== `Bearer ${secret}`) {
+  if (!secret) {
+    console.error('Print Club: CRON_SECRET is not set — refusing to send. Set it in Vercel → Settings → Environment Variables.');
+    return res.status(503).json({ error: 'Print Club sending is not configured' });
+  }
+  if (req.headers.authorization !== `Bearer ${secret}`) {
     return res.status(401).json({ error: 'Unauthorised' });
   }
   const dry = req.query.dry === '1';
