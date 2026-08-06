@@ -13,6 +13,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { GENERATED_EXTRAS } from '../lib/extras-products.generated.js';
+import { PRINTIFY_CONFIG } from '../lib/printify-config.generated.js';
 
 const REPO = path.resolve(new URL('..', import.meta.url).pathname);
 const SITE = 'https://www.littlepoppin.com';
@@ -120,6 +121,7 @@ const foot = (up) => `
     </div>
   </footer>
   <script src="${up}store.js" defer></script>
+  <script src="${up}physical.js" defer></script>
 </body>
 </html>
 `;
@@ -194,6 +196,23 @@ for (const p of data.prints) {
             <button type="button" data-sku="${p.sku}" class="btn btn--primary btn--lg">Download Print — $${(p.price / 100).toFixed(0)}</button>
           </div>
           <a class="pd__alt" href="${up}personalise.html?print=${encodeURIComponent(p.sku)}">✨ Or add their name — personalise this print for $19</a>
+
+          <!-- Printed copies. Hidden until Printify is configured; physical.js reveals it
+               only when data/print-options.json says this design is orderable. -->
+          <div class="pd__physical" data-physical-for="${p.sku}" hidden>
+            <h2 class="pd__physicalTitle">Or have it printed and posted</h2>
+            <div class="pd__physicalRow">
+              <label>Format
+                <select data-physical-format aria-label="Print format"></select>
+              </label>
+              <label>Size
+                <select data-physical-size aria-label="Print size"></select>
+              </label>
+            </div>
+            <button type="button" class="btn btn--outline-dark pd__physicalBuy" data-physical-buy>Order a printed copy</button>
+            <p class="pd__physicalNote">Printed and posted for you · Australia-wide shipping</p>
+            <p class="pd__err" data-physical-err role="alert"></p>
+          </div>
           <ul class="pd__list">
             <li>High-resolution PNG (4:5 ratio, ~300 DPI)</li>
             <li>Prints beautifully at 4×5&Prime;, 8×10&Prime; and 16×20&Prime;</li>
@@ -277,6 +296,27 @@ ${relatedGrid(comps, up)}`;
   fs.writeFileSync(path.join(REPO, 'set', `${slug}.html`),
     head({ title, description: s.description, canonical: url, image: img, jsonLd, up }) + body + foot(up));
   written++;
+}
+
+// --- physical print options (Printify) --------------------------------------
+// A browser-safe view of the Printify config: labels, sizes and prices only, never the
+// blueprint/provider/variant ids. Written even when empty so the picker can ask for it
+// unconditionally and simply render nothing until setup has run.
+{
+  const formats = Object.entries(PRINTIFY_CONFIG.formats || {}).map(([key, f]) => ({
+    key,
+    label: f.label || key,
+    sizes: (f.sizes || []).filter((s) => s.variantId).map((s) => ({ key: s.key, label: s.label, price: s.price })),
+  })).filter((f) => f.sizes.length);
+
+  const configured = !!PRINTIFY_CONFIG.shopId && formats.length > 0;
+  // Which art has a Printify product built for it — the picker only offers those.
+  const availableFor = Object.keys(PRINTIFY_CONFIG.products || {});
+
+  fs.mkdirSync(path.join(REPO, 'data'), { recursive: true });
+  fs.writeFileSync(path.join(REPO, 'data', 'print-options.json'),
+    JSON.stringify({ configured, formats, availableFor }));
+  console.log(`wrote data/print-options.json (${configured ? `${formats.length} formats, ${availableFor.length} prints` : 'not configured yet — picker stays hidden'})`);
 }
 
 // --- printables shop page ---------------------------------------------------

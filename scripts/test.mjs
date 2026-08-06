@@ -252,6 +252,26 @@ check('every page with a nav has a mobile menu button', noNav.length === 0,
   `unreachable navigation on mobile: ${noNav.join(', ')}`);
 
 // ---------------------------------------------------------------------------
+group('Physical prints (Printify)');
+
+const { printifyConfigured, PRINTIFY_CONFIG } = await import('../lib/printify.js');
+const opts = JSON.parse(fs.readFileSync('data/print-options.json', 'utf8'));
+check('print-options.json agrees with the Printify config',
+  opts.configured === printifyConfigured(),
+  `json says ${opts.configured}, lib says ${printifyConfigured()}`);
+check('no Printify ids leak to the browser',
+  !JSON.stringify(opts).match(/blueprintId|providerId|variantId/),
+  'data/print-options.json is public — it must carry labels and prices only.');
+
+const sampleProduct = fs.readFileSync('print/sleepy-moon-and-stars.html', 'utf8');
+check('product pages carry the physical picker', sampleProduct.includes('data-physical-for'));
+check('the picker starts hidden', /data-physical-for="[^"]+" hidden/.test(sampleProduct),
+  'It must not show a control that 409s while Printify is unconfigured.');
+if (!printifyConfigured()) {
+  check('picker stays hidden while Printify is unconfigured', opts.formats.length === 0 && opts.availableFor.length === 0);
+}
+
+// ---------------------------------------------------------------------------
 group('Custom (made-to-order) products');
 
 const badFields = Object.values(CUSTOM_PRODUCTS).flatMap((p) =>

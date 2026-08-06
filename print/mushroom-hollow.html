@@ -90,6 +90,23 @@
             <button type="button" data-sku="print-mushroom-hollow" class="btn btn--primary btn--lg">Download Print — $12</button>
           </div>
           <a class="pd__alt" href="../personalise.html?print=print-mushroom-hollow">✨ Or add their name — personalise this print for $19</a>
+
+          <!-- Printed copies. Hidden until Printify is configured; physical.js reveals it
+               only when data/print-options.json says this design is orderable. -->
+          <div class="pd__physical" data-physical-for="print-mushroom-hollow" hidden>
+            <h2 class="pd__physicalTitle">Or have it printed and posted</h2>
+            <div class="pd__physicalRow">
+              <label>Format
+                <select data-physical-format aria-label="Print format"></select>
+              </label>
+              <label>Size
+                <select data-physical-size aria-label="Print size"></select>
+              </label>
+            </div>
+            <button type="button" class="btn btn--outline-dark pd__physicalBuy" data-physical-buy>Order a printed copy</button>
+            <p class="pd__physicalNote">Printed and posted for you · Australia-wide shipping</p>
+            <p class="pd__err" data-physical-err role="alert"></p>
+          </div>
           <ul class="pd__list">
             <li>High-resolution PNG (4:5 ratio, ~300 DPI)</li>
             <li>Prints beautifully at 4×5&Prime;, 8×10&Prime; and 16×20&Prime;</li>
@@ -139,5 +156,6 @@
     </div>
   </footer>
   <script src="../store.js" defer></script>
+  <script src="../physical.js" defer></script>
 </body>
 </html>
