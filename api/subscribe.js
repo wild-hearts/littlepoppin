@@ -1,6 +1,13 @@
 // api/subscribe.js — join the Little Poppin list (stored as a Resend Audience).
 // Uses the existing RESEND_API_KEY; lazily creates the "Little Poppin" audience on first
-// signup, then adds each contact. POST { email } -> { ok: true }.
+// signup, then adds each contact and emails the free welcome print.
+// POST { email } -> { ok: true, gift: true|false }.
+//
+// The signup form has always promised "a free printable" — this is where that promise is
+// kept. Delivery is automatic, so the promise can't quietly go unfulfilled again.
+import { presignGet } from '../lib/blob-link.js';
+import { getDigital } from '../lib/products.js';
+import { FREE_PRINT } from '../lib/freeprint.js';
 
 const AUDIENCE_NAME = 'Little Poppin';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -46,9 +53,55 @@ export default async function handler(req, res) {
     const id = await audienceId();
     await sleep(600); // rate-limit spacing
     await resend(`/audiences/${id}/contacts`, { method: 'POST', body: JSON.stringify({ email, unsubscribed: false }) });
-    return res.status(200).json({ ok: true });
+
+    // Send the welcome print. A failure here must NOT fail the signup — they are on the
+    // list either way, and Naomi can re-send by hand.
+    let gift = false;
+    try {
+      await sleep(600);
+      await sendWelcomePrint(email);
+      gift = true;
+    } catch (err) {
+      console.error('welcome print send failed for', email, '::', err.message);
+    }
+    return res.status(200).json({ ok: true, gift });
   } catch (err) {
     console.error('subscribe error:', err.message);
     return res.status(500).json({ error: 'Something hiccuped — please try again in a moment.' });
   }
+}
+
+async function sendWelcomePrint(email) {
+  const print = getDigital(FREE_PRINT.sku);
+  if (!print?.file) throw new Error(`free print ${FREE_PRINT.sku} has no file`);
+  const presignedUrl = await presignGet(print.file, FREE_PRINT.ttlMs);
+
+  const text = [
+    'Welcome to Little Poppin! 🌙',
+    '',
+    `Here's your free print — "${print.title}" — yours to keep and print as often as you like:`,
+    '',
+    presignedUrl,
+    '',
+    'It\'s a high-resolution file (4:5), so it prints beautifully at 8×10 inch or in an A4',
+    'frame with a small mat. Matte paper suits the soft watercolour style best.',
+    '',
+    'We\'ll be in touch now and then with new collections — never too often, and you can',
+    'unsubscribe from any email in one click.',
+    '',
+    '🌿 A portion of every Little Poppin sale supports children\'s charities worldwide.',
+    '',
+    '— Little Poppin',
+    'littlepoppin.com',
+  ].join('\n');
+
+  await resend('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+      from: process.env.ORDER_FROM_EMAIL || 'Little Poppin <onboarding@resend.dev>',
+      to: [email],
+      subject: `Your free print is here 🌙 — ${print.title}`,
+      text,
+    }),
+  });
 }

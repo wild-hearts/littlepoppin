@@ -59,14 +59,23 @@
             var amount = '$' + (o.amount_total / 100).toFixed(2) + ' ' + (o.currency || 'aud').toUpperCase();
             meta.textContent = 'Order confirmed — ' + amount + (o.email ? ' · receipt sent to ' + o.email : '');
           }
-          if (o && o.paid && o.type === 'digital' && o.sku) {
+          if (o && o.paid && (o.type === 'digital' || o.type === 'personalised') && o.sku) {
             var dl = document.getElementById('downloadArea');
             if (dl) {
               var a = document.createElement('a');
               a.href = '/api/download?session_id=' + encodeURIComponent(id) + '&sku=' + encodeURIComponent(o.sku);
               a.className = 'btn btn--primary';
-              a.textContent = '⬇  Download your print';
+              a.textContent = o.type === 'personalised'
+                ? '⬇  Download your personalised print'
+                : '⬇  Download your print';
               dl.appendChild(a);
+              if (o.type === 'personalised') {
+                var note = document.createElement('p');
+                note.className = 'status-card__note';
+                note.textContent = 'Your PDF has the same design at three print-ready sizes — 8×10 inch, A4 and 16×20 inch. '
+                  + 'It takes a moment to prepare, so the download may pause briefly before it starts.';
+                dl.appendChild(note);
+              }
             }
           }
         })

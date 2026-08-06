@@ -69,7 +69,9 @@
           var data = await res.json().catch(function () { return {}; });
           note.hidden = false;
           if (res.ok) {
-            note.textContent = 'You’re on the list! We’ll be in touch the moment prints launch. ✨';
+            note.textContent = data.gift
+              ? 'You’re on the list — your free print is on its way to your inbox! ✨'
+              : 'You’re on the list! Your free print will follow shortly. ✨';
             form.querySelector('.subscribe__row').hidden = true;
           } else {
             note.textContent = data.error || 'Something hiccuped — please try again.';

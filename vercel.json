@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/printclub-send",
+      "schedule": "0 21 1 * *"
+    }
+  ]
+}

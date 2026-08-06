@@ -5,23 +5,26 @@
 //   Single print: GET /api/download?session_id=cs_..._&sku=print-...  -> 302 to a presigned URL
 //   Gallery set:  same URL with a set sku                             -> a small download page
 import Stripe from 'stripe';
-import { issueSignedToken, presignUrl } from '@vercel/blob';
+import fs from 'node:fs';
+import path from 'node:path';
+import { presignGet } from '../lib/blob-link.js';
 import { getDigital, setComponents } from '../lib/products.js';
+import { renderPersonalisedPdf, cleanField, LIMITS } from '../lib/personalise.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-// product.file holds the private blob PATHNAME -> mint a 1-hour presigned GET URL.
+// product.file holds the private blob PATHNAME -> mint a short-lived presigned GET URL.
 // (Backwards compatible: a full http(s) URL is passed through unchanged.)
 async function fileUrl(file) {
   if (!file) return null;
   if (/^https?:\/\//.test(file)) return file;
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) throw new Error('BLOB_READ_WRITE_TOKEN not set');
-  const st = await issueSignedToken({ token, pathname: file, operations: ['get'], validUntil: Date.now() + 3600e3 });
-  const { presignedUrl } = await presignUrl(st, { operation: 'get', pathname: file, access: 'private' });
-  return presignedUrl;
+  return presignGet(file);
 }
+
+// A filename the buyer will recognise in their downloads folder.
+const safeFilename = (s) =>
+  String(s).replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-').slice(0, 60) || 'little-poppin-print';
 
 export default async function handler(req, res) {
   const sessionId = String(req.query.session_id || '');
@@ -31,7 +34,8 @@ export default async function handler(req, res) {
   try {
     const s = await stripe.checkout.sessions.retrieve(sessionId);
     if (s.payment_status !== 'paid') return res.status(403).send('Payment not completed');
-    if (s.metadata?.type !== 'digital' || s.metadata?.sku !== sku) {
+    const kind = s.metadata?.type;
+    if ((kind !== 'digital' && kind !== 'personalised') || s.metadata?.sku !== sku) {
       return res.status(403).send('This download is not authorised for that order');
     }
     const product = getDigital(sku);
@@ -39,22 +43,63 @@ export default async function handler(req, res) {
 
     res.setHeader('Cache-Control', 'no-store');
 
-    // Gallery set → simple page listing each print's presigned download link.
+    // Personalised print → render the keepsake PDF on demand from the paid session's
+    // metadata. The buyer's text comes from Stripe, never from the request, so a link
+    // cannot be edited to render different wording than was paid for.
+    if (kind === 'personalised') {
+      if (!product.file) return res.status(404).send('File not found');
+      const fields = {
+        name: cleanField(s.metadata.p_name, LIMITS.name),
+        line2: cleanField(s.metadata.p_line2, LIMITS.line2),
+        line3: cleanField(s.metadata.p_line3, LIMITS.line3),
+      };
+      if (!fields.name) return res.status(422).send('This order is missing its personalisation details — please contact us.');
+
+      const artResp = await fetch(await fileUrl(product.file));
+      if (!artResp.ok) throw new Error(`art fetch failed: ${artResp.status}`);
+      const art = Buffer.from(await artResp.arrayBuffer());
+
+      const fontPath = path.join(process.cwd(), 'assets', 'fonts', 'CormorantGaramond.ttf');
+      const pdf = await renderPersonalisedPdf(art, fields, { regular: fs.readFileSync(fontPath) });
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition',
+        `attachment; filename="${safeFilename(fields.name)}-little-poppin-print.pdf"`);
+      return res.status(200).send(Buffer.from(pdf));
+    }
+
+    // Gallery set or collection bundle → a page of presigned links, one per print.
+    // Collections run to 90+ prints, so this lays out as a grid rather than a long
+    // stack of full-width buttons.
     if (product.items) {
       const comps = setComponents(product);
       if (!comps.length || comps.some((c) => !c.file)) return res.status(404).send('Files not found');
       const urls = await Promise.all(comps.map((c) => fileUrl(c.file)));
       const links = comps.map((c, i) =>
         `<a class="dl" href="${esc(urls[i])}" download>⬇ ${esc((c.name || c.sku).replace(' — Art Print', ''))}</a>`).join('\n');
+      const many = comps.length > 6;
       return res.status(200).send(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Your prints — Little Poppin</title>
-<style>body{font-family:system-ui,sans-serif;background:#FDFAF7;color:#2C2C2C;text-align:center;padding:60px 20px}
-h1{font-weight:600}.dl{display:block;max-width:420px;margin:12px auto;padding:16px;background:#B5223E;color:#fff;
-border-radius:12px;text-decoration:none;font-weight:700}.dl:hover{background:#8C1A30}p{color:#6B6B6B}</style></head>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;background:#FDFAF7;color:#2C2C2C;text-align:center;
+     padding:56px 20px;margin:0}
+h1{font-weight:600;font-size:1.8rem;margin:0 0 10px}
+p{color:#6B6B6B;max-width:620px;margin:0 auto 8px}
+.grid{display:grid;gap:10px;max-width:${many ? '900px' : '440px'};margin:28px auto 0;
+      grid-template-columns:repeat(${many ? 'auto-fill,minmax(260px,1fr)' : '1,1fr'})}
+.dl{display:block;padding:14px 16px;background:#B5223E;color:#fff;border-radius:12px;
+    text-decoration:none;font-weight:700;font-size:0.94rem;text-align:left}
+.dl:hover{background:#8C1A30}
+.count{display:inline-block;background:#F0EDE9;color:#6B6B6B;border-radius:999px;
+       padding:4px 14px;font-size:0.85rem;margin-top:6px}
+</style></head>
 <body><h1>Your ${esc(product.title || 'Little Poppin')} is ready 🌙</h1>
-<p>Tap each to download and save your high-resolution prints. These links stay fresh for an hour —
-just revisit this page from your email any time for new ones.</p>${links}
-<p style="margin-top:30px">🌿 A portion of your purchase supports children's charities. Thank you!</p></body></html>`);
+<span class="count">${comps.length} high-resolution print${comps.length === 1 ? '' : 's'}</span>
+<p style="margin-top:14px">Tap each one to download and save it. These links stay fresh for an hour —
+revisit this page from your email any time for new ones.</p>
+<div class="grid">${links}</div>
+<p style="margin-top:34px">🌿 A portion of your purchase supports children's charities. Thank you!</p>
+</body></html>`);
     }
 
     // Single print → redirect to a presigned URL.

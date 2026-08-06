@@ -5,8 +5,11 @@
 //   Event: checkout.session.completed
 // Copy that endpoint's signing secret into STRIPE_WEBHOOK_SECRET.
 import Stripe from 'stripe';
+import { presignGet, MAX_TTL_MS } from '../lib/blob-link.js';
 import { getProduct, getDigital, getCustom } from '../lib/products.js';
 import { getPrintOption, submitPrintifyOrder } from '../lib/printify.js';
+import { GENERATED_DIGITAL_PRODUCTS } from '../lib/digital-products.generated.js';
+import { picksForMonth, monthLabel } from '../lib/printclub.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -69,9 +72,15 @@ async function onOrderPaid(session) {
     await handleCustomOrder(full, sku);  // made-to-order: brief to Naomi + confirmation to buyer
     return;
   }
+  if (session.metadata?.type === 'club') {
+    await handleClubSignup(full);        // subscription: welcome + this month's print now
+    return;
+  }
   await notifyOrder(full, sku, qty);   // 1) email Naomi so she can fulfil it
-  if (session.metadata?.type === 'digital') {
-    await emailDownloadLink(full, sku); // 2a) email the buyer their download link
+  if (session.metadata?.type === 'digital' || session.metadata?.type === 'personalised') {
+    // Personalised prints are rendered on demand by /api/download, so they need no
+    // manual work — the same gated link delivers them.
+    await emailDownloadLink(full, sku, session.metadata); // 2a) email the buyer their link
   } else if (session.metadata?.fulfil === 'printify') {
     await fulfilPrintify(full);         // 2b) send physical print to Printify for production
   } else {
@@ -200,20 +209,94 @@ async function handleCustomOrder(session, sku) {
   }
 }
 
+// --- Print Club signup: welcome + this month's print, immediately ------------
+// New members should not have to wait until the 1st to get anything, so the same print
+// the monthly cron would send is delivered on the spot.
+async function handleClubSignup(session) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = session.customer_details?.email;
+  const name = session.customer_details?.name || '';
+  const from = process.env.ORDER_FROM_EMAIL || 'Little Poppin <onboarding@resend.dev>';
+
+  const now = new Date();
+  const prints = picksForMonth(GENERATED_DIGITAL_PRODUCTS, now).map(getDigital).filter((p) => p?.file);
+  const label = monthLabel(now);
+
+  let links = [];
+  if (prints.length && process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      links = await Promise.all(prints.map((p) => presignGet(p.file, MAX_TTL_MS)));
+    } catch (err) {
+      console.error('Print Club welcome: presign failed', err.message);
+    }
+  }
+
+  const buyerText = [
+    `${name ? 'Welcome, ' + name.split(' ')[0] + '!' : 'Welcome to the Print Club!'}`,
+    '',
+    'You\'re in — and you don\'t have to wait until next month to start.',
+    ...(links.length
+      ? ['', `Here are your ${label} prints — all ${prints.length} of them:`, '',
+         ...prints.flatMap((p, i) => [p.title, links[i], '']),
+         'The links stay live for 6 days, so save the files somewhere safe.']
+      : ['', 'Your first prints are on their way — we\'ll email them shortly.']),
+    '',
+    `From now on ${prints.length || 3} new prints will land in your inbox at the start of every month.`,
+    'Nothing to remember, nothing to claim — it just arrives.',
+    '',
+    '🌿 A portion of your membership supports children\'s charities worldwide.',
+    '',
+    'Want to stop? Reply to any Print Club email and we\'ll cancel it right away.',
+    '',
+    '— Little Poppin',
+  ].join('\n');
+
+  if (!apiKey) { console.log('[print club signup — set RESEND_API_KEY]\n' + buyerText); return; }
+
+  const send = (payload) => fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (to) {
+    const r = await send({ from, to: [to], subject: `Welcome to the Print Club 🌙 — your ${label} prints are inside`, text: buyerText });
+    if (!r.ok) console.error('Resend (club welcome) error:', r.status, await r.text());
+  }
+  await new Promise((r) => setTimeout(r, 700)); // Resend 2 req/s limit
+  if (process.env.ORDER_NOTIFY_EMAIL) {
+    await send({
+      from, to: [process.env.ORDER_NOTIFY_EMAIL],
+      subject: '🌙 New Print Club member',
+      text: `New Print Club member: ${name} <${to}>\nFirst prints sent: ${prints.map((p) => p.title).join(', ') || '(none available)'}\nStripe session: ${session.id}`,
+    });
+  }
+}
+
 // --- 1b) Digital download link to the buyer ---------------------------------
-async function emailDownloadLink(session, sku) {
+async function emailDownloadLink(session, sku, meta = {}) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = session.customer_details?.email;
   const product = getDigital(sku);
   if (!to || !product) return;
   const origin = (process.env.SITE_URL || 'https://www.littlepoppin.com').replace(/\/$/, '');
   const link = `${origin}/api/download?session_id=${session.id}&sku=${encodeURIComponent(sku)}`;
+  const personalised = meta.type === 'personalised';
+  const label = personalised ? `${product.title || product.name} — personalised for ${meta.p_name}` : product.name;
+
   const text = [
     'Thank you for your Little Poppin order!',
     '',
-    `Your digital print "${product.name}" is ready to download:`,
+    personalised
+      ? `Your personalised print for ${meta.p_name} is ready to download:`
+      : `Your digital print "${product.name}" is ready to download:`,
     link,
     '',
+    ...(personalised
+      ? ['Your PDF contains the same design at three print-ready sizes — 8×10 inch, A4 and',
+         '16×20 inch (in that order). Print whichever suits your frame; matte paper looks loveliest.',
+         '']
+      : []),
     'Tip: download and save the file to your device — the link is tied to your order.',
   ].join('\n');
 
@@ -224,7 +307,7 @@ async function emailDownloadLink(session, sku) {
     body: JSON.stringify({
       from: process.env.ORDER_FROM_EMAIL || 'Little Poppin <onboarding@resend.dev>',
       to: [to],
-      subject: `Your Little Poppin download — ${product.name}`,
+      subject: `Your Little Poppin download — ${label}`,
       text,
     }),
   });

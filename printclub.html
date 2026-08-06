@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Print Club — Three New Prints Every Month | Little Poppin</title>
+  <meta name="description" content="Join the Little Poppin Print Club — three hand-picked magical art prints delivered to your inbox every month for $12. That's $36 of prints for $12. Cancel any time." />
+  <link rel="canonical" href="https://www.littlepoppin.com/printclub.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Little Poppin" />
+  <meta property="og:title" content="The Little Poppin Print Club — Three New Prints Every Month" />
+  <meta property="og:description" content="Three hand-picked magical prints in your inbox every month, for $12. Cancel any time." />
+  <meta property="og:url" content="https://www.littlepoppin.com/printclub.html" />
+  <meta property="og:image" content="https://www.littlepoppin.com/images/prints/sets/bundle-nursery.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Little Poppin Print Club" />
+  <meta name="twitter:description" content="Three hand-picked magical prints in your inbox every month, for $12." />
+  <meta name="twitter:image" content="https://www.littlepoppin.com/images/prints/sets/bundle-nursery.jpg" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Product",
+   "name":"Little Poppin Print Club",
+   "description":"Three hand-picked magical art prints delivered by email every month. High-resolution, ready to print and frame. Cancel any time.",
+   "image":"https://www.littlepoppin.com/images/prints/sets/bundle-nursery.jpg",
+   "brand":{"@type":"Brand","name":"Little Poppin"},
+   "offers":{"@type":"Offer","price":"12.00","priceCurrency":"AUD",
+     "availability":"https://schema.org/InStock",
+     "url":"https://www.littlepoppin.com/printclub.html"}}
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TD4975MVCS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TD4975MVCS');
+  </script>
+  <style>
+    .club { padding: 46px 0 70px; }
+    .club__grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,0.85fr); gap: 52px; align-items: center; }
+    @media (max-width: 860px) { .club__grid { grid-template-columns: 1fr; gap: 30px; } }
+    .club__art { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+    .club__price { font-family: var(--font-serif); font-size: 3rem; margin: 0 0 2px; line-height: 1; }
+    .club__price span { font-family: var(--font-sans); font-size: 0.95rem; color: var(--mid-grey); }
+    .club__buy { width: 100%; margin: 22px 0 10px; }
+    .club__fine { font-size: 0.85rem; color: var(--mid-grey); text-align: center; }
+    .club__err { color: var(--red); font-size: 0.9rem; min-height: 1.2em; text-align: center; }
+    .club__steps { list-style: none; padding: 0; margin: 26px 0 0; }
+    .club__steps li { padding-left: 30px; position: relative; margin-bottom: 12px; color: var(--mid-grey); }
+    .club__steps li strong { color: var(--charcoal); display: block; }
+    .club__steps li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--green); font-weight: 700; font-size: 1.05rem; }
+  </style>
+</head>
+<body>
+  <nav class="nav nav--scrolled" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo"><img src="images/logo.jpg" alt="Little Poppin" /></a>
+      <ul class="nav__links">
+        <li><a href="index.html#products">Swaddles</a></li>
+        <li><a href="prints.html">Art Prints</a></li>
+        <li><a href="personalise.html">Personalise</a></li>
+        <li><a href="printclub.html">Print Club</a></li>
+        <li><a href="printables.html">Printables</a></li>
+        <li><a href="custom.html">Made for You</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="prints-hero">
+    <div class="container">
+      <div class="section-label">Membership</div>
+      <h1>The Print Club</h1>
+      <p>Three hand-picked magical prints, delivered to your inbox every single month.
+         Twelve dollars for thirty-six dollars’ worth. Cancel whenever you like.</p>
+      <p class="prints-hero__note">🌿 A portion of every membership supports children's charities worldwide.</p>
+    </div>
+  </header>
+
+  <main class="club">
+    <div class="container">
+      <div class="club__grid">
+        <div>
+          <img class="club__art" src="images/prints/sets/bundle-nursery.jpg"
+               alt="A selection of Little Poppin magical art prints" />
+        </div>
+        <div>
+          <p class="club__price">$12 <span>AUD / month</span></p>
+          <p style="color:var(--mid-grey);margin:0">Three prints a month is $36 at shop prices. Members pay $12 — and every print stays theirs.</p>
+
+          <button type="button" class="btn btn--primary btn--lg club__buy" id="clubJoin">Join the Print Club — $12/month</button>
+          <p class="club__err" id="clubErr" role="alert"></p>
+          <p class="club__fine">Cancel any time · No lock-in · Secure checkout by Stripe</p>
+
+          <ul class="club__steps">
+            <li><strong>Three new prints every month</strong>One from each collection — nursery, star signs and magical academia — so every month feels different. December is all festive.</li>
+            <li><strong>Straight to your inbox</strong>It arrives automatically on the 1st. Nothing to remember, nothing to claim.</li>
+            <li><strong>Yours to keep</strong>High resolution and ready to frame. Every print stays yours, even if you cancel.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="prints-faq">
+    <div class="container container--narrow">
+      <h2 class="prints-section__title">Questions</h2>
+      <div class="faq">
+        <details>
+          <summary>When do my first prints arrive?</summary>
+          <p>Straight away — your first three prints are emailed the moment you join. After that, three more arrive at the start of each month.</p>
+        </details>
+        <details>
+          <summary>Can I choose which prints I get?</summary>
+          <p>Not yet — part of the fun is the surprise, and they're picked so each month spans different collections. If there's one you particularly want right now, you can always buy it from the <a href="prints.html">shop</a> for $12.</p>
+        </details>
+        <details>
+          <summary>How do I cancel?</summary>
+          <p>Reply to any Print Club email and we'll cancel it for you right away. There's no lock-in and no cancellation fee, and every print you've already received stays yours.</p>
+        </details>
+        <details>
+          <summary>What if I miss an email?</summary>
+          <p>Each download link stays live for 6 days. If you miss a month, just get in touch and we'll send them again.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__bottom">
+        <nav class="footer__legal" aria-label="Legal">
+          <a href="shipping.html">Shipping</a>
+          <a href="refunds.html">Refunds &amp; Returns</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </nav>
+        <p>&copy; 2025 Little Poppin. All rights reserved. Canberra, ACT, Australia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Deliberately not using store.js's [data-sku] handler: the club is a subscription,
+    // and this page needs its own error surface rather than the shop's inline note.
+    (function () {
+      var btn = document.getElementById('clubJoin');
+      var err = document.getElementById('clubErr');
+      btn.addEventListener('click', function () {
+        err.textContent = '';
+        var label = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Taking you to checkout…';
+        fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sku: 'print-club' }),
+        })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.d.url) throw new Error(res.d.error || 'Could not start checkout');
+            window.location.href = res.d.url;
+          })
+          .catch(function (e) {
+            btn.disabled = false;
+            btn.textContent = label;
+            err.textContent = e.message || 'Sorry — checkout hiccuped. Please try again.';
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
