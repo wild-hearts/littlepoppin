@@ -68,12 +68,21 @@ function lineArt(sku) {
   return out;
 }
 
-/** Square centre-crop, used for milestone cards (cheaper than clipping inside the PDF). */
+/** Square centre-crop, used for cut-out cards (cheaper than clipping inside the PDF). */
 function squareCrop(sku, size = 900) {
   const out = path.join(CACHE, `${sku}-sq${size}.jpg`);
   if (fs.existsSync(out)) return out;
   execFileSync('magick', [sourceIndex[sku], '-resize', `${size}x${size}^`,
     '-gravity', 'center', '-extent', `${size}x${size}`, '-quality', '86', out]);
+  return out;
+}
+
+/** Tall centre-crop for bookmarks (roughly 1:4). */
+function tallCrop(sku, w = 500, h = 2000) {
+  const out = path.join(CACHE, `${sku}-tall.jpg`);
+  if (fs.existsSync(out)) return out;
+  execFileSync('magick', [sourceIndex[sku], '-resize', `${w}x${h}^`,
+    '-gravity', 'center', '-extent', `${w}x${h}`, '-quality', '86', out]);
   return out;
 }
 
@@ -150,15 +159,13 @@ async function buildColouring(extra) {
   return doc;
 }
 
-// --- milestone cards --------------------------------------------------------
-const MILESTONES = [
-  'Newborn', '1 month', '2 months', '3 months', '4 months', '5 months', '6 months', '7 months',
-  '8 months', '9 months', '10 months', '11 months', 'One year!', 'Coming home', 'First smile', 'First tooth',
-];
-
-async function buildMilestone(extra) {
+// --- square cut-out cards (milestones, name-banner letters) -----------------
+// One renderer, driven by `extra.labels`: a 2x2 grid of square cards, each a piece of
+// artwork with a soft disc behind the wording so it stays readable over any design.
+async function buildCards(extra) {
   const pool = printsIn(extra.fromSection);
-  if (pool.length < 4) throw new Error('not enough prints for milestone cards');
+  if (pool.length < 4) throw new Error(`not enough prints in ${extra.fromSection}`);
+  const labels = extra.labels;
   const { doc, font } = await newDoc(`${extra.title} — Little Poppin`);
 
   await drawCover(doc, font, {
@@ -169,15 +176,9 @@ async function buildMilestone(extra) {
   // Instructions page — this is a cut-out product, so say so.
   const info = doc.addPage([A4.w, A4.h]);
   info.drawRectangle({ x: 0, y: 0, width: A4.w, height: A4.h, color: CREAM });
-  centredText(info, font, 'How to use your cards', { y: A4.h - 120, size: 26, color: INK });
-  const lines = [
-    'Print these pages on white card (200–300 gsm gives the nicest result).',
-    'Cut along the outside of each square — a paper trimmer makes short work of it.',
-    'Photograph the card beside your baby each month as they grow.',
-    '',
-    'Print as many copies as you like for your own family. Please don\'t resell them.',
-  ];
-  lines.forEach((l, i) => centredText(info, font, l, { y: A4.h - 175 - i * 22, size: 12, color: MUTED }));
+  centredText(info, font, extra.howToTitle || 'How to use your cards', { y: A4.h - 120, size: 26, color: INK });
+  (extra.howTo || []).forEach((l, i) =>
+    centredText(info, font, l, { y: A4.h - 175 - i * 22, size: 12, color: MUTED }));
 
   // Four large cards per page, 2x2. Big cards photograph better beside a baby than a
   // sheet of small ones, so the grid is centred on the page rather than pushed to the
@@ -190,7 +191,7 @@ async function buildMilestone(extra) {
   const blockH = cardH * 2 + gap;
   const topY = (A4.h - blockH) / 2 + cardH + gap;
 
-  for (let i = 0; i < MILESTONES.length; i++) {
+  for (let i = 0; i < labels.length; i++) {
     if (i % cardsPerPage === 0) doc.addPage([A4.w, A4.h]);
     const page = doc.getPage(doc.getPageCount() - 1);
     if (i % cardsPerPage === 0) page.drawRectangle({ x: 0, y: 0, width: A4.w, height: A4.h, color: rgb(1, 1, 1) });
@@ -207,8 +208,10 @@ async function buildMilestone(extra) {
     const cx = x + cardW / 2, cy = y + cardH / 2;
     page.drawCircle({ x: cx, y: cy, size: cardW * 0.30, color: CREAM, opacity: 0.88 });
 
-    const label = MILESTONES[i];
-    const size = fitText(font, label, cardW * 0.50, 30);
+    const label = labels[i];
+    // Single characters are the point of a banner letter, so let them run much larger.
+    const maxSize = label.length <= 2 ? cardW * 0.34 : 30;
+    const size = fitText(font, label, cardW * 0.50, maxSize);
     const w = font.widthOfTextAtSize(label, size);
     page.drawText(label, { x: cx - w / 2, y: cy - size * 0.32, size, font, color: INK });
 
@@ -283,8 +286,67 @@ async function buildCalendar(extra) {
   return doc;
 }
 
+// --- bookmarks --------------------------------------------------------------
+// Four tall bookmarks per A4 sheet. A cheap, high-margin add-on that suits the academia
+// artwork, where the prints are detailed enough to read at a narrow crop.
+async function buildBookmarks(extra) {
+  const pool = printsIn(extra.fromSection);
+  if (!pool.length) throw new Error(`no prints in ${extra.fromSection}`);
+  const { doc, font } = await newDoc(`${extra.title} — Little Poppin`);
+
+  await drawCover(doc, font, {
+    title: extra.title, blurb: extra.coverBlurb,
+    artJpeg: path.join(REPO, pool[0].preview.replace(/^\//, '')),
+  });
+
+  const info = doc.addPage([A4.w, A4.h]);
+  info.drawRectangle({ x: 0, y: 0, width: A4.w, height: A4.h, color: CREAM });
+  centredText(info, font, 'How to use your bookmarks', { y: A4.h - 120, size: 26, color: INK });
+  [
+    'Print on white card (250–300 gsm) so they survive a handbag.',
+    'Cut along the outside of each bookmark.',
+    'Punch a hole at the top and add a ribbon if you like.',
+    '',
+    'Print as many as you like for yourself or as gifts. Please don\'t resell them.',
+  ].forEach((l, i) => centredText(info, font, l, { y: A4.h - 175 - i * 22, size: 12, color: MUTED }));
+
+  const perPage = 4;
+  const margin = 42;
+  const gap = 14;
+  const bmW = (A4.w - margin * 2 - gap * (perPage - 1)) / perPage;
+  const bmH = A4.h - margin * 2;
+
+  for (let i = 0; i < extra.count; i++) {
+    if (i % perPage === 0) {
+      const pg = doc.addPage([A4.w, A4.h]);
+      pg.drawRectangle({ x: 0, y: 0, width: A4.w, height: A4.h, color: rgb(1, 1, 1) });
+    }
+    const page = doc.getPage(doc.getPageCount() - 1);
+    const slot = i % perPage;
+    const x = margin + slot * (bmW + gap);
+    const y = margin;
+
+    const art = pool[i % pool.length];
+    // Cover-crop the 4:5 artwork into the tall bookmark shape.
+    const img = await doc.embedJpg(fs.readFileSync(tallCrop(art.sku)));
+    page.drawImage(img, { x, y, width: bmW, height: bmH });
+
+    // Caption plate at the foot so the design is named.
+    const plateH = 34;
+    page.drawRectangle({ x, y, width: bmW, height: plateH, color: CREAM, opacity: 0.92 });
+    const label = art.title;
+    const size = fitText(font, label, bmW * 0.88, 11, 6);
+    const w = font.widthOfTextAtSize(label, size);
+    page.drawText(label, { x: x + (bmW - w) / 2, y: y + plateH / 2 - size * 0.34, size, font, color: INK });
+
+    page.drawRectangle({ x, y, width: bmW, height: bmH, borderColor: rgb(0.82, 0.80, 0.78), borderWidth: 0.5 });
+    process.stdout.write('.');
+  }
+  return doc;
+}
+
 // --- run --------------------------------------------------------------------
-const builders = { colouring: buildColouring, milestone: buildMilestone, calendar: buildCalendar };
+const builders = { colouring: buildColouring, cards: buildCards, calendar: buildCalendar, bookmarks: buildBookmarks };
 const wanted = process.argv.slice(2);
 const todo = wanted.length ? EXTRAS.filter((e) => wanted.includes(e.sku)) : EXTRAS;
 
