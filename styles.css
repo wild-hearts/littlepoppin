@@ -870,6 +870,13 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 768px) {
   .nav__toggle { display: flex; }
 
+  /* backdrop-filter makes .nav a containing block for its position:fixed descendants,
+     so the off-canvas menu below was being trapped inside the ~64px nav bar instead of
+     filling the viewport — measured 132px tall with the filter, 812px without. That is
+     why tapping the hamburger appeared to do nothing. The nav background is already 97%
+     opaque, so dropping the blur on mobile costs nothing visually. */
+  .nav--scrolled { backdrop-filter: none; -webkit-backdrop-filter: none; }
+
   .nav__links {
     position: fixed;
     top: 0;

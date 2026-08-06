@@ -295,11 +295,23 @@ for (const extra of todo) {
   const pdfPath = path.join(OUT, `${extra.sku}.pdf`);
   fs.writeFileSync(pdfPath, bytes);
 
-  // Web preview: the cover page rendered to a JPEG for the shop card.
+  // Web preview for the shop card. NOT the cover: a colouring book's cover shows the
+  // original full-colour artwork, so a shopper browsing "Nursery Colouring Book" would
+  // see a finished painting and have no idea they're buying line art to colour in.
+  // Preview an INTERIOR page instead, so the card shows what the buyer actually gets.
+  //   colouring → first line drawing · milestone → first sheet of cards · calendar → January
+  const PREVIEW_PAGE = { colouring: 1, milestone: 2, calendar: 1 };
   const previewPath = path.join(PREVIEW_DIR, `${extra.sku}.jpg`);
   try {
-    execFileSync('qlmanage', ['-t', '-s', '1000', '-o', CACHE, pdfPath], { stdio: 'ignore' });
-    const thumb = path.join(CACHE, `${extra.sku}.pdf.png`);
+    const pageNo = Math.min(PREVIEW_PAGE[extra.kind] ?? 0, doc.getPageCount() - 1);
+    const one = await PDFDocument.create();
+    const [copied] = await one.copyPages(doc, [pageNo]);
+    one.addPage(copied);
+    const onePath = path.join(CACHE, `${extra.sku}-preview.pdf`);
+    fs.writeFileSync(onePath, await one.save());
+
+    execFileSync('qlmanage', ['-t', '-s', '1000', '-o', CACHE, onePath], { stdio: 'ignore' });
+    const thumb = path.join(CACHE, `${extra.sku}-preview.pdf.png`);
     if (fs.existsSync(thumb)) {
       execFileSync('magick', [thumb, '-background', 'white', '-flatten', '-resize', '800x', '-quality', '84', previewPath]);
     }

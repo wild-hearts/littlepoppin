@@ -89,6 +89,9 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
   <nav class="nav nav--scrolled" id="nav">
     <div class="nav__inner">
       <a href="${up}index.html" class="nav__logo"><img src="${up}images/logo.jpg" alt="Little Poppin" /></a>
+      <button class="nav__toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
       <ul class="nav__links">
         <li><a href="${up}index.html#products">Swaddles</a></li>
         <li><a href="${up}prints.html">Art Prints</a></li>
