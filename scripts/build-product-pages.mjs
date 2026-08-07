@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { GENERATED_EXTRAS } from '../lib/extras-products.generated.js';
 import { PRINTIFY_CONFIG } from '../lib/printify-config.generated.js';
+import { GUIDES } from './guides-content.mjs';
 
 const REPO = path.resolve(new URL('..', import.meta.url).pathname);
 const SITE = 'https://www.littlepoppin.com';
@@ -88,6 +89,23 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
     .related__card { background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: block; }
     .related__card img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
     .related__card span { display: block; padding: 11px 12px; font-size: 0.9rem; text-align: center; color: var(--charcoal); }
+    .guide { padding: 34px 0 80px; }
+    .guide h1 { font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 600; margin: 0 0 16px; line-height: 1.15; }
+    .guide__intro { font-size: 1.12rem; color: var(--mid-grey); margin: 0 0 28px; }
+    .guide__hero { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-lg); margin-bottom: 36px; }
+    .guide h2 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; margin: 34px 0 12px; }
+    .guide p { margin-bottom: 14px; color: var(--charcoal); }
+    .guide__cta { background: var(--teal-light); border-radius: var(--radius); padding: 26px; margin: 38px 0; text-align: center; }
+    .guide__cta p { color: var(--mid-grey); margin-bottom: 16px; }
+    .lp-ways { padding: 70px 0 90px; }
+    .lp-ways__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+    .lp-way { display: flex; flex-direction: column; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform var(--transition); }
+    .lp-way:hover { transform: translateY(-4px); }
+    .lp-way__img img { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
+    .lp-way__body { padding: 20px 22px 24px; }
+    .lp-way__body h3 { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; margin: 0 0 8px; }
+    .lp-way__body p { color: var(--mid-grey); font-size: 0.92rem; margin: 0 0 14px; }
+    .lp-way__go { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--red); }
   </style>
 </head>
 <body>
@@ -103,6 +121,7 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
         <li><a href="${up}personalise.html">Personalise</a></li>
         <li><a href="${up}printclub.html">Print Club</a></li>
         <li><a href="${up}printables.html">Printables</a></li>
+        <li><a href="${up}guides.html">Guides</a></li>
         <li><a href="${up}custom.html">Made for You</a></li>
         <li><a href="${up}index.html#contact">Contact</a></li>
       </ul>
@@ -461,6 +480,103 @@ ${cards}
   console.log(`wrote printables.html (${extras.length} printable products)`);
 }
 
+// --- guides -----------------------------------------------------------------
+// Product pages can only rank for their own design. These answer the questions people
+// search on the way to buying ("how high to hang nursery art") and link into the shop.
+{
+  fs.mkdirSync(path.join(REPO, 'guides'), { recursive: true });
+  const gUp = '../';
+
+  for (const g of GUIDES) {
+    const url = `${SITE}/guides/${g.slug}.html`;
+    const jsonLd = [
+      {
+        '@context': 'https://schema.org', '@type': 'Article',
+        headline: g.title, description: g.description,
+        image: SITE + g.image, datePublished: g.updated, dateModified: g.updated,
+        author: { '@type': 'Organization', name: 'Little Poppin' },
+        publisher: { '@type': 'Organization', name: 'Little Poppin', logo: { '@type': 'ImageObject', url: `${SITE}/images/logo.jpg` } },
+        mainEntityOfPage: url,
+      },
+      {
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: g.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+      },
+      {
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE}/guides.html` },
+          { '@type': 'ListItem', position: 3, name: g.title, item: url },
+        ],
+      },
+    ];
+
+    const body = `
+  <main class="guide">
+    <div class="container container--narrow">
+      <p class="breadcrumb"><a href="${gUp}index.html">Home</a> › <a href="${gUp}guides.html">Guides</a> › ${esc(g.title)}</p>
+      <h1>${esc(g.title)}</h1>
+      <p class="guide__intro">${esc(g.intro)}</p>
+      <img class="guide__hero" src="${gUp}${g.image.replace(/^\//, '')}" alt="${esc(g.imageAlt)}" />
+${g.sections.map((sec) => `      <h2>${esc(sec.h)}</h2>
+${sec.p.map((para) => `      <p>${para}</p>`).join('\n')}`).join('\n\n')}
+
+      <div class="guide__cta">
+        <p>${esc(g.cta.text)}</p>
+        <a class="btn btn--primary" href="${gUp}${g.cta.href}">${esc(g.cta.label)}</a>
+      </div>
+
+      <h2>Common questions</h2>
+      <div class="faq">
+${g.faq.map(([q, a]) => `        <details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n')}
+      </div>
+    </div>
+  </main>`;
+
+    fs.writeFileSync(path.join(REPO, 'guides', `${g.slug}.html`),
+      head({ title: `${g.title} | Little Poppin`, description: g.description, canonical: url,
+             image: SITE + g.image, jsonLd, up: gUp }) + body + foot(gUp));
+  }
+
+  // Index page
+  const cards = GUIDES.map((g) => `          <a class="lp-way" href="guides/${g.slug}.html">
+            <div class="lp-way__img"><img src="${g.image.replace(/^\//, '')}" alt="${esc(g.imageAlt)}" loading="lazy" /></div>
+            <div class="lp-way__body">
+              <h3>${esc(g.title)}</h3>
+              <p>${esc(g.description)}</p>
+              <span class="lp-way__go">Read the guide →</span>
+            </div>
+          </a>`).join('\n');
+
+  const indexLd = {
+    '@context': 'https://schema.org', '@type': 'ItemList',
+    name: 'Little Poppin Guides',
+    itemListElement: GUIDES.map((g, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/guides/${g.slug}.html`, name: g.title })),
+  };
+
+  fs.writeFileSync(path.join(REPO, 'guides.html'),
+    head({ title: 'Guides — Styling, Sizing &amp; Printing Nursery Art | Little Poppin',
+           description: 'Practical guides to nursery wall art: how to style a gallery wall, what size print to choose, and how to print a digital download in Australia.',
+           canonical: `${SITE}/guides.html`, image: SITE + GUIDES[0].image, jsonLd: [indexLd], up: '' }) + `
+  <header class="prints-hero">
+    <div class="container">
+      <div class="section-label">Guides</div>
+      <h1>Getting It On the Wall</h1>
+      <p>Practical answers to the questions that come up between choosing a print and hanging it.</p>
+    </div>
+  </header>
+  <section class="lp-ways">
+    <div class="container">
+      <div class="lp-ways__grid">
+${cards}
+      </div>
+    </div>
+  </section>` + foot(''));
+
+  console.log(`wrote ${GUIDES.length} guides + guides.html`);
+}
+
 // --- sitemap ----------------------------------------------------------------
 const staticPages = [
   ['/', '1.0', 'monthly'],
@@ -468,6 +584,7 @@ const staticPages = [
   ['/personalise.html', '0.9', 'monthly'],
   ['/printclub.html', '0.8', 'monthly'],
   ['/printables.html', '0.9', 'monthly'],
+  ['/guides.html', '0.7', 'monthly'],
   ['/custom.html', '0.8', 'monthly'],
   ['/pink-swaddle.html', '0.8', 'monthly'],
   ['/green-swaddle.html', '0.8', 'monthly'],
@@ -479,7 +596,8 @@ const staticPages = [
 const urls = staticPages
   .map(([loc, pr, cf]) => ({ loc: SITE + loc, pr, cf }))
   .concat(data.prints.map((p) => ({ loc: `${SITE}/print/${slugOf(p.sku)}.html`, pr: '0.7', cf: 'monthly' })))
-  .concat(data.sets.map((s) => ({ loc: `${SITE}/set/${slugOf(s.sku)}.html`, pr: '0.7', cf: 'monthly' })));
+  .concat(data.sets.map((s) => ({ loc: `${SITE}/set/${slugOf(s.sku)}.html`, pr: '0.7', cf: 'monthly' })))
+  .concat(GUIDES.map((g) => ({ loc: `${SITE}/guides/${g.slug}.html`, pr: '0.6', cf: 'yearly' })));
 
 fs.writeFileSync(path.join(REPO, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>

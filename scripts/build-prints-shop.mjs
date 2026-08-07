@@ -396,6 +396,7 @@ const page = `<!DOCTYPE html>
         <li><a href="personalise.html">Personalise</a></li>
         <li><a href="printclub.html">Print Club</a></li>
         <li><a href="printables.html">Printables</a></li>
+        <li><a href="guides.html">Guides</a></li>
         <li><a href="custom.html">Made for You</a></li>
         <li><a href="index.html#contact">Contact</a></li>
       </ul>

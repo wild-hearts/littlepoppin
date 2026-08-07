@@ -27,6 +27,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://www.littlepoppin.com/guides.html</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://www.littlepoppin.com/custom.html</loc>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
@@ -640,5 +645,20 @@
     <loc>https://www.littlepoppin.com/set/bundle-everything.html</loc>
     <priority>0.7</priority>
     <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.littlepoppin.com/guides/nursery-gallery-wall.html</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.littlepoppin.com/guides/nursery-art-print-sizes.html</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.littlepoppin.com/guides/how-to-print-digital-art.html</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
   </url>
 </urlset>
