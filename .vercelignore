@@ -1,0 +1,5 @@
+# Build output: 160MB+ of generated PDFs. The sellable copies live in Vercel Blob;
+# regenerate locally with `npm run build:extras`. Never needs uploading.
+dist/
+node_modules/
+.git/
