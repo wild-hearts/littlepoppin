@@ -133,8 +133,11 @@ export default async function handler(req, res) {
       if (!opt) return res.status(409).json({ error: 'That print option isn’t available yet — check back soon.' });
       const art = getDigital(sku);
       const origin = baseUrl(req);
-      const subtotal = opt.price;
-      const shipAmount = shippingFor(subtotal);
+      // Physical prints ship FREE: Printify's own postage (~$8-10 per item) is already
+      // built into the retail price in lib/printify-config.generated.js. The swaddle rule
+      // ($9.95, free over $80) must not apply here — it was written for parcels Naomi
+      // posts herself, and on a framed print it would have shipped at her expense.
+      const shipAmount = 0;
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: [{
