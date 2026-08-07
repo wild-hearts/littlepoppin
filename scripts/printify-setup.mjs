@@ -19,16 +19,32 @@ import { fileURLToPath } from 'node:url';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(os.homedir(), 'Downloads', 'LittlePoppin-Designs');
-const COLLS = ['collection-01', 'collection-02', 'collection-03', 'collection-05', 'collection-06'];
+// Every collection that appears in the shop. This previously stopped at collection-06,
+// which silently left 42 of the 93 prints without any physical option.
+const COLLS = ['collection-01', 'collection-02', 'collection-03', 'collection-05',
+  'collection-06', 'collection-07', 'collection-08', 'collection-09', 'collection-10'];
 
 // ── FILL THIS after discovery, then run `build`. Prices are RETAIL cents (base cost + margin). ──
 const CHOICES = {
-  shopId: null,
+  // Naomi's Printify account (info@wildheartspublishing.com.au), shop "My new store".
+  shopId: 28504147,
+  // Provider 66 = Prima Printing, Noble Park North VIC — the only Australian provider
+  // that prints wall art, so orders are printed and posted domestically rather than
+  // flown in from the US. Sizes chosen to match the artwork's native 4:5 ratio.
+  // Prices are RETAIL in AUD cents and INCLUDE postage (physical prints ship free).
   formats: {
-    // poster: { blueprintId: 0, providerId: 0, label: 'Poster (matte)',
-    //   sizes: [ { key:'a4', label:'A4', variantId:0, price:3500 }, { key:'a3', label:'A3', variantId:0, price:4500 } ] },
-    // framed: { blueprintId: 0, providerId: 0, label: 'Framed Print', sizes: [ ... ] },
-    // canvas: { blueprintId: 0, providerId: 0, label: 'Canvas', sizes: [ ... ] },
+    poster: {
+      blueprintId: 1079, providerId: 66, label: 'Poster (matte)',
+      sizes: [{ key: '16x20', label: '16" x 20"', variantId: 81395, price: 3400 }],
+    },
+    framed: {
+      blueprintId: 1130, providerId: 66, label: 'Framed Print (black)',
+      sizes: [{ key: '11x14', label: '11" x 14"', variantId: 85215, price: 7900 }],
+    },
+    canvas: {
+      blueprintId: 1061, providerId: 66, label: 'Stretched Canvas',
+      sizes: [{ key: '16x20', label: '16" x 20"', variantId: 80707, price: 6900 }],
+    },
   },
 };
 
@@ -39,6 +55,13 @@ const TOKEN = (() => {
   return null;
 })();
 if (!TOKEN) { console.error('Set PRINTIFY_API_TOKEN in .env.local'); process.exit(1); }
+
+// presignGet() reads BLOB_READ_WRITE_TOKEN from the environment; load it from .env.local
+// so this script works the same way the other publish scripts do.
+if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  const m = fs.readFileSync(path.join(REPO, '.env.local'), 'utf8').match(/BLOB_READ_WRITE_TOKEN\s*=\s*(.+)/);
+  if (m) process.env.BLOB_READ_WRITE_TOKEN = m[1].trim().replace(/^["']|["']$/g, '');
+}
 
 const API = 'https://api.printify.com/v1';
 async function pf(pathname, opts = {}) {
@@ -58,6 +81,14 @@ function listArt() {
   }
   return out;
 }
+
+// High-res originals already live in the private Vercel Blob store; Printify can fetch
+// them directly by presigned URL, which is far quicker than base64 from here.
+const { GENERATED_DIGITAL_PRODUCTS } = await import('../lib/digital-products.generated.js');
+const { presignGet, MAX_TTL_MS } = await import('../lib/blob-link.js');
+const BLOB_PATHS = Object.fromEntries(
+  Object.entries(GENERATED_DIGITAL_PRODUCTS).filter(([, p]) => p.file && !p.items).map(([sku, p]) => [sku, p.file])
+);
 
 const cmd = process.argv[2];
 try {
@@ -79,26 +110,68 @@ try {
   } else if (cmd === 'build') {
     if (!CHOICES.shopId || !Object.keys(CHOICES.formats).length) { console.error('Fill CHOICES first (run the discovery commands).'); process.exit(1); }
     const art = listArt();
-    const products = {};
-    for (const a of art) {
-      const contents = fs.readFileSync(a.file).toString('base64');
-      const up = await pf('/uploads/images.json', { method: 'POST', body: JSON.stringify({ file_name: a.sku + '.png', contents }) });
-      products[a.sku] = {};
-      for (const [fmt, cfg] of Object.entries(CHOICES.formats)) {
-        const variants = cfg.sizes.map(s => ({ id: s.variantId, price: s.price, is_enabled: true }));
-        const print_areas = [{ variant_ids: cfg.sizes.map(s => s.variantId), placeholders: [{ position: 'front', images: [{ id: up.id, x: 0.5, y: 0.5, scale: 1, angle: 0 }] }] }];
-        const prod = await pf(`/shops/${CHOICES.shopId}/products.json`, { method: 'POST', body: JSON.stringify({
-          title: `${a.sku.replace('print-', '').replace(/-/g, ' ')} — ${cfg.label}`,
-          description: 'Little Poppin art print.', blueprint_id: cfg.blueprintId, print_provider_id: cfg.providerId, variants, print_areas,
-        }) });
-        products[a.sku][fmt] = prod.id;
-        process.stdout.write('.');
+    const fmts = Object.entries(CHOICES.formats);
+
+    // RESUMABLE. This creates one product per design per format — nearly 300 API writes
+    // against a live account. Without a progress file, an interruption at #200 would mean
+    // re-running duplicated everything already created, with no way to tell the copies
+    // apart. Progress is flushed after every single write, so a re-run picks up exactly
+    // where it stopped and never creates the same product twice.
+    const PROGRESS = path.join(REPO, 'dist', '.printify-progress.json');
+    fs.mkdirSync(path.dirname(PROGRESS), { recursive: true });
+    const state = fs.existsSync(PROGRESS) ? JSON.parse(fs.readFileSync(PROGRESS, 'utf8')) : { uploads: {}, products: {} };
+    const save = () => fs.writeFileSync(PROGRESS, JSON.stringify(state));
+
+    const doneAlready = Object.values(state.products).reduce((n, p) => n + Object.keys(p).length, 0);
+    if (doneAlready) console.log(`resuming — ${doneAlready}/${art.length * fmts.length} products already created`);
+
+    let created = 0, skipped = 0;
+    for (const [i, a] of art.entries()) {
+      // Upload the artwork once and remember its id, so a resume never re-sends it.
+      //
+      // Hand Printify a presigned URL rather than base64 `contents`. The originals are
+      // ~7MB each, so base64 means pushing ~9MB per design up from this machine —
+      // measured at roughly four minutes per design, i.e. six hours for the catalogue.
+      // Passing a URL lets Printify pull straight from Vercel Blob instead, which is
+      // both far faster and avoids holding the whole file in memory here.
+      // Falls back to base64 if a design has no Blob copy.
+      if (!state.uploads[a.sku]) {
+        const blobPath = BLOB_PATHS[a.sku];
+        let payload;
+        if (blobPath) {
+          payload = { file_name: a.sku + '.png', url: await presignGet(blobPath, MAX_TTL_MS) };
+        } else {
+          payload = { file_name: a.sku + '.png', contents: fs.readFileSync(a.file).toString('base64') };
+        }
+        const up = await pf('/uploads/images.json', { method: 'POST', body: JSON.stringify(payload) });
+        state.uploads[a.sku] = up.id;
+        save();
       }
+      const uploadId = state.uploads[a.sku];
+      state.products[a.sku] ||= {};
+
+      for (const [fmt, cfg] of fmts) {
+        if (state.products[a.sku][fmt]) { skipped++; continue; }
+        const variants = cfg.sizes.map(s => ({ id: s.variantId, price: s.price, is_enabled: true }));
+        const print_areas = [{ variant_ids: cfg.sizes.map(s => s.variantId), placeholders: [{ position: 'front', images: [{ id: uploadId, x: 0.5, y: 0.5, scale: 1, angle: 0 }] }] }];
+        const title = a.sku.replace('print-', '').replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+        const prod = await pf(`/shops/${CHOICES.shopId}/products.json`, { method: 'POST', body: JSON.stringify({
+          title: `${title} — ${cfg.label}`,
+          description: 'Little Poppin art print. Printed and posted in Australia.',
+          blueprint_id: cfg.blueprintId, print_provider_id: cfg.providerId, variants, print_areas,
+        }) });
+        state.products[a.sku][fmt] = prod.id;
+        save();
+        created++;
+      }
+      process.stdout.write(`\r  ${i + 1}/${art.length} designs · ${created} created · ${skipped} already done   `);
     }
-    const config = { shopId: CHOICES.shopId, formats: Object.fromEntries(Object.entries(CHOICES.formats).map(([f, c]) => [f, { blueprintId: c.blueprintId, providerId: c.providerId, label: c.label, sizes: c.sizes.map(s => ({ key: s.key, label: s.label, variantId: s.variantId, price: s.price })) }])), products };
+
+    const config = { shopId: CHOICES.shopId, formats: Object.fromEntries(fmts.map(([f, c]) => [f, { blueprintId: c.blueprintId, providerId: c.providerId, label: c.label, sizes: c.sizes.map(s => ({ key: s.key, label: s.label, variantId: s.variantId, price: s.price })) }])), products: state.products };
     fs.writeFileSync(path.join(REPO, 'lib', 'printify-config.generated.js'),
-      `// AUTO-GENERATED by scripts/printify-setup.mjs.\nexport const PRINTIFY_CONFIG = ${JSON.stringify(config, null, 2)};\n`);
-    console.log(`\nDone — created products for ${art.length} prints. Config written. Commit + push.`);
+      `// AUTO-GENERATED by scripts/printify-setup.mjs — do not edit by hand.\n// Physical prints via Printify. Prices are RETAIL AUD cents and INCLUDE postage.\nexport const PRINTIFY_CONFIG = ${JSON.stringify(config, null, 2)};\n`);
+    console.log(`\n\nDone — ${created} products created (${skipped} already existed) across ${art.length} designs.`);
+    console.log('Config written. Next: npm run build:site && npm test');
   } else {
     console.log('Commands: shops | blueprints <kw> | providers <bp> | variants <bp> <prov> | build');
   }

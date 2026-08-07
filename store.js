@@ -44,7 +44,37 @@
     btn.innerHTML = 'Sold out';
   }
 
+  // --- mobile navigation ----------------------------------------------------
+  // At <=768px the stylesheet slides .nav__links off-screen and expects a hamburger
+  // to bring it back. prints.html and custom.html shipped without that button, so the
+  // shop has had NO navigation on mobile — where most of its visitors are. Handling it
+  // here means every page that loads store.js gets a working menu, rather than each new
+  // page having to remember to copy the markup and the script.
+  //
+  // Pages with their own inline handler (index, the swaddle pages) mark the button
+  // data-nav-bound="1" so we don't bind twice and cancel their toggle out.
+  function initNav() {
+    var toggle = document.querySelector('.nav__toggle');
+    var links = document.querySelector('.nav__links');
+    if (!toggle || !links || toggle.dataset.navBound) return;
+    toggle.dataset.navBound = '1';
+    function close() {
+      links.classList.remove('nav__links--open');
+      toggle.classList.remove('nav__toggle--open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.addEventListener('click', function () {
+      var open = links.classList.toggle('nav__links--open');
+      toggle.classList.toggle('nav__toggle--open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    initNav();
     var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-sku]'));
     if (!buttons.length) return;
     buttons.forEach(function (btn) {
@@ -69,7 +99,9 @@
           var data = await res.json().catch(function () { return {}; });
           note.hidden = false;
           if (res.ok) {
-            note.textContent = 'You’re on the list! We’ll be in touch the moment prints launch. ✨';
+            note.textContent = data.gift
+              ? 'You’re on the list — your free print is on its way to your inbox! ✨'
+              : 'You’re on the list! Your free print will follow shortly. ✨';
             form.querySelector('.subscribe__row').hidden = true;
           } else {
             note.textContent = data.error || 'Something hiccuped — please try again.';

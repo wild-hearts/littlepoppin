@@ -4,6 +4,8 @@
 import Stripe from 'stripe';
 import { getProduct, getDigital, getCustom, isDeliverable, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
 import { getPrintOption } from '../lib/printify.js';
+import { parsePersonalisation, PERSONALISE_PRICE } from '../lib/personalise.js';
+import { PRINT_CLUB } from '../lib/printclub.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -58,14 +60,84 @@ export default async function handler(req, res) {
       return res.status(200).json({ url: session.url });
     }
 
+    // --- Print Club: a monthly subscription, not a one-off purchase ---
+    // subscription_data.metadata is what /api/printclub-send filters on, so it must stay
+    // in step with that endpoint. This Stripe account is shared across Wild Hearts brands.
+    if (sku === PRINT_CLUB.sku) {
+      const origin = baseUrl(req);
+      const session = await stripe.checkout.sessions.create({
+        mode: 'subscription',
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: CURRENCY,
+            unit_amount: PRINT_CLUB.price,
+            recurring: { interval: PRINT_CLUB.interval },
+            product_data: {
+              name: PRINT_CLUB.name,
+              description: PRINT_CLUB.description,
+              images: [`${origin}${PRINT_CLUB.preview}`],
+              metadata: { sku: PRINT_CLUB.sku, brand: 'little_poppin', type: 'club' },
+            },
+          },
+        }],
+        success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/cancel.html`,
+        metadata: { brand: 'little_poppin', sku: PRINT_CLUB.sku, type: 'club' },
+        subscription_data: { metadata: { brand: 'little_poppin', sku: PRINT_CLUB.sku, type: 'club' } },
+      });
+      return res.status(200).json({ url: session.url });
+    }
+
+    // --- Personalised name print: body { sku (art), personalise: {name, line2, line3} } ---
+    // The buyer's text is stored on the session metadata, which is the ONLY source of truth
+    // used at render time — /api/download never trusts text from the request that fetches it.
+    if (body.personalise) {
+      const parsed = parsePersonalisation(body.personalise);
+      if (!parsed.ok) return res.status(400).json({ error: parsed.error });
+      const art = getDigital(sku);
+      if (!art) return res.status(400).json({ error: 'Unknown print' });
+      if (art.items) return res.status(400).json({ error: 'Gallery sets cannot be personalised — please choose a single print.' });
+      if (!isDeliverable(art)) return res.status(409).json({ error: 'This print isn’t available yet — check back soon.' });
+
+      const origin = baseUrl(req);
+      const { name, line2, line3 } = parsed.data;
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: CURRENCY,
+            unit_amount: PERSONALISE_PRICE,
+            product_data: {
+              name: `${art.title || art.name} — Personalised for ${name}`,
+              description: 'Personalised keepsake print. Instant download, print-ready at 8×10", A4 and 16×20".',
+              ...(art.preview ? { images: [art.preview.startsWith('http') ? art.preview : `${origin}${art.preview}`] } : {}),
+              metadata: { sku: art.sku, brand: 'little_poppin', type: 'personalised' },
+            },
+          },
+        }],
+        success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/cancel.html`,
+        metadata: {
+          brand: 'little_poppin', sku: art.sku, type: 'personalised',
+          p_name: name, p_line2: line2, p_line3: line3,
+        },
+      });
+      return res.status(200).json({ url: session.url });
+    }
+
     // --- Physical print via Printify: body { sku (art), format, size } ---
     if (body.format && body.size) {
       const opt = getPrintOption(sku, String(body.format), String(body.size));
       if (!opt) return res.status(409).json({ error: 'That print option isn’t available yet — check back soon.' });
       const art = getDigital(sku);
       const origin = baseUrl(req);
-      const subtotal = opt.price;
-      const shipAmount = shippingFor(subtotal);
+      // Physical prints ship FREE: Printify's own postage (~$8-10 per item) is already
+      // built into the retail price in lib/printify-config.generated.js. The swaddle rule
+      // ($9.95, free over $80) must not apply here — it was written for parcels Naomi
+      // posts herself, and on a framed print it would have shipped at her expense.
+      const shipAmount = 0;
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: [{
