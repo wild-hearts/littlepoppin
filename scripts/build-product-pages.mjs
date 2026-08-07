@@ -116,7 +116,7 @@ const foot = (up) => `
           <a href="${up}privacy.html">Privacy</a>
           <a href="${up}terms.html">Terms</a>
         </nav>
-        <p>&copy; 2025 Little Poppin. All rights reserved. Canberra, ACT, Australia.</p>
+        <p>&copy; 2025 Little Poppin. All rights reserved. Australia.</p>
       </div>
     </div>
   </footer>

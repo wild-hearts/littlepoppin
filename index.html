@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Little Poppin — Bamboo Baby Swaddles &amp; Magical Nursery Art</title>
-  <meta name="description" content="Premium 70% bamboo baby swaddles from Canberra, Australia — softer than cotton, breathable and beautifully designed. Plus dreamy magical nursery art prints. A portion of every sale supports children's charities." />
+  <title>Little Poppin — Magical Nursery Art, Personalised Prints &amp; Bamboo Swaddles</title>
+  <meta name="description" content="Ninety-three dreamy nursery art prints, personalised name keepsakes, printable colouring books and premium bamboo baby swaddles. Digital downloads arrive instantly; framed prints are printed and posted in Australia. A portion of every sale supports children's charities." />
   <link rel="canonical" href="https://www.littlepoppin.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Little Poppin" />
-  <meta property="og:title" content="Little Poppin — Bamboo Baby Swaddles &amp; Magical Nursery Art" />
-  <meta property="og:description" content="Premium bamboo baby swaddles and dreamy magical nursery art prints. Made with love in Canberra, Australia." />
+  <meta property="og:title" content="Little Poppin — Magical Nursery Art &amp; Bamboo Swaddles" />
+  <meta property="og:description" content="Dreamy nursery art prints, personalised name keepsakes and premium bamboo swaddles. Most of it lands in your inbox the moment you buy." />
   <meta property="og:url" content="https://www.littlepoppin.com/" />
-  <meta property="og:image" content="https://www.littlepoppin.com/images/hero-pink.jpg" />
+  <meta property="og:image" content="https://www.littlepoppin.com/images/prints/sets/bundle-nursery.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.littlepoppin.com/#org","name":"Little Poppin","url":"https://www.littlepoppin.com/","logo":"https://www.littlepoppin.com/images/logo.jpg","description":"Canberra-based baby brand: premium bamboo swaddles and magical nursery art prints. A portion of every sale supports children's charities.","sameAs":["https://www.facebook.com/LittlePoppin"],"address":{"@type":"PostalAddress","addressLocality":"Canberra","addressRegion":"ACT","addressCountry":"AU"},"parentOrganization":{"@type":"Organization","name":"Wild Hearts Publishing Pty Ltd"}},{"@type":"WebSite","name":"Little Poppin","url":"https://www.littlepoppin.com/","publisher":{"@id":"https://www.littlepoppin.com/#org"}}]}</script>
+  <meta name="twitter:title" content="Little Poppin — Magical Nursery Art &amp; Bamboo Swaddles" />
+  <meta name="twitter:description" content="Dreamy nursery art prints, personalised name keepsakes and premium bamboo swaddles." />
+  <meta name="twitter:image" content="https://www.littlepoppin.com/images/prints/sets/bundle-nursery.jpg" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.littlepoppin.com/#org","name":"Little Poppin","url":"https://www.littlepoppin.com/","logo":"https://www.littlepoppin.com/images/logo.jpg","description":"Australian baby and nursery brand: magical nursery art prints, personalised keepsakes, printables and premium bamboo swaddles. A portion of every sale supports children's charities.","sameAs":["https://www.facebook.com/LittlePoppin"],"areaServed":{"@type":"Country","name":"Australia"},"parentOrganization":{"@type":"Organization","name":"Wild Hearts Publishing Pty Ltd"}},{"@type":"WebSite","name":"Little Poppin","url":"https://www.littlepoppin.com/","publisher":{"@id":"https://www.littlepoppin.com/#org"}}]}</script>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TD4975MVCS"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -26,6 +28,69 @@
     gtag('js', new Date());
     gtag('config', 'G-TD4975MVCS');
   </script>
+  <style>
+    /* ── Hero ─────────────────────────────────────────────────────────────
+       Art-led rather than photo-led: the shop is 121 pieces of artwork and two
+       swaddles, so the front page should open on the artwork. Prints are shown at
+       their true 4:5 — cropping them to a letterbox band threw away the composition. */
+    .lp-hero { background: linear-gradient(170deg, var(--pink-light) 0%, var(--cream) 55%, var(--warm-white) 100%);
+               padding: 130px 0 0; text-align: center; overflow: hidden; }
+    .lp-hero__logo { width: 190px; margin: 0 auto 26px; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .lp-hero h1 { font-family: var(--font-serif); font-size: clamp(2.1rem, 5vw, 3.6rem); font-weight: 400;
+                  line-height: 1.12; margin: 0 0 16px; }
+    .lp-hero__sub { font-size: clamp(1rem, 2vw, 1.18rem); color: var(--mid-grey); max-width: 620px;
+                    margin: 0 auto 30px; }
+    .lp-hero__cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+    /* .btn--lg carries an unconditional width:100% — intended for the single-column buy
+       areas on product pages. Side-by-side hero buttons need to size to their content. */
+    .lp-hero__cta .btn { width: auto; }
+    @media (max-width: 480px) { .lp-hero__cta .btn { width: 100%; } }
+    .lp-hero__note { font-size: 0.88rem; color: var(--mid-grey); margin: 0 0 46px; }
+
+    .lp-strip { display: flex; justify-content: center; gap: 14px; padding: 0 24px 6px; }
+    .lp-strip a { flex: 0 1 190px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-lg);
+                  transform: translateY(24px); transition: transform var(--transition); }
+    .lp-strip a:hover { transform: translateY(14px); }
+    .lp-strip img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
+    /* Trim the strip on smaller screens rather than shrinking every tile to a stamp. */
+    @media (max-width: 860px) { .lp-strip a:nth-child(n+4) { display: none; } }
+    @media (max-width: 520px) { .lp-strip a:nth-child(n+3) { display: none; } }
+
+    /* ── Ways to shop ─────────────────────────────────────────────────── */
+    .lp-ways { padding: 96px 0 90px; }
+    .lp-ways__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 22px; }
+    .lp-way { display: flex; flex-direction: column; background: #fff; border-radius: var(--radius);
+              overflow: hidden; box-shadow: var(--shadow); transition: transform var(--transition), box-shadow var(--transition); }
+    .lp-way:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .lp-way__img { position: relative; }
+    .lp-way__img img { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
+    .lp-way__tag { position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.94);
+                   color: var(--red); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em;
+                   text-transform: uppercase; padding: 5px 11px; border-radius: 999px; }
+    .lp-way__body { padding: 20px 22px 24px; display: flex; flex-direction: column; flex: 1; }
+    .lp-way__body h3 { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; margin: 0 0 8px; }
+    .lp-way__body p { color: var(--mid-grey); font-size: 0.94rem; margin: 0 0 16px; flex: 1; }
+    .lp-way__price { font-weight: 700; color: var(--charcoal); font-size: 0.92rem; }
+    .lp-way__price span { font-weight: 400; color: var(--mid-grey); }
+    .lp-way__go { margin-top: 14px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em;
+                  text-transform: uppercase; color: var(--red); }
+
+    /* ── Free print band ──────────────────────────────────────────────── */
+    .lp-free { background: var(--light-grey); padding: 76px 0; }
+    .lp-free__inner { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,0.8fr); gap: 48px; align-items: center; }
+    @media (max-width: 800px) { .lp-free__inner { grid-template-columns: 1fr; gap: 28px; } }
+    .lp-free h2 { font-family: var(--font-serif); font-size: clamp(1.7rem, 3.4vw, 2.4rem); font-weight: 400; margin: 0 0 12px; }
+    .lp-free p { color: var(--mid-grey); margin: 0 0 20px; }
+    .lp-free__art { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+
+    /* ── Story ────────────────────────────────────────────────────────── */
+    .lp-story { padding: 92px 0; background: var(--cream); }
+    .lp-story__grid { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,0.9fr); gap: 60px; align-items: center; }
+    @media (max-width: 860px) { .lp-story__grid { grid-template-columns: 1fr; gap: 30px; } }
+    .lp-story__img { width: 100%; height: 430px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+    .lp-story__lead { font-family: var(--font-serif); font-size: 1.45rem; color: var(--red); margin-bottom: 20px; line-height: 1.4; }
+    .lp-story p { color: var(--mid-grey); margin-bottom: 15px; }
+  </style>
 </head>
 <body>
 
@@ -39,15 +104,12 @@
         <span></span><span></span><span></span>
       </button>
       <ul class="nav__links" id="navLinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#products">Our Swaddles</a></li>
         <li><a href="prints.html">Art Prints</a></li>
         <li><a href="personalise.html">Personalise</a></li>
         <li><a href="printclub.html">Print Club</a></li>
         <li><a href="printables.html">Printables</a></li>
         <li><a href="custom.html">Made for You</a></li>
-        <li><a href="#features">Why Us</a></li>
-        <li><a href="#gift">Perfect Gift</a></li>
+        <li><a href="#products">Swaddles</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="https://www.facebook.com/LittlePoppin" target="_blank" rel="noopener" class="nav__fb">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
@@ -58,57 +120,177 @@
   </nav>
 
   <!-- ===== HERO ===== -->
-  <section class="hero" id="home">
-    <div class="hero__images">
-      <div class="hero__img hero__img--left">
-        <img src="images/hero-pink.jpg" alt="Little Poppin pink swaddle on stroller" />
-      </div>
-      <div class="hero__img hero__img--right">
-        <img src="images/lifestyle-green.jpg" alt="Little Poppin green swaddle on stroller" />
-      </div>
-      <div class="hero__overlay"></div>
-    </div>
-    <div class="hero__content">
-      <img src="images/logo.jpg" alt="Little Poppin" class="hero__logo" />
-      <h1 class="hero__tagline">Bamboo Swaddles &amp; Magical Nursery Art</h1>
-      <p class="hero__sub">Softer than cotton. Dreamier than bedtime. Beautifully designed.</p>
-      <div class="hero__cta">
-        <a href="#products" class="btn btn--primary">Discover Our Swaddles</a>
-        <a href="prints.html" class="btn btn--outline">Shop Art Prints</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== ABOUT ===== -->
-  <section class="about" id="about">
+  <header class="lp-hero" id="home">
     <div class="container">
-      <div class="section-label">Our Story</div>
-      <h2 class="section-title">Made with Love in Canberra</h2>
-      <div class="about__grid">
-        <div class="about__text">
-          <p class="about__lead">You did it — you found the perfect baby swaddle. Your search is finally over.</p>
-          <p>Little Poppin is a Canberra-based baby swaddle brand created by a mother who wanted something truly special for her little one. We believe every baby deserves the softest, most breathable wrap — and every parent deserves to feel proud of what they drape over their little bundle of joy.</p>
-          <p>Our swaddles are crafted from a premium <strong>70% Bamboo / 30% Cotton</strong> blend — softer than cotton, naturally breathable, and beautifully printed with elegant designs unlike anything else on the market.</p>
-          <p>And the magic doesn't stop at the cot: our <a href="prints.html">art print collections</a> bring the same enchanted wonder to nursery walls and little bedrooms — dreamy watercolour worlds, delivered as instant downloads.</p>
-          <p>A portion of every purchase goes towards a children's charity making a real difference for disadvantaged children around the world.</p>
+      <img src="images/logo.jpg" alt="Little Poppin" class="lp-hero__logo" />
+      <h1>Magical Art for Little Rooms</h1>
+      <p class="lp-hero__sub">Ninety-three dreamy prints, keepsakes with their name on them,
+         printables to keep small hands busy — and the softest bamboo swaddles.</p>
+      <div class="lp-hero__cta">
+        <a href="prints.html" class="btn btn--primary btn--lg">Shop Art Prints</a>
+        <a href="personalise.html" class="btn btn--outline-dark btn--lg">✨ Add Their Name</a>
+      </div>
+      <p class="lp-hero__note">🌿 A portion of every sale supports children's charities worldwide.</p>
+    </div>
+    <div class="lp-strip">
+      <a href="print/sleepy-moon-and-stars.html"><img src="images/prints/05-sleepy-moon-and-stars.jpg" alt="Sleepy Moon &amp; Stars nursery print" /></a>
+      <a href="print/unicorn-dreams.html"><img src="images/prints/04-unicorn-dreams.jpg" alt="Unicorn Dreams nursery print" /></a>
+      <a href="print/the-enchanted-library.html"><img src="images/prints/01-the-enchanted-library.jpg" alt="The Enchanted Library art print" /></a>
+      <a href="print/sleepy-bunny.html"><img src="images/prints/03-sleepy-bunny.jpg" alt="Sleepy Bunny nursery print" /></a>
+      <a href="print/rainbow-and-clouds.html"><img src="images/prints/07-rainbow-and-clouds.jpg" alt="Rainbow &amp; Clouds nursery print" /></a>
+    </div>
+  </header>
+
+  <!-- ===== WAYS TO SHOP ===== -->
+  <section class="lp-ways" id="shop">
+    <div class="container">
+      <div class="section-label">The Collection</div>
+      <h2 class="section-title">Everything We Make</h2>
+      <p class="section-intro">Most of it arrives in your inbox the moment you buy. The rest is printed and posted for you.</p>
+
+      <div class="lp-ways__grid">
+
+        <a href="prints.html" class="lp-way">
+          <div class="lp-way__img">
+            <img src="images/prints/sets/bundle-nursery.jpg" alt="A selection of Little Poppin nursery art prints" />
+            <span class="lp-way__tag">93 designs</span>
+          </div>
+          <div class="lp-way__body">
+            <h3>Art Prints</h3>
+            <p>Dreamy nursery scenes, star signs, enchanted libraries and Christmas magic — downloaded and ready to frame in minutes.</p>
+            <span class="lp-way__price">From $12 <span>· instant download</span></span>
+            <span class="lp-way__go">Browse the shop →</span>
+          </div>
+        </a>
+
+        <a href="personalise.html" class="lp-way">
+          <div class="lp-way__img">
+            <img src="images/prints/05-sleepy-moon-and-stars.jpg" alt="Personalised name print" />
+            <span class="lp-way__tag">Keepsake</span>
+          </div>
+          <div class="lp-way__body">
+            <h3>Add Their Name</h3>
+            <p>Put your little one's name and birth details on any design and watch it appear as you type. The nursery gift people keep.</p>
+            <span class="lp-way__price">$19 <span>· three print sizes</span></span>
+            <span class="lp-way__go">Make one now →</span>
+          </div>
+        </a>
+
+        <a href="prints.html#bundles" class="lp-way">
+          <div class="lp-way__img">
+            <img src="images/prints/sets/set-sweet-dreams.jpg" alt="Gallery set of three matching prints" />
+            <span class="lp-way__tag">Best value</span>
+          </div>
+          <div class="lp-way__body">
+            <h3>Sets &amp; Collections</h3>
+            <p>Three matching prints for a ready-made gallery wall — or take a whole collection at once and save properly.</p>
+            <span class="lp-way__price">$30 – $149 <span>· up to 93 prints</span></span>
+            <span class="lp-way__go">See the bundles →</span>
+          </div>
+        </a>
+
+        <a href="print/sleepy-moon-and-stars.html" class="lp-way">
+          <div class="lp-way__img">
+            <img src="images/prints/10-dream-castle-in-the-clouds.jpg" alt="Framed art print" />
+            <span class="lp-way__tag">Printed for you</span>
+          </div>
+          <div class="lp-way__body">
+            <h3>Printed &amp; Posted</h3>
+            <p>Rather not print it yourself? Choose any design as a poster, framed print or stretched canvas — made and sent within Australia.</p>
+            <span class="lp-way__price">From $34 <span>· free shipping</span></span>
+            <span class="lp-way__go">Choose a design →</span>
+          </div>
+        </a>
+
+        <a href="printclub.html" class="lp-way">
+          <div class="lp-way__img">
+            <img src="images/prints/05-enchanted-fairy-garden.jpg" alt="Little Poppin Print Club" />
+            <span class="lp-way__tag">Membership</span>
+          </div>
+          <div class="lp-way__body">
+            <h3>The Print Club</h3>
+            <p>Three hand-picked prints in your inbox every month, chosen across the collections. Yours to keep, cancel whenever.</p>
+            <span class="lp-way__price">$12 <span>/ month · $36 of prints</span></span>
+            <span class="lp-way__go">Join the club →</span>
+          </div>
+        </a>
+
+        <a href="printables.html" class="lp-way">
+          <div class="lp-way__img">
+            <img src="images/extras/extra-colouring-academia.jpg" alt="Printable colouring book" />
+            <span class="lp-way__tag">7 printables</span>
+          </div>
+          <div class="lp-way__body">
+            <h3>Printables</h3>
+            <p>Colouring books, baby milestone cards, name-banner letters, bookmarks and a wall calendar — print them as often as you like.</p>
+            <span class="lp-way__price">From $7.95 <span>· print at home</span></span>
+            <span class="lp-way__go">See what's inside →</span>
+          </div>
+        </a>
+
+        <a href="custom.html" class="lp-way">
+          <div class="lp-way__img">
+            <img src="images/prints/08-carousel-dreams.jpg" alt="Custom songs and stories" />
+            <span class="lp-way__tag">Made to order</span>
+          </div>
+          <div class="lp-way__body">
+            <h3>Made for You</h3>
+            <p>A song written for your child, an illustrated bedtime story starring them, or a keepsake made just for your family.</p>
+            <span class="lp-way__price">From $15 <span>· within 5 days</span></span>
+            <span class="lp-way__go">Have one made →</span>
+          </div>
+        </a>
+
+        <a href="#products" class="lp-way">
+          <div class="lp-way__img">
+            <img src="images/lifestyle-green.jpg" alt="Little Poppin bamboo baby swaddle" />
+            <span class="lp-way__tag">Posted to you</span>
+          </div>
+          <div class="lp-way__body">
+            <h3>Bamboo Swaddles</h3>
+            <p>Our original: a generous 47&nbsp;×&nbsp;47&Prime; wrap in 70% bamboo, softer than cotton and endlessly useful.</p>
+            <span class="lp-way__price">$15 <span>· two designs</span></span>
+            <span class="lp-way__go">See the swaddles →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FREE PRINT ===== -->
+  <section class="lp-free">
+    <div class="container">
+      <div class="lp-free__inner">
+        <div>
+          <div class="section-label">A Gift to Start</div>
+          <h2>Have a print, on us</h2>
+          <p>Join the Poppin' list and we'll send you a free high-resolution print straight away — plus
+             first look at new collections. No spam, and one-click unsubscribe on every email.</p>
+          <form class="subscribe" id="subscribeForm" novalidate>
+            <div class="subscribe__row">
+              <input type="email" name="email" placeholder="Your email address" required aria-label="Email address" />
+              <button type="submit" class="btn btn--primary">Send my free print</button>
+            </div>
+            <p class="subscribe__note" hidden></p>
+          </form>
         </div>
-        <div class="about__image">
-          <img src="images/hero-green.jpg" alt="Baby wrapped in Little Poppin swaddle" />
+        <div>
+          <img class="lp-free__art" src="images/prints/15-cloud-dreams.jpg" alt="Cloud Dreams — the free welcome print" />
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== PRODUCTS ===== -->
+  <!-- ===== SWADDLES ===== -->
   <section class="products" id="products">
     <div class="container">
-      <div class="section-label">Our Collection</div>
-      <h2 class="section-title">Two Signature Designs</h2>
+      <div class="section-label">Where We Started</div>
+      <h2 class="section-title">The Bamboo Swaddles</h2>
       <p class="section-intro">Each swaddle is a 47 × 47 inch work of art — generously sized, vibrantly printed, and crafted to become your most-reached-for baby essential.</p>
 
       <div class="products__grid">
 
-        <!-- PINK -->
         <a href="pink-swaddle.html" class="product-card product-card--pink">
           <div class="product-card__images">
             <div class="product-card__img product-card__img--main">
@@ -133,7 +315,6 @@
           </div>
         </a>
 
-        <!-- GREEN -->
         <a href="green-swaddle.html" class="product-card product-card--green">
           <div class="product-card__images">
             <div class="product-card__img product-card__img--main">
@@ -162,187 +343,80 @@
     </div>
   </section>
 
-  <!-- ===== ART PRINTS SHOWCASE ===== -->
-  <section class="prints-teaser" id="prints">
-    <div class="container">
-      <span class="prints-teaser__ribbon">✨ Now available</span>
-      <div class="section-label">New From Little Poppin</div>
-      <h2 class="section-title">Magical Art Prints</h2>
-      <p class="section-intro">Dreamy, enchanted art for nurseries and little bedrooms — from sleepy woodland friends to star-sign prints made for your baby. Delivered as an instant high-resolution download the moment you buy.</p>
-      <div class="prints-teaser__grid">
-        <a href="prints.html#nursery" class="prints-teaser__item">
-          <img src="images/prints/03-sleepy-bunny.jpg" alt="Sleepy Bunny — magical nursery art print" loading="lazy" />
-          <span>Nursery Art</span>
-        </a>
-        <a href="prints.html#zodiac" class="prints-teaser__item">
-          <img src="images/prints/05-little-leo.jpg" alt="Little Leo — star sign nursery print" loading="lazy" />
-          <span>Little Zodiac</span>
-        </a>
-        <a href="prints.html#academia" class="prints-teaser__item">
-          <img src="images/prints/01-the-enchanted-library.jpg" alt="The Enchanted Library — magical academia print" loading="lazy" />
-          <span>Magical Academia</span>
-        </a>
-        <a href="prints.html#festive" class="prints-teaser__item">
-          <img src="images/prints/10-polar-bear-s-first-christmas.jpg" alt="Polar Bear's First Christmas — festive nursery print" loading="lazy" />
-          <span>Festive Magic</span>
-        </a>
-      </div>
-      <div class="prints-teaser__cta">
-        <a href="prints.html" class="btn btn--primary">Browse the Collection →</a>
-        <a href="custom.html" class="btn btn--outline-dark">🎵 Custom Songs — from $15</a>
-      </div>
-      <form class="subscribe" id="subscribeForm" novalidate>
-        <p class="subscribe__lead">Join the Poppin’ list and we’ll send you a <strong>free print</strong> right now — plus first look at new collections. 🌙</p>
-        <div class="subscribe__row">
-          <input type="email" name="email" placeholder="Your email address" required aria-label="Email address" />
-          <button type="submit" class="btn btn--primary">Send my free print</button>
-        </div>
-        <p class="subscribe__note" hidden></p>
-      </form>
-    </div>
-  </section>
-
-  <!-- ===== FEATURES ===== -->
+  <!-- ===== WHY ===== -->
   <section class="features" id="features">
     <div class="container">
       <div class="section-label">Why Little Poppin</div>
-      <h2 class="section-title">Everything Your Baby Deserves</h2>
+      <h2 class="section-title">Lovely Things, Made Easy</h2>
       <div class="features__grid">
 
         <div class="feature">
           <div class="feature__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M32 8c-6 0-18 8-18 22 0 10 8 18 18 22 10-4 18-12 18-22C50 16 38 8 32 8z"/>
-              <path d="M32 18v8l5 5"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           </div>
-          <h3>Ultra Soft &amp; Luxurious</h3>
-          <p>Our 70% bamboo / 30% cotton blend is softer than cotton with a luxurious feel. Prewashed and gets even softer with every wash.</p>
+          <h3>Delivered Instantly</h3>
+          <p>Every print, set and printable arrives the moment you pay — a download button appears straight away and the link is emailed too. Nothing to wait for.</p>
         </div>
 
         <div class="feature">
           <div class="feature__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="32" cy="32" r="22"/>
-              <path d="M22 26c0-5.5 4.5-10 10-10s10 4.5 10 10c0 8-10 18-10 18S22 34 22 26z"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.35-9.33-8.66A5.5 5.5 0 0 1 12 6.5a5.5 5.5 0 0 1 9.33 5.84C19 16.65 12 21 12 21z"/></svg>
           </div>
-          <h3>Breathable &amp; Temperature Regulating</h3>
-          <p>Open muslin weave fabric allows natural body temperature regulation, moisture absorption and better airflow — a safer, more comfortable sleep for baby.</p>
+          <h3>Printed in Australia</h3>
+          <p>Choose a poster, frame or canvas and it's made and posted here in Australia — not flown halfway around the world to reach you.</p>
         </div>
 
         <div class="feature">
           <div class="feature__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="14" y="14" width="36" height="36" rx="4"/>
-              <path d="M24 32l6 6 10-10"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2-6.3-4.6-6.3 4.6L7.9 13.8 2 9.4h7.6z"/></svg>
           </div>
-          <h3>Generous 47 × 47 Inch Size</h3>
-          <p>Much larger than traditional swaddles — making it easier to wrap baby snugly and possible to swaddle comfortably for longer as your baby grows.</p>
+          <h3>Made Personal</h3>
+          <p>Add a name and birth details to any design, or have a song or bedtime story made just for your child. Ordinary gifts, they are not.</p>
         </div>
 
         <div class="feature">
           <div class="feature__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M32 10l5.5 11 12 1.7-8.7 8.5 2 12-10.8-5.7L21.2 43.2l2-12-8.7-8.5 12-1.7z"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
           </div>
-          <h3>Unique Elegant Designs</h3>
-          <p>Our prints stand apart from run-of-the-mill cartoon patterns. Vibrant, artistic and stylish — beautiful enough to show off when you take your baby out.</p>
+          <h3>Print It Your Way</h3>
+          <p>High-resolution files at 4:5, so they sit beautifully at 8×10&Prime;, 16×20&Prime; or in an A4 frame. Print at home, at the shops, or anywhere you like.</p>
         </div>
 
         <div class="feature">
           <div class="feature__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 28c0-8.8 7.2-16 16-16s16 7.2 16 16c0 6-3 10-8 14H24c-5-4-8-8-8-14z"/>
-              <path d="M26 46v6M38 46v6M23 52h18"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
           </div>
-          <h3>Multi-Purpose Essential</h3>
-          <p>So much more than a swaddle. Use it as a nursing cover, change mat, burp cloth, stroller cover, tummy time blanket and more — it does it all.</p>
+          <h3>Softer Than Cotton</h3>
+          <p>Our swaddles are a premium 70% bamboo blend — naturally breathable, temperature-regulating, and generously sized at 47 × 47 inches.</p>
         </div>
 
         <div class="feature">
           <div class="feature__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M32 12c-5 0-9 4-9 9 0 3 1.5 5.5 4 7l5 3 5-3c2.5-1.5 4-4 4-7 0-5-4-9-9-9z"/>
-              <path d="M16 46c2-6 8-10 16-10s14 4 16 10"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </div>
-          <h3>Give Back to Children</h3>
-          <p>With every purchase, a portion of proceeds is donated to a children's charity supporting disadvantaged kids around the world. Buy beautifully, give meaningfully.</p>
+          <h3>Gives Something Back</h3>
+          <p>A portion of every single sale — print, printable or swaddle — goes to children's charities making a real difference around the world.</p>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- ===== GIFT BANNER ===== -->
-  <section class="gift" id="gift">
-    <div class="gift__overlay"></div>
+  <!-- ===== STORY ===== -->
+  <section class="lp-story" id="about">
     <div class="container">
-      <div class="gift__content">
-        <div class="section-label section-label--light">Perfect Gift</div>
-        <h2>The Baby Shower Gift<br/>Everyone Will Love</h2>
-        <p>Little Poppin swaddles are the gift that gets remembered. Beautiful, practical, and unlike anything else in the baby aisle — the expecting parents in your life deserve something truly special.</p>
-        <div class="gift__checklist">
-          <div class="gift__check">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Premium bamboo softness
-          </div>
-          <div class="gift__check">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Unique artistic designs
-          </div>
-          <div class="gift__check">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            6-in-1 multi-use blanket
-          </div>
-          <div class="gift__check">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Contributes to children's charity
-          </div>
+      <div class="section-label">Our Story</div>
+      <h2 class="section-title">Made with Love in Australia</h2>
+      <div class="lp-story__grid">
+        <div>
+          <p class="lp-story__lead">It began with one mother wanting something lovelier than what was on the shelf.</p>
+          <p>Little Poppin started with a swaddle — a premium bamboo wrap, softer than cotton, printed with a design you'd actually want to be photographed holding. Parents kept asking where the artwork came from.</p>
+          <p>So the artwork became the point. Today there are ninety-three original prints across nursery, star signs, magical academia and Christmas — plus colouring books, milestone cards, wall calendars and keepsakes with your child's name on them.</p>
+          <p>Nearly all of it is delivered the second you buy it, so a last-minute gift is still a beautiful one. And if you'd rather not print it yourself, we'll have it framed and posted to you from right here in Australia.</p>
+          <p>A portion of every purchase goes towards children's charities making a real difference for disadvantaged children around the world.</p>
         </div>
-        <button type="button" data-sku="bundle" class="btn btn--white">Shop the Bundle — $27</button>
-      </div>
-      <div class="gift__image">
-        <img src="images/pink-2.jpg" alt="Little Poppin as a gift" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== HOW IT WORKS ===== -->
-  <section class="unbox">
-    <div class="container">
-      <div class="section-label">The Experience</div>
-      <h2 class="section-title">What Happens Next</h2>
-      <p class="section-intro">From the moment your swaddle arrives, you'll understand why parents love Little Poppin.</p>
-      <div class="unbox__steps">
-        <div class="unbox__step">
-          <div class="unbox__number">01</div>
-          <h4>It Arrives</h4>
-          <p>Your package arrives and you open it immediately — of course.</p>
-        </div>
-        <div class="unbox__step">
-          <div class="unbox__number">02</div>
-          <h4>You're Struck</h4>
-          <p>The vibrant colors and elegant design take your breath away through the packaging window.</p>
-        </div>
-        <div class="unbox__step">
-          <div class="unbox__number">03</div>
-          <h4>You Feel It</h4>
-          <p>You unfold it and are immediately struck by how impossibly soft it feels.</p>
-        </div>
-        <div class="unbox__step">
-          <div class="unbox__number">04</div>
-          <h4>Baby Loves It</h4>
-          <p>You can't resist swaddling your little one — and baby is instantly calmer, cozier, happier.</p>
-        </div>
-        <div class="unbox__step">
-          <div class="unbox__number">05</div>
-          <h4>Give Back</h4>
-          <p>Choose a children's charity from the instructions on the package — your purchase makes a difference.</p>
+        <div>
+          <img class="lp-story__img" src="images/hero-green.jpg" alt="Baby wrapped in a Little Poppin swaddle" />
         </div>
       </div>
     </div>
@@ -354,37 +428,24 @@
       <div class="section-label">Get in Touch</div>
       <h2 class="section-title">We'd Love to Hear from You</h2>
       <div class="contact__grid">
-        <div class="contact__info">
-          <p class="contact__lead">Little Poppin is proudly Canberra-made and available to buy securely online. For enquiries about purchasing or anything else, reach out anytime.</p>
-          <div class="contact__details">
-            <div class="contact__item">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-              <a href="tel:0456367013">0456 367 013</a>
-            </div>
-            <div class="contact__item">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span>Canberra, ACT, Australia</span>
-            </div>
-            <div class="contact__item">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-              <a href="https://www.facebook.com/LittlePoppin" target="_blank" rel="noopener">Little Poppin on Facebook</a>
-            </div>
+        <div class="contact__details">
+          <p class="contact__lead">Little Poppin is an Australian family business, available to buy securely online. For questions about an order, a custom piece, or anything else at all — just reach out.</p>
+          <div class="contact__item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            <span><a href="mailto:info@wildheartspublishing.com.au">info@wildheartspublishing.com.au</a></span>
           </div>
-
-          <div class="shop-online">
-            <h4>Shop Online</h4>
-            <p>Buy securely online with card — checkout is powered by Stripe. Swaddles ship Australia-wide; art prints arrive instantly as high-resolution downloads.</p>
-            <div class="shop-online__buttons">
-              <a href="pink-swaddle.html" class="btn btn--primary" style="margin-top:16px;">Shop The Garden Dance →</a>
-              <a href="green-swaddle.html" class="btn btn--outline-dark" style="margin-top:16px;">Shop The Wild Garden →</a>
-              <a href="prints.html" class="btn btn--outline-dark" style="margin-top:16px;">Browse Art Prints →</a>
-            </div>
+          <div class="contact__item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Australia · shipped Australia-wide</span>
+          </div>
+          <div class="contact__item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            <span><a href="https://www.facebook.com/LittlePoppin" target="_blank" rel="noopener">facebook.com/LittlePoppin</a></span>
           </div>
         </div>
-
         <div class="contact__image">
-          <img src="images/hero-pink.jpg" alt="Little Poppin lifestyle shot" />
-          <img src="images/hero-green.jpg" alt="Little Poppin lifestyle shot" class="contact__image--second" />
+          <img src="images/pink-2.jpg" alt="Little Poppin" />
+          <img src="images/green-2.jpg" alt="Little Poppin" class="contact__image--second" />
         </div>
       </div>
     </div>
@@ -396,19 +457,17 @@
       <div class="footer__inner">
         <div class="footer__brand">
           <img src="images/logo.jpg" alt="Little Poppin" class="footer__logo" />
-          <p>Premium bamboo swaddles &amp; magical nursery art.<br/>Made with love in Canberra, Australia.</p>
+          <p>Magical nursery art, personalised keepsakes<br/>&amp; premium bamboo swaddles.<br/>Made with love in Australia.</p>
         </div>
         <div class="footer__links">
           <nav aria-label="Footer navigation">
-            <a href="#about">About</a>
-            <a href="#products">Our Swaddles</a>
             <a href="prints.html">Art Prints</a>
             <a href="personalise.html">Personalise</a>
             <a href="printclub.html">Print Club</a>
             <a href="printables.html">Printables</a>
             <a href="custom.html">Made for You</a>
-            <a href="#features">Why Us</a>
-            <a href="#gift">Perfect Gift</a>
+            <a href="#products">Swaddles</a>
+            <a href="#about">Our Story</a>
             <a href="#contact">Contact</a>
           </nav>
         </div>
@@ -427,58 +486,40 @@
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
         </nav>
-        <p>&copy; 2025 Little Poppin. All rights reserved. Canberra, ACT, Australia.</p>
+        <p>&copy; 2025 Little Poppin. All rights reserved. Australia.</p>
       </div>
     </div>
   </footer>
 
   <script>
-    // Sticky nav
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('nav--scrolled', window.scrollY > 60);
-    });
+    // Nav background on scroll. The menu toggle itself is handled by store.js,
+    // which every page loads (this button is marked data-nav-bound so it binds once).
+    (function () {
+      var nav = document.getElementById('nav');
+      var onScroll = function () { nav.classList.toggle('nav--scrolled', window.scrollY > 40); };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Mobile toggle
-    const toggle = document.getElementById('navToggle');
-    const links = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('nav__links--open');
-      toggle.classList.toggle('nav__toggle--open');
-    });
-
-    // Close nav on link click
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        links.classList.remove('nav__links--open');
-        toggle.classList.remove('nav__toggle--open');
+      var toggle = document.getElementById('navToggle');
+      var links = document.getElementById('navLinks');
+      toggle.addEventListener('click', function () {
+        var open = links.classList.toggle('nav__links--open');
+        toggle.classList.toggle('nav__toggle--open', open);
       });
-    });
-
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+      links.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          links.classList.remove('nav__links--open');
+          toggle.classList.remove('nav__toggle--open');
+        });
       });
-    });
 
-    // Fade-in on scroll
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+      document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener('click', function (e) {
+          var target = document.querySelector(this.getAttribute('href'));
+          if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
       });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.feature, .product-card, .unbox__step, .about__text, .about__image').forEach(el => {
-      el.classList.add('fade-in');
-      observer.observe(el);
-    });
+    })();
   </script>
   <script src="store.js" defer></script>
 </body>
