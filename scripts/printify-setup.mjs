@@ -56,6 +56,13 @@ const TOKEN = (() => {
 })();
 if (!TOKEN) { console.error('Set PRINTIFY_API_TOKEN in .env.local'); process.exit(1); }
 
+// presignGet() reads BLOB_READ_WRITE_TOKEN from the environment; load it from .env.local
+// so this script works the same way the other publish scripts do.
+if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  const m = fs.readFileSync(path.join(REPO, '.env.local'), 'utf8').match(/BLOB_READ_WRITE_TOKEN\s*=\s*(.+)/);
+  if (m) process.env.BLOB_READ_WRITE_TOKEN = m[1].trim().replace(/^["']|["']$/g, '');
+}
+
 const API = 'https://api.printify.com/v1';
 async function pf(pathname, opts = {}) {
   const r = await fetch(API + pathname, { ...opts, headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json', ...(opts.headers || {}) } });
@@ -74,6 +81,14 @@ function listArt() {
   }
   return out;
 }
+
+// High-res originals already live in the private Vercel Blob store; Printify can fetch
+// them directly by presigned URL, which is far quicker than base64 from here.
+const { GENERATED_DIGITAL_PRODUCTS } = await import('../lib/digital-products.generated.js');
+const { presignGet, MAX_TTL_MS } = await import('../lib/blob-link.js');
+const BLOB_PATHS = Object.fromEntries(
+  Object.entries(GENERATED_DIGITAL_PRODUCTS).filter(([, p]) => p.file && !p.items).map(([sku, p]) => [sku, p.file])
+);
 
 const cmd = process.argv[2];
 try {
@@ -112,10 +127,23 @@ try {
 
     let created = 0, skipped = 0;
     for (const [i, a] of art.entries()) {
-      // Upload the artwork once and remember its id, so a resume never re-sends 7MB.
+      // Upload the artwork once and remember its id, so a resume never re-sends it.
+      //
+      // Hand Printify a presigned URL rather than base64 `contents`. The originals are
+      // ~7MB each, so base64 means pushing ~9MB per design up from this machine —
+      // measured at roughly four minutes per design, i.e. six hours for the catalogue.
+      // Passing a URL lets Printify pull straight from Vercel Blob instead, which is
+      // both far faster and avoids holding the whole file in memory here.
+      // Falls back to base64 if a design has no Blob copy.
       if (!state.uploads[a.sku]) {
-        const contents = fs.readFileSync(a.file).toString('base64');
-        const up = await pf('/uploads/images.json', { method: 'POST', body: JSON.stringify({ file_name: a.sku + '.png', contents }) });
+        const blobPath = BLOB_PATHS[a.sku];
+        let payload;
+        if (blobPath) {
+          payload = { file_name: a.sku + '.png', url: await presignGet(blobPath, MAX_TTL_MS) };
+        } else {
+          payload = { file_name: a.sku + '.png', contents: fs.readFileSync(a.file).toString('base64') };
+        }
+        const up = await pf('/uploads/images.json', { method: 'POST', body: JSON.stringify(payload) });
         state.uploads[a.sku] = up.id;
         save();
       }
