@@ -63,6 +63,10 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
     .pd__grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); gap: 50px; align-items: start; }
     @media (max-width: 860px) { .pd__grid { grid-template-columns: 1fr; gap: 28px; } }
     .pd__art { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-lg); display: block; }
+    .pd__mockup { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); display: block; margin-top: 16px; }
+    .pd__mockupNote { font-size: 0.78rem; color: var(--mid-grey); text-align: center; margin-top: 8px; }
+    .pd__guarantee { background: var(--teal-light); border-radius: var(--radius); padding: 14px 16px;
+                     font-size: 0.9rem; color: var(--charcoal); margin: 18px 0 0; line-height: 1.55; }
     .pd__body h1 { font-family: var(--font-serif); font-size: 2.4rem; font-weight: 600; margin: 0 0 12px; line-height: 1.15; }
     .pd__lead { font-size: 1.05rem; color: var(--mid-grey); margin: 0 0 22px; }
     .pd__price { font-family: var(--font-serif); font-size: 2rem; margin: 0 0 4px; }
@@ -187,7 +191,12 @@ for (const p of data.prints) {
       <p class="breadcrumb"><a href="${up}index.html">Home</a> › <a href="${up}prints.html">Art Prints</a> ›
          <a href="${up}prints.html#${p.section}">${esc(sectionName)}</a> › ${esc(p.title)}</p>
       <div class="pd__grid">
-        <div><img class="pd__art" src="${up}${p.preview.replace(/^\//, '')}" alt="${esc(p.title)} — magical art print by Little Poppin" /></div>
+        <div>
+          <img class="pd__art" src="${up}${p.preview.replace(/^\//, '')}" alt="${esc(p.title)} — magical art print by Little Poppin" />
+          <img class="pd__mockup" src="${up}images/mockups/${slug}.jpg" loading="lazy"
+               alt="${esc(p.title)} shown framed on a wall" />
+          <p class="pd__mockupNote">Shown framed — frame not included with the digital download.</p>
+        </div>
         <div class="pd__body">
           <h1>${esc(p.title)}</h1>
           <p class="pd__lead">${esc(p.description)}</p>
@@ -213,6 +222,9 @@ for (const p of data.prints) {
             <p class="pd__physicalNote">Printed and posted for you · Australia-wide shipping</p>
             <p class="pd__err" data-physical-err role="alert"></p>
           </div>
+          <p class="pd__guarantee"><strong>Our promise:</strong> if your file isn't right —
+             wrong size, won't open, anything at all — tell us and we'll fix it or refund you.
+             No argument, no forms.</p>
           <ul class="pd__list">
             <li>High-resolution PNG (4:5 ratio, ~300 DPI)</li>
             <li>Prints beautifully at 4×5&Prime;, 8×10&Prime; and 16×20&Prime;</li>
@@ -270,7 +282,12 @@ for (const s of data.sets) {
       <p class="breadcrumb"><a href="${up}index.html">Home</a> › <a href="${up}prints.html">Art Prints</a> ›
          <a href="${up}prints.html#sets">Gallery Sets</a> › ${esc(s.title)}</p>
       <div class="pd__grid">
-        <div><img class="pd__art" src="${up}${s.preview.replace(/^\//, '')}" alt="${esc(s.title)} — set of three magical art prints" /></div>
+        <div>
+          <img class="pd__art" src="${up}${s.preview.replace(/^\//, '')}" alt="${esc(s.title)} — set of magical art prints" />
+          <img class="pd__mockup" src="${up}images/mockups/${s.sku}.jpg" loading="lazy"
+               alt="${esc(s.title)} shown as a framed gallery wall" />
+          <p class="pd__mockupNote">Shown framed — frames not included with the digital download.</p>
+        </div>
         <div class="pd__body">
           <h1>${esc(s.title)}</h1>
           <p class="pd__lead">${esc(s.description)}</p>
@@ -281,6 +298,9 @@ for (const s of data.sets) {
           <ul class="pd__sets">
 ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">${esc(c.title)}</a></li>`).join('\n')}
           </ul>
+          <p class="pd__guarantee"><strong>Our promise:</strong> if any file isn't right —
+             wrong size, won't open, anything at all — tell us and we'll fix it or refund you.
+             No argument, no forms.</p>
           <ul class="pd__list">
             <li>${comps.length} high-resolution PNGs (4:5 ratio, ~300 DPI)</li>
             <li>A ready-made gallery wall, designed to hang together</li>

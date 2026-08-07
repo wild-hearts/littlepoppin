@@ -34,6 +34,10 @@
     .pd__grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); gap: 50px; align-items: start; }
     @media (max-width: 860px) { .pd__grid { grid-template-columns: 1fr; gap: 28px; } }
     .pd__art { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-lg); display: block; }
+    .pd__mockup { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); display: block; margin-top: 16px; }
+    .pd__mockupNote { font-size: 0.78rem; color: var(--mid-grey); text-align: center; margin-top: 8px; }
+    .pd__guarantee { background: var(--teal-light); border-radius: var(--radius); padding: 14px 16px;
+                     font-size: 0.9rem; color: var(--charcoal); margin: 18px 0 0; line-height: 1.55; }
     .pd__body h1 { font-family: var(--font-serif); font-size: 2.4rem; font-weight: 600; margin: 0 0 12px; line-height: 1.15; }
     .pd__lead { font-size: 1.05rem; color: var(--mid-grey); margin: 0 0 22px; }
     .pd__price { font-family: var(--font-serif); font-size: 2rem; margin: 0 0 4px; }
@@ -81,7 +85,12 @@
       <p class="breadcrumb"><a href="../index.html">Home</a> › <a href="../prints.html">Art Prints</a> ›
          <a href="../prints.html#nursery">Nursery</a> › Sleepy Koala</p>
       <div class="pd__grid">
-        <div><img class="pd__art" src="../images/prints/01-sleepy-koala.jpg" alt="Sleepy Koala — magical art print by Little Poppin" /></div>
+        <div>
+          <img class="pd__art" src="../images/prints/01-sleepy-koala.jpg" alt="Sleepy Koala — magical art print by Little Poppin" />
+          <img class="pd__mockup" src="../images/mockups/sleepy-koala.jpg" loading="lazy"
+               alt="Sleepy Koala shown framed on a wall" />
+          <p class="pd__mockupNote">Shown framed — frame not included with the digital download.</p>
+        </div>
         <div class="pd__body">
           <h1>Sleepy Koala</h1>
           <p class="pd__lead">A baby koala dozes in a glowing eucalyptus tree under the stars — an Aussie lullaby.</p>
@@ -107,6 +116,9 @@
             <p class="pd__physicalNote">Printed and posted for you · Australia-wide shipping</p>
             <p class="pd__err" data-physical-err role="alert"></p>
           </div>
+          <p class="pd__guarantee"><strong>Our promise:</strong> if your file isn't right —
+             wrong size, won't open, anything at all — tell us and we'll fix it or refund you.
+             No argument, no forms.</p>
           <ul class="pd__list">
             <li>High-resolution PNG (4:5 ratio, ~300 DPI)</li>
             <li>Prints beautifully at 4×5&Prime;, 8×10&Prime; and 16×20&Prime;</li>
