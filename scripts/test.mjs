@@ -194,10 +194,16 @@ check('sender refuses to run without CRON_SECRET', /if\s*\(\s*!secret\s*\)/.test
   '`if (secret && ...)` fails OPEN: with the env var unset the endpoint becomes a public trigger for a mass email.');
 
 const sendMod = await import('../api/printclub-send.js');
+const reviewMod = await import('../api/review-request.js');
+const reviewSrc = fs.readFileSync('api/review-request.js', 'utf8');
+check('review-request also fails closed without CRON_SECRET', /if\s*\(\s*!secret\s*\)/.test(reviewSrc),
+  'It emails customers and spends Resend quota — an unset secret must disable it, not open it.');
 const mkRes = () => { const r = {}; r.status = (c) => { r.code = c; return r; }; r.json = (b) => { r.body = b; return r; }; return r; };
 delete process.env.CRON_SECRET;
 let r1 = mkRes(); await sendMod.default({ headers: {}, query: {} }, r1);
 check('unset secret → 503', r1.code === 503, `got ${r1.code}`);
+let rr = mkRes(); await reviewMod.default({ headers: {}, query: {} }, rr);
+check('review-request unset secret → 503', rr.code === 503, `got ${rr.code}`);
 process.env.CRON_SECRET = 'unit-test-secret';
 let r2 = mkRes(); await sendMod.default({ headers: {}, query: {} }, r2);
 check('missing auth header → 401', r2.code === 401, `got ${r2.code}`);
@@ -250,6 +256,19 @@ const noNav = pages.filter((pg) => {
 });
 check('every page with a nav has a mobile menu button', noNav.length === 0,
   `unreachable navigation on mobile: ${noNav.join(', ')}`);
+
+// ---------------------------------------------------------------------------
+group('Social proof');
+
+const testimonials = JSON.parse(fs.readFileSync('data/testimonials.json', 'utf8'));
+check('testimonials.json is an array', Array.isArray(testimonials));
+const badT = testimonials.filter((t) => !t.quote || !t.name);
+check('every testimonial has a quote and a name', badT.length === 0, JSON.stringify(badT).slice(0, 200));
+const home = fs.readFileSync('index.html', 'utf8');
+check('testimonials section starts hidden', /<section class="lp-says" id="says" hidden>/.test(home),
+  'An empty "What People Say" heading is worse than none at all.');
+check('every product page carries the guarantee',
+  fs.readdirSync('print').every((f) => fs.readFileSync(`print/${f}`, 'utf8').includes('Our promise:')));
 
 // ---------------------------------------------------------------------------
 group('Physical prints (Printify)');

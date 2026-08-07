@@ -83,6 +83,14 @@
     .lp-free p { color: var(--mid-grey); margin: 0 0 20px; }
     .lp-free__art { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
 
+    /* ── Testimonials (hidden until there are any) ─────────────────────── */
+    .lp-says { padding: 86px 0; }
+    .lp-says__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+    .lp-say { background: #fff; border-radius: var(--radius); padding: 26px 26px 22px; box-shadow: var(--shadow); }
+    .lp-say__quote { font-family: var(--font-serif); font-size: 1.12rem; line-height: 1.55; margin: 0 0 16px; }
+    .lp-say__who { font-size: 0.86rem; color: var(--mid-grey); }
+    .lp-say__who strong { color: var(--charcoal); }
+
     /* ── Story ────────────────────────────────────────────────────────── */
     .lp-story { padding: 92px 0; background: var(--cream); }
     .lp-story__grid { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,0.9fr); gap: 60px; align-items: center; }
@@ -402,6 +410,20 @@
     </div>
   </section>
 
+  <!-- ===== WHAT PEOPLE SAY =====
+       Renders only when data/testimonials.json has entries, so it is never an empty
+       shell on the page. To add one, append to that file — no rebuild needed:
+         { "quote": "...", "name": "Sarah", "detail": "Melbourne", "product": "Sleepy Moon & Stars" }
+       Only publish words a real customer actually wrote. Inventing them is misleading
+       conduct under Australian Consumer Law, and Etsy closes shops for it. -->
+  <section class="lp-says" id="says" hidden>
+    <div class="container">
+      <div class="section-label">Kind Words</div>
+      <h2 class="section-title">What People Say</h2>
+      <div class="lp-says__grid" id="saysGrid"></div>
+    </div>
+  </section>
+
   <!-- ===== STORY ===== -->
   <section class="lp-story" id="about">
     <div class="container">
@@ -512,6 +534,30 @@
           toggle.classList.remove('nav__toggle--open');
         });
       });
+
+      // Testimonials: fetch and reveal only if there is something to show.
+      fetch('data/testimonials.json')
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (items) {
+          if (!Array.isArray(items) || !items.length) return;
+          var grid = document.getElementById('saysGrid');
+          items.slice(0, 6).forEach(function (t) {
+            var el = document.createElement('figure');
+            el.className = 'lp-say';
+            var q = document.createElement('blockquote');
+            q.className = 'lp-say__quote';
+            q.textContent = '\u201c' + t.quote + '\u201d';
+            var who = document.createElement('figcaption');
+            who.className = 'lp-say__who';
+            who.innerHTML = '<strong>' + (t.name || 'A customer') + '</strong>'
+              + (t.detail ? ' \u00b7 ' + t.detail : '')
+              + (t.product ? '<br/>on ' + t.product : '');
+            el.appendChild(q); el.appendChild(who);
+            grid.appendChild(el);
+          });
+          document.getElementById('says').hidden = false;
+        })
+        .catch(function () { /* stay hidden */ });
 
       document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         anchor.addEventListener('click', function (e) {
