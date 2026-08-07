@@ -298,6 +298,24 @@ const badFields = Object.values(CUSTOM_PRODUCTS).flatMap((p) =>
 check('Stripe custom_field labels are within the 50-char limit', badFields.length === 0,
   badFields.join(', '));
 
+// Buttons on custom.html must quote what Stripe will actually charge.
+const customHtml = fs.readFileSync('custom.html', 'utf8');
+const priceDrift = [];
+for (const p of Object.values(CUSTOM_PRODUCTS)) {
+  if (p.sku.startsWith('gift-voucher')) continue;
+  const m = customHtml.match(new RegExp(`data-sku="${p.sku}"[^>]*>([^<]*)<`));
+  if (!m) continue;                              // not displayed is fine
+  const want = `$${(p.price / 100).toFixed(0)}`;
+  if (!m[1].includes(want)) priceDrift.push(`${p.sku}: page says "${m[1].trim()}", code says ${want}`);
+}
+check('custom.html prices match lib/products.js', priceDrift.length === 0, priceDrift.join('\n      '));
+
+// A bundle must cost more than any single item inside it, or it undercuts its own parts.
+const song = CUSTOM_PRODUCTS['custom-song'].price;
+check('bundles containing the song cost more than the song alone',
+  CUSTOM_PRODUCTS['bundle-song-story'].price > song && CUSTOM_PRODUCTS['bundle-first-year'].price > song,
+  `song $${song / 100}, song+story $${CUSTOM_PRODUCTS['bundle-song-story'].price / 100}, first-year $${CUSTOM_PRODUCTS['bundle-first-year'].price / 100}`);
+
 // ---------------------------------------------------------------------------
 console.log(`\n${'─'.repeat(60)}`);
 if (failures.length) {
