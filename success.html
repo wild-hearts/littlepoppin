@@ -27,7 +27,10 @@
         <p class="status-card__lead">Your payment was successful and your order is confirmed. We’ll get your swaddle on its way and email you if we need anything.</p>
         <p class="status-card__meta" id="orderMeta"></p>
         <div class="status-card__download" id="downloadArea"></div>
-        <div class="status-card__charity">🌿 A portion of your purchase supports children’s charities worldwide. Thank you for making a difference.</div>
+        <!-- Populated by JS for SWADDLE orders only. Charity funding comes from swaddle
+             sales, so showing this to someone who bought a digital print would be a false
+             claim about their purchase. Empty by default — it must never render blind. -->
+        <div class="status-card__charity" id="charityNote" hidden></div>
         <a href="index.html" class="btn btn--primary">Back to Little Poppin</a>
       </div>
     </div>
@@ -58,6 +61,14 @@
           if (o && o.paid && o.amount_total != null) {
             var amount = '$' + (o.amount_total / 100).toFixed(2) + ' ' + (o.currency || 'aud').toUpperCase();
             meta.textContent = 'Order confirmed — ' + amount + (o.email ? ' · receipt sent to ' + o.email : '');
+          }
+          // Physical order = a swaddle, which is the range that funds the charity giving.
+          if (o && o.paid && o.type !== 'digital' && o.type !== 'personalised') {
+            var ch = document.getElementById('charityNote');
+            if (ch) {
+              ch.textContent = '🌿 A portion of your swaddle purchase supports children’s charities worldwide. Thank you for making a difference.';
+              ch.hidden = false;
+            }
           }
           if (o && o.paid && (o.type === 'digital' || o.type === 'personalised') && o.sku) {
             var dl = document.getElementById('downloadArea');

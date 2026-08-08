@@ -316,6 +316,36 @@ check('bundles containing the song cost more than the song alone',
   CUSTOM_PRODUCTS['bundle-song-story'].price > song && CUSTOM_PRODUCTS['bundle-first-year'].price > song,
   `song $${song / 100}, song+story $${CUSTOM_PRODUCTS['bundle-song-story'].price / 100}, first-year $${CUSTOM_PRODUCTS['bundle-first-year'].price / 100}`);
 
+// Charity claims must stay scoped to the swaddles, which are the only range that funds
+// the giving. An unqualified "a portion of every sale" across a shop that is now mostly
+// digital is misleading conduct under Australian Consumer Law, not loose copy — and it
+// was live on ~130 pages until August 2026. Anything that reintroduces it fails here.
+{
+  const pages = [];
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === 'node_modules' || e.name.startsWith('.')) continue;
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (e.name.endsWith('.html')) pages.push(full);
+    }
+  };
+  walk(REPO);
+  const bad = [];
+  for (const f of pages) {
+    const html = fs.readFileSync(f, 'utf8');
+    for (const m of html.matchAll(/A portion of[^.<"]{0,120}/g)) {
+      // "swaddle" anywhere in the sentence makes the scope explicit and truthful.
+      // "this sale" is fine only on the two swaddle product pages.
+      const sent = m[0];
+      if (/swaddle/i.test(sent)) continue;
+      if (/this sale/i.test(sent) && /swaddle/.test(path.basename(f))) continue;
+      bad.push(`${path.relative(REPO, f)}: "${sent.trim().slice(0, 70)}"`);
+    }
+  }
+  check('charity claims are scoped to swaddles', bad.length === 0, bad.slice(0, 6).join('\n      '));
+}
+
 // ---------------------------------------------------------------------------
 console.log(`\n${'─'.repeat(60)}`);
 if (failures.length) {

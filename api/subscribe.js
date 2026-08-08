@@ -89,7 +89,6 @@ async function sendWelcomePrint(email) {
     'We\'ll be in touch now and then with new collections — never too often, and you can',
     'unsubscribe from any email in one click.',
     '',
-    '🌿 A portion of every Little Poppin sale supports children\'s charities worldwide.',
     '',
     '— Little Poppin',
     'littlepoppin.com',

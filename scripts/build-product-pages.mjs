@@ -249,7 +249,6 @@ for (const p of data.prints) {
             <li>Prints beautifully at 4×5&Prime;, 8×10&Prime; and 16×20&Prime;</li>
             <li>Instant download — nothing is posted</li>
             <li>Personal-use licence for your home, nursery or as a gift</li>
-            <li>🌿 A portion of every sale supports children's charities</li>
           </ul>
         </div>
       </div>
@@ -324,7 +323,6 @@ ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">$
             <li>${comps.length} high-resolution PNGs (4:5 ratio, ~300 DPI)</li>
             <li>A ready-made gallery wall, designed to hang together</li>
             <li>Instant download — nothing is posted</li>
-            <li>🌿 A portion of every sale supports children's charities</li>
           </ul>
         </div>
       </div>
@@ -420,7 +418,6 @@ ${relatedGrid(comps, up)}`;
       <h1>More Than Wall Art</h1>
       <p>Colouring books, milestone cards and a wall calendar — all drawn from the same
          magical collection. Print them at home, as many times as you like.</p>
-      <p class="prints-hero__note">🌿 A portion of every sale supports children's charities worldwide.</p>
     </div>
   </header>
 

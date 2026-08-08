@@ -87,7 +87,6 @@ export default async function handler(req, res) {
         'The links stay live for 6 days, so save the files somewhere safe once you download them.',
         `Print them at home, or take them to any print shop — all high resolution and ready to frame.`,
         '',
-        '🌿 A portion of your membership supports children\'s charities worldwide.',
         '',
         'Not feeling it this month? You can manage or cancel your membership any time —',
         'just reply to this email and we\'ll sort it out.',

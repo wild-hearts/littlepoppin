@@ -189,7 +189,6 @@ async function handleCustomOrder(session, sku) {
     `We've received your brief for "${product?.name || sku}" and we're getting started.`,
     'Your finished creation will arrive at this email address within 5 days.',
     '',
-    'A portion of your purchase supports children\'s charities worldwide — thank you.',
     '— Little Poppin',
   ].join('\n');
 
@@ -244,7 +243,6 @@ async function handleClubSignup(session) {
     `From now on ${prints.length || 3} new prints will land in your inbox at the start of every month.`,
     'Nothing to remember, nothing to claim — it just arrives.',
     '',
-    '🌿 A portion of your membership supports children\'s charities worldwide.',
     '',
     'Want to stop? Reply to any Print Club email and we\'ll cancel it right away.',
     '',

@@ -98,7 +98,6 @@ p{color:#6B6B6B;max-width:620px;margin:0 auto 8px}
 <p style="margin-top:14px">Tap each one to download and save it. These links stay fresh for an hour —
 revisit this page from your email any time for new ones.</p>
 <div class="grid">${links}</div>
-<p style="margin-top:34px">🌿 A portion of your purchase supports children's charities. Thank you!</p>
 </body></html>`);
     }
 
