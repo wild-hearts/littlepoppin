@@ -1,5 +1,12 @@
 # Etsy Listing Pack — LittlePoppin (top 20 digital-print listings)
 
+> **DO NOT reinstate the charity line in these descriptions.** Only Little Poppin *swaddle*
+> sales fund the children's-charity giving (confirmed 8 Aug 2026). Every Etsy listing here is
+> a digital download, which funds none of it — so the claim is false on all of them, and an
+> unsubstantiated donation claim is misleading conduct under the Australian Consumer Law.
+> **The ~97 listings already live were published with the old body text and still carry it —
+> they need editing in Etsy's bulk editor.**
+
 Copy-paste pack for etsy.com/your/shops. Files live in `~/Downloads/LittlePoppin-Designs/`
 (upload the full-res PNG as the digital file; the web preview JPG in the repo's
 `images/prints/` works as the listing photo).
@@ -7,8 +14,8 @@ Copy-paste pack for etsy.com/your/shops. Files live in `~/Downloads/LittlePoppin
 ## One-time shop setup (5 min)
 - **Shop title:** `Little Poppin — Magical Nursery Art, Printables & Baby Keepsakes`
 - **Announcement:** `Dreamy, magical art for nurseries and little bedrooms — instant digital
-  downloads, printed and loved from Australia. A portion of every sale supports children's
-  charities worldwide. 🌙 Custom songs, stories & keepsakes at littlepoppin.com`
+  downloads, printed and loved from Australia. 🌙 Custom songs, stories & keepsakes at
+  littlepoppin.com`
 - **Shop sections:** Nursery Art · Little Zodiac · Magical Academia · Christmas · Gallery Sets
 - **Policies:** enable the digital-download policy template (no returns on digital items;
   buyers can always contact you if there's a problem).
@@ -38,7 +45,6 @@ to any local print shop. Matte paper suits the soft watercolour style best.
 LICENCE
 Personal use only — print for your home, nursery or as a gift. Not for resale.
 
-🌿 A portion of every sale supports children's charities worldwide.
 💝 Want it personalised — or a custom song for your little one? Visit littlepoppin.com
 ```
 
