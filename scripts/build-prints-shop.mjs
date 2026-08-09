@@ -111,16 +111,20 @@ const SETS = [
 // buy anyway, plus the rest" tier — the marginal cost of a digital file is zero, so the
 // job of these is to lift average order value, not to protect the single-print price.
 // To reprice, edit `price` here and rebuild — nothing else needs to change.
+// PRICING NOTE: collection prices were 69-87% off the per-print price, bottoming out at
+// $1.60 a print for the whole library. That is below the point where the rest of the shop
+// makes sense to buy at all. Raised so the ladder still rewards volume without gutting the
+// $12 print and $30 set tiers underneath it.
 const BUNDLES = [
-  { sku: 'bundle-zodiac', title: 'The Complete Little Zodiac', fromSection: 'zodiac', price: 4500,
+  { sku: 'bundle-zodiac', title: 'The Complete Little Zodiac', fromSection: 'zodiac', price: 6900,
     description: 'All twelve star-sign prints in one download — every birthday covered, for siblings, cousins and every baby shower this year.' },
-  { sku: 'bundle-festive', title: 'The Complete Festive Collection', fromSection: 'festive', price: 5900,
+  { sku: 'bundle-festive', title: 'The Complete Festive Collection', fromSection: 'festive', price: 8900,
     description: 'All twenty enchanted Christmas prints — a whole season of decorating, and a new wall every December.' },
-  { sku: 'bundle-academia', title: 'The Complete Magical Academia', fromSection: 'academia', price: 5900,
+  { sku: 'bundle-academia', title: 'The Complete Magical Academia', fromSection: 'academia', price: 8900,
     description: 'All twenty candlelit, wizarding-inspired prints — a full study wall for magic lovers of every age.' },
-  { sku: 'bundle-nursery', title: 'The Complete Nursery Collection', fromSection: 'nursery', price: 8900,
+  { sku: 'bundle-nursery', title: 'The Complete Nursery Collection', fromSection: 'nursery', price: 14900,
     description: 'Every one of our dreamy nursery prints in a single download — enough to style a whole nursery, playroom and hallway.' },
-  { sku: 'bundle-everything', title: 'The Entire Little Poppin Library', all: true, price: 14900,
+  { sku: 'bundle-everything', title: 'The Entire Little Poppin Library', all: true, price: 24900,
     description: 'Every single print we make — nursery, star signs, magical academia and festive. The whole library, one download, yours forever.' },
 ];
 

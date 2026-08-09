@@ -4,7 +4,7 @@
 import Stripe from 'stripe';
 import { getProduct, getDigital, getCustom, isDeliverable, shippingFor, CURRENCY, SHIPPING,
          printShippingFor, PRINT_COUNTRIES } from '../lib/products.js';
-import { getPrintOption } from '../lib/printify.js';
+import { getPrintOption, getSetPrintOption } from '../lib/printify.js';
 import { parsePersonalisation, PERSONALISE_PRICE } from '../lib/personalise.js';
 import { PRINT_CLUB } from '../lib/printclub.js';
 
@@ -128,11 +128,15 @@ export default async function handler(req, res) {
       return res.status(200).json({ url: session.url });
     }
 
-    // --- Physical print via Printify: body { sku (art), format, size } ---
+    // --- Physical print via Printify: body { sku, format, size, country } ---
+    // `sku` may be a single print OR a gallery set, in which case all three of its prints
+    // are ordered in the chosen format and size as one Printify order.
     if (body.format && body.size) {
-      const opt = getPrintOption(sku, String(body.format), String(body.size));
-      if (!opt) return res.status(409).json({ error: 'That print option isn’t available yet — check back soon.' });
       const art = getDigital(sku);
+      const opt = art?.items
+        ? getSetPrintOption(art.items, String(body.format), String(body.size))
+        : getPrintOption(sku, String(body.format), String(body.size));
+      if (!opt) return res.status(409).json({ error: 'That print option isn’t available yet — check back soon.' });
       const origin = baseUrl(req);
       // Postage is charged separately by destination — see PRINT_SHIPPING in lib/products.js
       // for why. The buyer picks their country before checkout, so the session is created
@@ -169,7 +173,7 @@ export default async function handler(req, res) {
         }],
         success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cancel.html`,
-        metadata: { brand: 'little_poppin', type: 'print', fulfil: 'printify', sku, format: String(body.format), size: String(body.size), country: String(body.country || '').toUpperCase() },
+        metadata: { brand: 'little_poppin', type: 'print', fulfil: 'printify', sku, format: String(body.format), size: String(body.size), country: String(body.country || '').toUpperCase(), isSet: art?.items ? '1' : '' },
       });
       return res.status(200).json({ url: session.url });
     }

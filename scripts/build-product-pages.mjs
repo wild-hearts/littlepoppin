@@ -25,6 +25,8 @@ const countryName = (() => {
   const dn = new Intl.DisplayNames(['en'], { type: 'region' });
   return (c) => { try { return dn.of(c) || c; } catch { return c; } };
 })();
+// A physical 'set' is only sensible up to a handful of prints.
+const MAX_PHYSICAL_SET = 5;
 const countryOptions = ['AU', 'US', 'GB', 'CA', 'NZ']
   .filter((c) => PRINT_COUNTRIES.includes(c))
   .concat(PRINT_COUNTRIES.filter((c) => !['AU','US','GB','CA','NZ'].includes(c))
@@ -334,6 +336,27 @@ for (const s of data.sets) {
           <ul class="pd__sets">
 ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">${esc(c.title)}</a></li>`).join('\n')}
           </ul>
+
+          <!-- All three prints, printed and posted as one order. Only SETS get this: they were
+               designed to hang together, whereas a 41- or 93-print collection is not a physical
+               product anyone wants posted (or could afford). Gated on size, not on sku naming. -->
+          ${comps.length <= MAX_PHYSICAL_SET ? `<div class="pd__physical" data-physical-for="${s.sku}" data-physical-set="${comps.length}" hidden>
+            <h2 class="pd__physicalTitle">Or have all ${comps.length} printed and posted</h2>
+            <div class="pd__physicalRow">
+              <label>Format
+                <select data-physical-format aria-label="Print format"></select>
+              </label>
+              <label>Size
+                <select data-physical-size aria-label="Print size"></select>
+              </label>
+              <label>Deliver to
+                <select data-physical-country aria-label="Delivery country">${countryOptions}</select>
+              </label>
+            </div>
+            <button type="button" class="btn btn--outline-dark pd__physicalBuy" data-physical-buy>Order the printed set</button>
+            <p class="pd__physicalNote">All ${comps.length} prints, printed close to you and posted together &mdash; postage shown at checkout</p>
+            <p class="pd__err" data-physical-err role="alert"></p>
+          </div>` : ''}
           <p class="pd__guarantee"><strong>Our promise:</strong> if any file isn't right —
              wrong size, won't open, anything at all — tell us and we'll fix it or refund you.
              No argument, no forms.</p>

@@ -39,7 +39,13 @@
   function updateLabel() {
     var fmt = formats.filter(function (f) { return f.key === formatSel.value; })[0];
     var size = fmt && fmt.sizes.filter(function (s) { return s.key === sizeSel.value; })[0];
-    buyBtn.textContent = size ? 'Order a printed copy — ' + money(size.price) : 'Order a printed copy';
+    var setCount = parseInt(block.getAttribute('data-physical-set') || '0', 10);
+    if (size && setCount > 1) {
+      var setPrice = Math.round(size.price * setCount * 0.9 / 100) * 100;   // matches SET_PRINT_SAVING
+      buyBtn.textContent = 'Order the printed set — ' + money(setPrice);
+    } else {
+      buyBtn.textContent = size ? 'Order a printed copy — ' + money(size.price) : 'Order a printed copy';
+    }
   }
 
   function buy() {

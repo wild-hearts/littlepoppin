@@ -7,7 +7,7 @@
 import Stripe from 'stripe';
 import { presignGet, MAX_TTL_MS } from '../lib/blob-link.js';
 import { getProduct, getDigital, getCustom } from '../lib/products.js';
-import { getPrintOption, submitPrintifyOrder } from '../lib/printify.js';
+import { getPrintOption, getSetPrintOption, submitPrintifyOrder } from '../lib/printify.js';
 import { GENERATED_DIGITAL_PRODUCTS } from '../lib/digital-products.generated.js';
 import { picksForMonth, monthLabel } from '../lib/printclub.js';
 
@@ -91,7 +91,9 @@ async function onOrderPaid(session) {
 // --- Printify fulfilment for physical prints ---
 async function fulfilPrintify(session) {
   const { sku, format, size } = session.metadata || {};
-  const opt = getPrintOption(sku, format, size);
+  // A gallery set resolves to three line items; a single print to one.
+  const art = getDigital(sku);
+  const opt = art?.items ? getSetPrintOption(art.items, format, size) : getPrintOption(sku, format, size);
   if (!opt) { console.error('Printify: no option for', sku, format, size); return; }
   const d = session.customer_details || {};
   const ship = session.shipping_details || {};
@@ -101,6 +103,7 @@ async function fulfilPrintify(session) {
       externalId: session.id,
       productId: opt.productId,
       variantId: opt.variantId,
+      items: opt.items,
       address: { name: ship.name || d.name, ...addr },
       email: d.email,
       phone: d.phone,
