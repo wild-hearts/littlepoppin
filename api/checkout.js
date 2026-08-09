@@ -2,7 +2,8 @@
 // Creates a Stripe Checkout Session for a single SKU and returns its hosted URL.
 // The storefront POSTs { sku, quantity } and then redirects the buyer to session.url.
 import Stripe from 'stripe';
-import { getProduct, getDigital, getCustom, isDeliverable, shippingFor, CURRENCY, SHIPPING } from '../lib/products.js';
+import { getProduct, getDigital, getCustom, isDeliverable, shippingFor, CURRENCY, SHIPPING,
+         printShippingFor, PRINT_COUNTRIES } from '../lib/products.js';
 import { getPrintOption } from '../lib/printify.js';
 import { parsePersonalisation, PERSONALISE_PRICE } from '../lib/personalise.js';
 import { PRINT_CLUB } from '../lib/printclub.js';

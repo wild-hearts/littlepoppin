@@ -346,6 +346,37 @@ check('bundles containing the song cost more than the song alone',
   check('charity claims are scoped to swaddles', bad.length === 0, bad.slice(0, 6).join('\n      '));
 }
 
+// Every symbol an api/ handler uses from a lib must actually be imported. `node --check`
+// only parses syntax, so a missing import is a ReferenceError that surfaces at RUNTIME, on
+// a real customer. That is exactly how the physical-print checkout shipped broken: an edit
+// to the import line silently no-op'd because the search string was stale, and nothing
+// caught it until Stripe returned 500 in production.
+{
+  const libExports = {};
+  for (const f of fs.readdirSync(path.join(REPO, 'lib')).filter((f) => f.endsWith('.js'))) {
+    const src = fs.readFileSync(path.join(REPO, 'lib', f), 'utf8');
+    for (const m of src.matchAll(/export (?:const|function|async function|class) (\w+)/g)) {
+      (libExports[m[1]] ||= []).push('lib/' + f);
+    }
+  }
+  const missing = [];
+  for (const f of fs.readdirSync(path.join(REPO, 'api')).filter((f) => f.endsWith('.js'))) {
+    const src = fs.readFileSync(path.join(REPO, 'api', f), 'utf8');
+    const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    const imported = new Set();
+    for (const m of code.matchAll(/import\s*\{([^}]+)\}\s*from/g)) {
+      for (const n of m[1].split(',')) imported.add(n.trim().split(/\s+as\s+/).pop().trim());
+    }
+    // Anything declared locally is fine too.
+    for (const m of code.matchAll(/(?:const|let|var|function|async function)\s+(\w+)/g)) imported.add(m[1]);
+    for (const name of Object.keys(libExports)) {
+      const used = new RegExp(`\\b${name}\\s*\\(|\\b${name}\\.|\\b${name}\\b`).test(code);
+      if (used && !imported.has(name)) missing.push(`api/${f} uses ${name} (${libExports[name][0]}) without importing it`);
+    }
+  }
+  check('api handlers import every lib symbol they use', missing.length === 0, missing.join('\n      '));
+}
+
 // ---------------------------------------------------------------------------
 console.log(`\n${'─'.repeat(60)}`);
 if (failures.length) {
