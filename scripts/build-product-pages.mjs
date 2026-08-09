@@ -16,6 +16,21 @@ import { GENERATED_EXTRAS } from '../lib/extras-products.generated.js';
 import { PRINTIFY_CONFIG } from '../lib/printify-config.generated.js';
 import { GUIDES } from './guides-content.mjs';
 
+import { PRINT_COUNTRIES } from '../lib/products.js';
+
+// Destination is chosen BEFORE checkout because Stripe fixes shipping rates when the
+// session is created — it cannot re-price after the buyer types an address. The list is
+// exactly the countries PRINT_SHIPPING covers, so every option has a real rate behind it.
+const countryName = (() => {
+  const dn = new Intl.DisplayNames(['en'], { type: 'region' });
+  return (c) => { try { return dn.of(c) || c; } catch { return c; } };
+})();
+const countryOptions = ['AU', 'US', 'GB', 'CA', 'NZ']
+  .filter((c) => PRINT_COUNTRIES.includes(c))
+  .concat(PRINT_COUNTRIES.filter((c) => !['AU','US','GB','CA','NZ'].includes(c))
+    .sort((a, b) => countryName(a).localeCompare(countryName(b))))
+  .map((c) => `<option value="${c}">${countryName(c)}</option>`).join('');
+
 const REPO = path.resolve(new URL('..', import.meta.url).pathname);
 const SITE = 'https://www.littlepoppin.com';
 
@@ -139,7 +154,7 @@ const foot = (up) => `
           <a href="${up}privacy.html">Privacy</a>
           <a href="${up}terms.html">Terms</a>
         </nav>
-        <p>&copy; 2025 Little Poppin. All rights reserved. Australia.</p>
+        <p>&copy; 2025 Little Poppin. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -236,9 +251,12 @@ for (const p of data.prints) {
               <label>Size
                 <select data-physical-size aria-label="Print size"></select>
               </label>
+              <label>Deliver to
+                <select data-physical-country aria-label="Delivery country">${countryOptions}</select>
+              </label>
             </div>
             <button type="button" class="btn btn--outline-dark pd__physicalBuy" data-physical-buy>Order a printed copy</button>
-            <p class="pd__physicalNote">Printed and posted for you · Australia-wide shipping</p>
+            <p class="pd__physicalNote">Printed close to you and posted &mdash; postage shown at checkout</p>
             <p class="pd__err" data-physical-err role="alert"></p>
           </div>
           <p class="pd__guarantee"><strong>Our promise:</strong> if your file isn't right —
@@ -384,7 +402,7 @@ ${relatedGrid(comps, up)}`;
       '@context': 'https://schema.org', '@type': 'FAQPage',
       mainEntity: [
         { '@type': 'Question', name: 'What format are Little Poppin printables?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Every printable is a print-ready PDF sized for A4, so it prints correctly at home, at Officeworks, or at any print shop. Nothing is posted — the file downloads instantly after payment.' } },
+          acceptedAnswer: { '@type': 'Answer', text: 'Every printable is a print-ready PDF sized for A4, so it prints correctly at home, at a print shop, or at any print shop. Nothing is posted — the file downloads instantly after payment.' } },
         { '@type': 'Question', name: 'Can I print a colouring book more than once?',
           acceptedAnswer: { '@type': 'Answer', text: 'Yes. Print as many copies as you like for your own family — that is the point of a printable. The licence is personal use only, so they cannot be resold or shared.' } },
         { '@type': 'Question', name: 'What paper should I use for the milestone cards?',
@@ -554,7 +572,7 @@ ${g.faq.map(([q, a]) => `        <details><summary>${esc(q)}</summary><p>${esc(a
 
   fs.writeFileSync(path.join(REPO, 'guides.html'),
     head({ title: 'Guides — Styling, Sizing &amp; Printing Nursery Art | Little Poppin',
-           description: 'Practical guides to nursery wall art: how to style a gallery wall, what size print to choose, and how to print a digital download in Australia.',
+           description: 'Practical guides to nursery wall art: how to style a gallery wall, what size print to choose, and how to print a digital download anywtralia.',
            canonical: `${SITE}/guides.html`, image: SITE + GUIDES[0].image, jsonLd: [indexLd], up: '' }) + `
   <header class="prints-hero">
     <div class="container">

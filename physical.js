@@ -16,6 +16,7 @@
   var sku = block.getAttribute('data-physical-for');
   var formatSel = block.querySelector('[data-physical-format]');
   var sizeSel = block.querySelector('[data-physical-size]');
+  var countrySel = block.querySelector('[data-physical-country]');
   var buyBtn = block.querySelector('[data-physical-buy]');
   var errEl = block.querySelector('[data-physical-err]');
   var formats = [];
@@ -49,7 +50,10 @@
     fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sku: sku, format: formatSel.value, size: sizeSel.value }),
+      body: JSON.stringify({ sku: sku, format: formatSel.value, size: sizeSel.value,
+        // Destination decides the postage rate, and Stripe fixes rates when the session
+        // is created — so it has to be sent now, not collected on the Stripe page.
+        country: countrySel ? countrySel.value : '' }),
     })
       .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (res) {

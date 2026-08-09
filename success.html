@@ -24,7 +24,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <h1>Thank you for your order!</h1>
-        <p class="status-card__lead">Your payment was successful and your order is confirmed. We’ll get your swaddle on its way and email you if we need anything.</p>
+        <p class="status-card__lead" id="orderLead">Your payment was successful and your order is confirmed. We’ll email you if we need anything.</p>
         <p class="status-card__meta" id="orderMeta"></p>
         <div class="status-card__download" id="downloadArea"></div>
         <!-- Populated by JS for SWADDLE orders only. Charity funding comes from swaddle
@@ -45,7 +45,7 @@
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
         </nav>
-        <p>&copy; 2025 Little Poppin. All rights reserved. Australia.</p>
+        <p>&copy; 2025 Little Poppin. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -62,8 +62,16 @@
             var amount = '$' + (o.amount_total / 100).toFixed(2) + ' ' + (o.currency || 'aud').toUpperCase();
             meta.textContent = 'Order confirmed — ' + amount + (o.email ? ' · receipt sent to ' + o.email : '');
           }
-          // Physical order = a swaddle, which is the range that funds the charity giving.
-          if (o && o.paid && o.type !== 'digital' && o.type !== 'personalised') {
+          // ONLY a swaddle funds the charity giving. Test for it positively: api/order.js
+          // reports 'physical' when no type is set (the swaddle path), while Printify
+          // orders report 'print'. An exclusion test ("not digital") silently swept the
+          // new print type in and thanked print buyers for a donation they never made.
+          var lead = document.getElementById('orderLead');
+          if (lead && o && o.paid) {
+            if (o.type === 'print') lead.textContent = 'Your payment was successful. Your print is being made now at the production partner closest to you, and we\u2019ll email tracking once it ships.';
+            else if (o.type === 'physical') lead.textContent = 'Your payment was successful and your order is confirmed. We\u2019ll get your swaddle on its way and email you if we need anything.';
+          }
+          if (o && o.paid && o.type === 'physical') {
             var ch = document.getElementById('charityNote');
             if (ch) {
               ch.textContent = '🌿 A portion of your swaddle purchase supports children’s charities worldwide. Thank you for making a difference.';

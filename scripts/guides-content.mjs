@@ -121,8 +121,8 @@ export const GUIDES = [
 
   {
     slug: 'how-to-print-digital-art',
-    title: 'How to Print Digital Wall Art (Australian Guide)',
-    description: 'What to do with a digital art download in Australia — paper choice, printing at home, and using Officeworks, Kmart or a local print shop for larger sizes.',
+    title: 'How to Print Digital Wall Art',
+    description: 'What to do with a digital art download — paper choice, printing at home, and using an online or local print service for larger sizes, wherever you are.',
     intro: 'You have bought a digital print and there is a file on your computer. Here is exactly what to do next, whether you are printing at home or having it done.',
     image: '/images/mockups/unicorn-dreams.jpg',
     imageAlt: 'A framed printed artwork on a wall',
@@ -143,31 +143,31 @@ export const GUIDES = [
         ],
       },
       {
-        h: 'Getting it printed in Australia',
+        h: 'Getting it printed',
         p: [
-          'For anything above A4, a print service will beat a home printer for very little money. <strong>Officeworks</strong> print and copy handles poster sizes and takes a file upload online. <strong>Kmart Photos</strong> and <strong>Big W Photos</strong> do standard photo sizes including 8×10. Most local print shops will print from a USB stick or an emailed file.',
+          'For anything above A4, a print service will beat a home printer for very little money. Almost every country has an online one that posts to your door, and most high-street print and copy shops will print from an emailed file or a USB stick. Photo counters in large supermarkets and pharmacies handle the standard sizes like 8×10 cheaply.',
           'Ask for matte, and tell them not to auto-crop or auto-enhance — both will alter the artwork.',
         ],
       },
       {
         h: 'Or skip the printing entirely',
         p: [
-          'If you would rather it simply arrive, we print any design as a poster, framed print or stretched canvas and post it to you within Australia. It is made in Victoria, not shipped from overseas, so it arrives in days rather than weeks.',
+          'If you would rather it simply arrive, we print any design as a poster, framed print or stretched canvas and post it to you. Each order is produced by the printing partner nearest you rather than shipped from one country, so it arrives in days rather than weeks wherever you are.',
         ],
       },
       {
         h: 'Framing on a budget',
         p: [
-          'Kmart, Target and IKEA all sell inexpensive frames in 8×10, A4 and larger. A frame with a mat will make a modest print look considerably more expensive than it was.',
+          'Inexpensive frames in 8×10, A4 and larger are sold by most large homeware and department stores. A frame with a mat will make a modest print look considerably more expensive than it was.',
           'Keep frames identical if you are hanging more than one — that consistency does more for the finished look than the price of the frame.',
         ],
       },
     ],
     faq: [
       ['What paper should I use to print digital wall art?', 'Matte photo paper or heavy matte card, ideally 200–250 gsm. Matte suits soft illustrated artwork better than gloss, which adds reflections and shows fingerprints.'],
-      ['Where can I get digital art printed in Australia?', 'Officeworks print and copy handles poster sizes and accepts online uploads. Kmart Photos and Big W Photos cover standard photo sizes such as 8×10. Most local print shops will print from a USB stick or an emailed file.'],
+      ['Where can I get digital art printed?', 'Any online print service that posts to your address, or any local print and copy shop — most will print from an emailed file or a USB stick. Photo counters in large supermarkets and pharmacies cover the standard sizes such as 8×10.'],
       ['Why did my print come out cropped?', 'Almost always the "fit to page" setting, which scales the image to the paper and trims the edges. Choose "actual size" or 100% instead, and make sure the paper size matches the print size you want.'],
     ],
-    cta: { text: 'Rather not print it yourself? We will have any design framed and posted to you from within Australia.', href: 'prints.html', label: 'Choose a design' },
+    cta: { text: 'Rather not print it yourself? We will have any design framed and posted to you, printed close to wherever you are.', href: 'prints.html', label: 'Choose a design' },
   },
 ];

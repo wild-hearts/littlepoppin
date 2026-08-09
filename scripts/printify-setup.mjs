@@ -28,22 +28,45 @@ const COLLS = ['collection-01', 'collection-02', 'collection-03', 'collection-05
 const CHOICES = {
   // Naomi's Printify account (info@wildheartspublishing.com.au), shop "My new store".
   shopId: 28504147,
-  // Provider 66 = Prima Printing, Noble Park North VIC — the only Australian provider
-  // that prints wall art, so orders are printed and posted domestically rather than
-  // flown in from the US. Sizes chosen to match the artwork's native 4:5 ratio.
-  // Prices are RETAIL in AUD cents and INCLUDE postage (physical prints ship free).
+  // Provider 99 = "Printify Choice": Printify's own routing, which sends each order to the
+  // nearest production partner. Verified to serve US, Canada and REST_OF_THE_WORLD, so a
+  // buyer in Berlin is printed near Berlin rather than flown from Melbourne.
+  //
+  // This REPLACES provider 66 (Prima Printing, Noble Park North VIC), the only Australian
+  // wall-art provider, which meant every order printed in Melbourne regardless of destination.
+  //
+  // PRICES are RETAIL in AUD cents and EXCLUDE postage — shipping is charged separately at
+  // checkout by destination (see PRINT_SHIPPING in lib/products.js), because postage runs
+  // USD 5.19 in the US to 18.89 rest-of-world and burying the worst case would make every
+  // US buyer overpay by about AUD 30.
+  //
+  // Costs are the REAL per-item costs read back from Printify (USD, via printify-costs.mjs),
+  // converted at ~1.55 AUD/USD and marked up ~1.8-2x. Re-check if the rate moves far:
+  //   poster 5.92 / 9.97 / 10.77   canvas 18.16 / 21.71 / 25.37   framed 35.89 / 38.53 / 47.76
   formats: {
     poster: {
-      blueprintId: 1079, providerId: 66, label: 'Poster (matte)',
-      sizes: [{ key: '16x20', label: '16" x 20"', variantId: 81395, price: 3400 }],
-    },
-    framed: {
-      blueprintId: 1130, providerId: 66, label: 'Framed Print (black)',
-      sizes: [{ key: '11x14', label: '11" x 14"', variantId: 85215, price: 7900 }],
+      blueprintId: 282, providerId: 99, label: 'Poster (matte)',
+      sizes: [
+        { key: '11x14', label: '11" x 14"', variantId: 43135,  price: 1900 },
+        { key: '12x16', label: '12" x 16"', variantId: 101110, price: 2900 },
+        { key: '16x20', label: '16" x 20"', variantId: 43141,  price: 3200 },
+      ],
     },
     canvas: {
-      blueprintId: 1061, providerId: 66, label: 'Stretched Canvas',
-      sizes: [{ key: '16x20', label: '16" x 20"', variantId: 80707, price: 6900 }],
+      blueprintId: 937, providerId: 99, label: 'Stretched Canvas',
+      sizes: [
+        { key: '11x14', label: '11" x 14"', variantId: 82229, price: 5500 },
+        { key: '12x16', label: '12" x 16"', variantId: 82230, price: 6500 },
+        { key: '16x20', label: '16" x 20"', variantId: 82231, price: 7500 },
+      ],
+    },
+    framed: {
+      blueprintId: 540, providerId: 99, label: 'Framed Print (black)',
+      sizes: [
+        { key: '11x14', label: '11" x 14"', variantId: 69663, price: 9900 },
+        { key: '12x16', label: '12" x 16"', variantId: 69664, price: 10900 },
+        { key: '16x20', label: '16" x 20"', variantId: 69667, price: 13500 },
+      ],
     },
   },
 };
@@ -157,7 +180,7 @@ try {
         const title = a.sku.replace('print-', '').replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
         const prod = await pf(`/shops/${CHOICES.shopId}/products.json`, { method: 'POST', body: JSON.stringify({
           title: `${title} — ${cfg.label}`,
-          description: 'Little Poppin art print. Printed and posted in Australia.',
+          description: 'Little Poppin art print. Printed near you and posted worldwide.',
           blueprint_id: cfg.blueprintId, print_provider_id: cfg.providerId, variants, print_areas,
         }) });
         state.products[a.sku][fmt] = prod.id;

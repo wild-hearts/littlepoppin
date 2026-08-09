@@ -338,7 +338,7 @@ const faqLd = JSON.stringify({
     { '@type': 'Question', name: 'What sizes can Little Poppin digital prints be printed at?',
       acceptedAnswer: { '@type': 'Answer', text: 'The 4:5 ratio prints beautifully at 4×5″, 8×10″ and 16×20″, and fits A4 or A3 frames with a small trim or mat. Local print shops can print directly from the file for larger sizes.' } },
     { '@type': 'Question', name: 'How do I print a digital art print?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Print at home on good photo paper, upload the file to an online print service such as Officeworks, Kmart Photos or Snapfish, or take it to any local print shop. Matte paper suits the soft watercolour style best.' } },
+      acceptedAnswer: { '@type': 'Answer', text: 'Print at home on good photo paper, upload the file to an online print service that posts to your address, or take it to any local print shop. Matte paper suits the soft watercolour style best.' } },
     { '@type': 'Question', name: 'Can I resell or share a Little Poppin digital print?',
       acceptedAnswer: { '@type': 'Answer', text: 'No — downloads are licensed for personal use: print them for your home, nursery, or as a gift. They cannot be resold, shared, or used commercially.' } },
     { '@type': 'Question', name: 'Are refunds available on digital downloads?',
@@ -438,7 +438,7 @@ ${sectionCards.join('\n\n')}
         </details>
         <details>
           <summary>How do I print it?</summary>
-          <p>Print at home on good photo paper, upload to an online print service (Officeworks, Kmart Photos, Snapfish), or take the file to any local print shop. Matte paper suits the soft watercolour style best.</p>
+          <p>Print at home on good photo paper, upload to an online print service (any online print service), or take the file to any local print shop. Matte paper suits the soft watercolour style best.</p>
         </details>
         <details>
           <summary>Can I use it for anything else?</summary>
@@ -461,7 +461,7 @@ ${sectionCards.join('\n\n')}
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
         </nav>
-        <p>&copy; 2025 Little Poppin. All rights reserved. Australia.</p>
+        <p>&copy; 2025 Little Poppin. All rights reserved.</p>
       </div>
     </div>
   </footer>

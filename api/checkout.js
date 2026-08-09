@@ -133,11 +133,15 @@ export default async function handler(req, res) {
       if (!opt) return res.status(409).json({ error: 'That print option isn’t available yet — check back soon.' });
       const art = getDigital(sku);
       const origin = baseUrl(req);
-      // Physical prints ship FREE: Printify's own postage (~$8-10 per item) is already
-      // built into the retail price in lib/printify-config.generated.js. The swaddle rule
-      // ($9.95, free over $80) must not apply here — it was written for parcels Naomi
-      // posts herself, and on a framed print it would have shipped at her expense.
-      const shipAmount = 0;
+      // Postage is charged separately by destination — see PRINT_SHIPPING in lib/products.js
+      // for why. The buyer picks their country before checkout, so the session is created
+      // with the right rate and locked to that country; without a country we fall back to
+      // the rest-of-world rate, which never under-charges.
+      // The swaddle rule ($9.95, free over $80) must NOT apply here: it was written for
+      // parcels Naomi posts herself, and on a framed print it would ship at her expense.
+      const band = printShippingFor(body.country);
+      const shipTo = PRINT_COUNTRIES.includes(String(body.country || '').toUpperCase())
+        ? [String(body.country).toUpperCase()] : PRINT_COUNTRIES;
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: [{
@@ -152,19 +156,19 @@ export default async function handler(req, res) {
             },
           },
         }],
-        shipping_address_collection: { allowed_countries: SHIPPING.allowedCountries },
+        shipping_address_collection: { allowed_countries: shipTo },
         phone_number_collection: { enabled: true },
         shipping_options: [{
           shipping_rate_data: {
             type: 'fixed_amount',
-            display_name: shipAmount === 0 ? 'Free shipping' : 'Standard shipping (Australia)',
-            fixed_amount: { amount: shipAmount, currency: CURRENCY },
+            display_name: band.label,
+            fixed_amount: { amount: band.amount, currency: CURRENCY },
             delivery_estimate: { minimum: { unit: 'business_day', value: 5 }, maximum: { unit: 'business_day', value: 12 } },
           },
         }],
         success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cancel.html`,
-        metadata: { brand: 'little_poppin', type: 'print', fulfil: 'printify', sku, format: String(body.format), size: String(body.size) },
+        metadata: { brand: 'little_poppin', type: 'print', fulfil: 'printify', sku, format: String(body.format), size: String(body.size), country: String(body.country || '').toUpperCase() },
       });
       return res.status(200).json({ url: session.url });
     }
