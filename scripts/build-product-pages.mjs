@@ -146,7 +146,7 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
   </nav>
 `;
 
-const foot = (up) => `
+const foot = (up, viewItemSku = '') => `
   <footer class="footer">
     <div class="container">
       <div class="footer__bottom">
@@ -161,7 +161,11 @@ const foot = (up) => `
     </div>
   </footer>
   <script src="${up}store.js" defer></script>
-  <script src="${up}physical.js" defer></script>
+  <script src="${up}physical.js" defer></script>${viewItemSku ? `
+  <script>
+    // GA4 view_item — no-ops without analytics configured.
+    (function(){ try { if (typeof window.gtag === 'function') window.gtag('event', 'view_item', { items: [{ item_id: '${viewItemSku}' }] }); } catch(e){} })();
+  </script>` : ''}
 </body>
 </html>
 `;
@@ -277,7 +281,7 @@ for (const p of data.prints) {
 ${relatedGrid(related, up)}`;
 
   fs.writeFileSync(path.join(REPO, 'print', `${slug}.html`),
-    head({ title, description: p.description, canonical: url, image: img, jsonLd, up }) + body + foot(up));
+    head({ title, description: p.description, canonical: url, image: img, jsonLd, up }) + body + foot(up, p.sku));
   written++;
 }
 
@@ -372,7 +376,7 @@ ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">$
 ${relatedGrid(comps, up)}`;
 
   fs.writeFileSync(path.join(REPO, 'set', `${slug}.html`),
-    head({ title, description: s.description, canonical: url, image: img, jsonLd, up }) + body + foot(up));
+    head({ title, description: s.description, canonical: url, image: img, jsonLd, up }) + body + foot(up, s.sku));
   written++;
 }
 

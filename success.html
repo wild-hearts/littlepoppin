@@ -66,6 +66,19 @@
           // reports 'physical' when no type is set (the swaddle path), while Printify
           // orders report 'print'. An exclusion test ("not digital") silently swept the
           // new print type in and thanked print buyers for a donation they never made.
+          // GA4 purchase event. No-ops when analytics is not configured. Fired here rather
+          // than in the webhook because GA4 needs the buyer's browser, not the server.
+          try {
+            if (typeof window.gtag === 'function' && o && o.paid && !window.__lpPurchaseSent) {
+              window.__lpPurchaseSent = true;
+              window.gtag('event', 'purchase', {
+                transaction_id: id,
+                value: (o.amount_total || 0) / 100,
+                currency: (o.currency || 'aud').toUpperCase(),
+                items: o.sku ? [{ item_id: o.sku, item_category: o.type || 'unknown' }] : [],
+              });
+            }
+          } catch (e) {}
           var lead = document.getElementById('orderLead');
           if (lead && o && o.paid) {
             if (o.type === 'print') lead.textContent = 'Your payment was successful. Your print is being made now at the production partner closest to you, and we\u2019ll email tracking once it ships.';

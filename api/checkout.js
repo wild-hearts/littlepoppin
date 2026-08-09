@@ -18,6 +18,18 @@ function baseUrl(req) {
   return `${proto}://${host}`;
 }
 
+// EU/UK consumers lose their 14-day withdrawal right on digital content ONLY if they
+// expressly asked for immediate delivery and acknowledged losing it. Stating it on the
+// Stripe payment page is what makes the waiver on refunds.html real rather than decorative.
+// Uses custom_text.submit, which needs no Stripe dashboard configuration — consent_collection
+// .terms_of_service would additionally require a ToS URL set on the account, and a session
+// that fails to create is a checkout that does not work.
+const INSTANT_DELIVERY_NOTICE = {
+  submit: {
+    message: 'This is an instant download. By paying you ask for it to be delivered straight away and, if you are in the EU or UK, you accept that this ends your 14-day right to withdraw. Anything wrong with the file and we will still fix it or refund you.',
+  },
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -205,9 +217,10 @@ export default async function handler(req, res) {
                 },
               },
         ],
+        custom_text: INSTANT_DELIVERY_NOTICE,
         success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cancel.html`,
-        metadata: { brand: 'little_poppin', sku: digital.sku, type: 'digital' },
+        metadata: { brand: 'little_poppin', sku: digital.sku, type: 'digital', instantDeliveryConsent: 'shown' },
       });
       return res.status(200).json({ url: session.url });
     }

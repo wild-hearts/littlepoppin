@@ -189,5 +189,9 @@
   </footer>
   <script src="../store.js" defer></script>
   <script src="../physical.js" defer></script>
+  <script>
+    // GA4 view_item — no-ops without analytics configured.
+    (function(){ try { if (typeof window.gtag === 'function') window.gtag('event', 'view_item', { items: [{ item_id: 'set-christmas-magic' }] }); } catch(e){} })();
+  </script>
 </body>
 </html>

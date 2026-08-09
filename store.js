@@ -1,3 +1,8 @@
+// --- analytics ---------------------------------------------------------------
+// No-ops entirely when GA4 is not configured, so these calls are safe to leave in.
+function lpTrack(event, params) {
+  try { if (typeof window.gtag === 'function') window.gtag('event', event, params || {}); } catch (e) {}
+}
 // store.js — Little Poppin storefront checkout wiring.
 // Any <button data-sku="pink|green|bundle"> starts Stripe Checkout when clicked.
 (function () {
@@ -9,6 +14,7 @@
     btn.classList.add('is-loading');
     btn.innerHTML = 'Redirecting to checkout…';
     try {
+      lpTrack('begin_checkout', { currency: 'AUD', items: [{ item_id: sku }] });
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

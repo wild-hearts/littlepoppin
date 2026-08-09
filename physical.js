@@ -1,3 +1,8 @@
+// --- analytics ---------------------------------------------------------------
+// No-ops entirely when GA4 is not configured, so these calls are safe to leave in.
+function lpTrack(event, params) {
+  try { if (typeof window.gtag === 'function') window.gtag('event', event, params || {}); } catch (e) {}
+}
 // physical.js — the "have it printed and posted" picker on a product page.
 //
 // api/checkout.js has always accepted { sku, format, size } for a Printify order, but no
@@ -53,6 +58,7 @@
     var label = buyBtn.textContent;
     buyBtn.disabled = true;
     buyBtn.textContent = 'Taking you to checkout…';
+    lpTrack('begin_checkout', { currency: 'AUD', items: [{ item_id: sku, item_variant: formatSel.value + '/' + sizeSel.value }] });
     fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
