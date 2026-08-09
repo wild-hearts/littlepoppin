@@ -7,6 +7,7 @@
 import Stripe from 'stripe';
 import { presignGet, MAX_TTL_MS } from '../lib/blob-link.js';
 import { getProduct, getDigital, getCustom } from '../lib/products.js';
+import { recordEvent } from '../lib/events.js';
 import { getPrintOption, getSetPrintOption, submitPrintifyOrder } from '../lib/printify.js';
 import { GENERATED_DIGITAL_PRODUCTS } from '../lib/digital-products.generated.js';
 import { picksForMonth, monthLabel } from '../lib/printclub.js';
@@ -109,8 +110,17 @@ async function fulfilPrintify(session) {
       phone: d.phone,
     });
     console.log('Printify order created:', order.id || JSON.stringify(order).slice(0, 120));
+    await recordEvent('printify-submitted', {
+      sessionId: session.id, sku, format, size, printifyOrderId: order.id || null,
+      country: (addr.country || null), email: d.email || null,
+    });
   } catch (err) {
     console.error('Printify fulfilment error (reconcile by hand):', err.message);
+    // Record the FAILURE too. Otherwise a paid order that never reached Printify leaves
+    // no trace anywhere except a log line nobody reads.
+    await recordEvent('printify-failed', {
+      sessionId: session.id, sku, format, size, error: err.message.slice(0, 300), email: d.email || null,
+    });
   }
 }
 

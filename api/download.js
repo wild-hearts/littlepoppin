@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { presignGet } from '../lib/blob-link.js';
 import { getDigital, setComponents } from '../lib/products.js';
+import { recordEvent } from '../lib/events.js';
 import { renderPersonalisedPdf, cleanField, LIMITS } from '../lib/personalise.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -34,6 +35,10 @@ export default async function handler(req, res) {
   try {
     const s = await stripe.checkout.sessions.retrieve(sessionId);
     if (s.payment_status !== 'paid') return res.status(403).send('Payment not completed');
+    // Fire-and-forget: a failure here must never stop a paying customer getting their file.
+    recordEvent('download', {
+      sessionId, sku, email: s.customer_details?.email || null, kind: s.metadata?.type || null,
+    }).catch(() => {});
     const kind = s.metadata?.type;
     if ((kind !== 'digital' && kind !== 'personalised') || s.metadata?.sku !== sku) {
       return res.status(403).send('This download is not authorised for that order');
