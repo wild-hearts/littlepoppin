@@ -1,4 +1,4 @@
-# Little Poppin — Collection 08: Nursery II (10 more enchanted nursery prints)
+# Little Poppin. Collection 08: Nursery II (10 more enchanted nursery prints)
 
 Expands the Nursery section. House FULL MAGIC style. All `--ar 4:5 --stylize 500`.
 

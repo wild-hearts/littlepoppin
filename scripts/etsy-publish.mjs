@@ -1,15 +1,15 @@
-// etsy-publish.mjs — create the staged listings on Etsy via the API.
+// etsy-publish.mjs. Create the staged listings on Etsy via the API.
 //
 //   node scripts/etsy-publish.mjs --dry     # show exactly what would be created, touch nothing
 //   node scripts/etsy-publish.mjs           # create them as DRAFTS
 //   node scripts/etsy-publish.mjs --publish # create and make them active (costs $0.20 each)
 //
 // WHY THE API AND NOT THE BROWSER: the digital files total 475 MB across 48 files over 5 MB
-// each. Browser automation cannot carry that — the upload tool is sandboxed to shared
+// each. Browser automation cannot carry that. The upload tool is sandboxed to shared
 // folders, the extension blocks localhost fetches, and injecting the files as base64 would
 // be hundreds of enormous calls. The API takes a file straight from disk.
 //
-// SAFE BY DEFAULT: creates DRAFTS unless --publish is passed, and is RESUMABLE — every
+// SAFE BY DEFAULT: creates DRAFTS unless --publish is passed, and is RESUMABLE. Every
 // created listing id is recorded immediately, so an interruption never double-charges or
 // double-lists. Re-running skips anything already made.
 import fs from 'node:fs';
@@ -76,7 +76,7 @@ const listings = fs.readdirSync(STAGE)
   .sort((a, b) => a.sku.localeCompare(b.sku));
 
 if (DRY) {
-  console.log(`DRY RUN — nothing will be created. ${listings.length} listings staged.\n`);
+  console.log(`DRY RUN. Nothing will be created. ${listings.length} listings staged.\n`);
   let fees = 0;
   for (const l of listings) {
     const mb = l.digital.reduce((n, f) => n + fs.statSync(path.join(l.dir, f)).size, 0) / 1048576;
@@ -129,7 +129,7 @@ for (const l of listings) {
     });
     done[l.sku] = { listing_id: created.listing_id, state: created.state }; save();
 
-    // Photos, in order — the framed mockup first, because it is what people see in search.
+    // Photos, in order. The framed mockup first, because it is what people see in search.
     for (const [i, p] of l.photos.entries()) {
       const fd = new FormData();
       fd.append('image', new Blob([fs.readFileSync(path.join(l.dir, p))]), p);
@@ -147,10 +147,10 @@ for (const l of listings) {
     done[l.sku].complete = true; save();
     console.log(`  + ${l.sku} -> ${created.listing_id} (${l.photos.length} photos, ${l.digital.length} files)`);
   } catch (err) {
-    console.log(`  x ${l.sku} — ${err.message.slice(0, 200)}`);
+    console.log(`  x ${l.sku}, ${err.message.slice(0, 200)}`);
   }
 }
 
 const made = Object.values(done).filter((d) => d.complete).length;
 console.log(`\n${made}/${listings.length} listings complete.`);
-if (!PUBLISH) console.log('Created as drafts — review them in Etsy, then publish (or re-run with --publish).');
+if (!PUBLISH) console.log('Created as drafts. Review them in Etsy, then publish (or re-run with --publish).');

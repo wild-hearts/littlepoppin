@@ -1,10 +1,10 @@
-// api/printify-webhook.js — receives production and shipping updates from Printify.
+// api/printify-webhook.js. Receives production and shipping updates from Printify.
 //
 // WHY: without this, a print buyer paid, got a confirmation, and then heard nothing until
-// a parcel turned up — or didn't. Printify knows when an order ships and what the tracking
+// a parcel turned up. Or didn't. Printify knows when an order ships and what the tracking
 // number is; nothing was listening.
 //
-// AUTHENTICATION — Printify does NOT sign webhooks. The webhook object it returns has only
+// AUTHENTICATION. Printify does NOT sign webhooks. The webhook object it returns has only
 // {topic, url, shop_id, id}: no secret, no signature header. (An earlier version of this
 // file verified an HMAC, which meant it rejected every real delivery.) So authenticity is
 // established two ways instead:
@@ -14,7 +14,7 @@
 //   2. More importantly, NOTHING in the request body is trusted for anything that leaves
 //      the system. Before emailing a customer we re-fetch the order from Printify's API by
 //      id and use the address and tracking from THAT response. A forged payload therefore
-//      cannot make us email an arbitrary address — the worst it can do is make us look up
+//      cannot make us email an arbitrary address. The worst it can do is make us look up
 //      an order id, which either exists or doesn't.
 //
 // Fails closed: no key configured, no processing.
@@ -40,7 +40,7 @@ async function emailBuyer({ to, trackingUrl, carrier, tracking }) {
   if (!apiKey || !to) return false;
   const from = process.env.ORDER_FROM_EMAIL || 'Little Poppin <onboarding@resend.dev>';
   const text = [
-    'Good news — your print is on its way.',
+    'Good news. Your print is on its way.',
     '',
     carrier ? `Carrier: ${carrier}` : null,
     tracking ? `Tracking: ${tracking}` : null,
@@ -49,7 +49,7 @@ async function emailBuyer({ to, trackingUrl, carrier, tracking }) {
     'It was printed at the production partner closest to you, so it should not be long.',
     '',
     'Any problems at all, just reply to this email.',
-    '— Little Poppin',
+    '. Little Poppin',
   ].filter(Boolean).join('\n');
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
 
   const expected = process.env.PRINTIFY_WEBHOOK_SECRET;
   if (!expected) {
-    console.error('Printify webhook: PRINTIFY_WEBHOOK_SECRET is not set — refusing.');
+    console.error('Printify webhook: PRINTIFY_WEBHOOK_SECRET is not set. Refusing.');
     return res.status(503).json({ error: 'Webhook not configured' });
   }
   const given = String(req.query.key || '');

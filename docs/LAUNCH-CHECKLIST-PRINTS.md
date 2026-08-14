@@ -1,9 +1,9 @@
-# Launch checklist — Little Poppin Art Prints (digital downloads)
+# Launch checklist. Little Poppin Art Prints (digital downloads)
 
 Everything is built and deployed. The shop (`prints.html`, 63 prints + 4 gallery sets) is now
 **browsable and linked from the homepage** (nav + "Magical Art Prints" showcase with a
 "Launching soon" ribbon + email signup). **Checkout stays blocked** until the high-res files are
-hosted — buy buttons show a friendly "check back soon" — so nothing can be bought-without-delivery.
+hosted. Buy buttons show a friendly "check back soon". So nothing can be bought-without-delivery.
 Steps to go live:
 
 ## 1. Enable Vercel Blob (~1 min)
@@ -32,7 +32,7 @@ teaser copy from "the moment they launch" to "the moment you buy"). Then email t
 
 ## 4. Test one purchase
 Buy a print with your own card → you should hit the success page with a **Download** button, and
-get a **download-link email**. Refund yourself. Done — you're selling digital art.
+get a **download-link email**. Refund yourself. Done. You're selling digital art.
 
 ---
 ### Notes

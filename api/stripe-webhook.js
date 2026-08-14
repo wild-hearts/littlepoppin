@@ -50,7 +50,7 @@ export default async function handler(req, res) {
       try {
         await onOrderPaid(session);
       } catch (err) {
-        // The payment already succeeded — never 500 here or Stripe will retry the whole event.
+        // The payment already succeeded. Never 500 here or Stripe will retry the whole event.
         // Log loudly so a failed notice/stock update can be reconciled by hand.
         console.error('Fulfilment handling error:', err);
       }
@@ -80,7 +80,7 @@ async function onOrderPaid(session) {
   await notifyOrder(full, sku, qty);   // 1) email Naomi so she can fulfil it
   if (session.metadata?.type === 'digital' || session.metadata?.type === 'personalised') {
     // Personalised prints are rendered on demand by /api/download, so they need no
-    // manual work — the same gated link delivers them.
+    // manual work. The same gated link delivers them.
     await emailDownloadLink(full, sku, session.metadata); // 2a) email the buyer their link
   } else if (session.metadata?.fulfil === 'printify') {
     await fulfilPrintify(full);         // 2b) send physical print to Printify for production
@@ -153,7 +153,7 @@ async function notifyOrder(session, sku, qty) {
 
   // If Resend isn't configured yet, log the notice so nothing is lost during testing.
   if (!apiKey || !to) {
-    console.log('[order notice — set RESEND_API_KEY + ORDER_NOTIFY_EMAIL to email this]\n' + body);
+    console.log('[order notice. Set RESEND_API_KEY + ORDER_NOTIFY_EMAIL to email this]\n' + body);
     return;
   }
 
@@ -166,7 +166,7 @@ async function notifyOrder(session, sku, qty) {
       // address like "Little Poppin Orders <orders@littlepoppin.com>" once DNS is set up.
       from: process.env.ORDER_FROM_EMAIL || 'Little Poppin Orders <onboarding@resend.dev>',
       to: [to],
-      subject: `New order — ${product?.name || sku} x${qty} ($${amount})`,
+      subject: `New order. ${product?.name || sku} x${qty} ($${amount})`,
       text: body,
     }),
   });
@@ -184,7 +184,7 @@ async function handleCustomOrder(session, sku) {
     .join('\n');
 
   const naomiText = [
-    `🎨 CUSTOM ORDER — ${product?.name || sku}`,
+    `🎨 CUSTOM ORDER. ${product?.name || sku}`,
     '',
     `Paid: $${amount} AUD`,
     `Buyer: ${d.name || ''} <${d.email || ''}>`,
@@ -202,17 +202,17 @@ async function handleCustomOrder(session, sku) {
     `We've received your brief for "${product?.name || sku}" and we're getting started.`,
     'Your finished creation will arrive at this email address within 5 days.',
     '',
-    '— Little Poppin',
+    '. Little Poppin',
   ].join('\n');
 
-  if (!apiKey) { console.log('[custom order — set RESEND_API_KEY]\n' + naomiText); return; }
+  if (!apiKey) { console.log('[custom order. Set RESEND_API_KEY]\n' + naomiText); return; }
   const from = process.env.ORDER_FROM_EMAIL || 'Little Poppin <onboarding@resend.dev>';
   const send = (payload) => fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  const r1 = await send({ from, to: [process.env.ORDER_NOTIFY_EMAIL], subject: `🎨 Custom order — ${product?.name || sku} ($${amount})`, text: naomiText });
+  const r1 = await send({ from, to: [process.env.ORDER_NOTIFY_EMAIL], subject: `🎨 Custom order. ${product?.name || sku} ($${amount})`, text: naomiText });
   if (!r1.ok) console.error('Resend (custom brief) error:', r1.status, await r1.text());
   await new Promise((r) => setTimeout(r, 700)); // Resend 2 req/s limit
   if (d.email) {
@@ -246,23 +246,23 @@ async function handleClubSignup(session) {
   const buyerText = [
     `${name ? 'Welcome, ' + name.split(' ')[0] + '!' : 'Welcome to the Print Club!'}`,
     '',
-    'You\'re in — and you don\'t have to wait until next month to start.',
+    'You\'re in. And you don\'t have to wait until next month to start.',
     ...(links.length
-      ? ['', `Here are your ${label} prints — all ${prints.length} of them:`, '',
+      ? ['', `Here are your ${label} prints. All ${prints.length} of them:`, '',
          ...prints.flatMap((p, i) => [p.title, links[i], '']),
          'The links stay live for 6 days, so save the files somewhere safe.']
-      : ['', 'Your first prints are on their way — we\'ll email them shortly.']),
+      : ['', 'Your first prints are on their way. We\'ll email them shortly.']),
     '',
     `From now on ${prints.length || 3} new prints will land in your inbox at the start of every month.`,
-    'Nothing to remember, nothing to claim — it just arrives.',
+    'Nothing to remember, nothing to claim. It just arrives.',
     '',
     '',
     'Want to stop? Reply to any Print Club email and we\'ll cancel it right away.',
     '',
-    '— Little Poppin',
+    '. Little Poppin',
   ].join('\n');
 
-  if (!apiKey) { console.log('[print club signup — set RESEND_API_KEY]\n' + buyerText); return; }
+  if (!apiKey) { console.log('[print club signup. Set RESEND_API_KEY]\n' + buyerText); return; }
 
   const send = (payload) => fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -271,7 +271,7 @@ async function handleClubSignup(session) {
   });
 
   if (to) {
-    const r = await send({ from, to: [to], subject: `Welcome to the Print Club 🌙 — your ${label} prints are inside`, text: buyerText });
+    const r = await send({ from, to: [to], subject: `Welcome to the Print Club 🌙, your ${label} prints are inside`, text: buyerText });
     if (!r.ok) console.error('Resend (club welcome) error:', r.status, await r.text());
   }
   await new Promise((r) => setTimeout(r, 700)); // Resend 2 req/s limit
@@ -293,7 +293,7 @@ async function emailDownloadLink(session, sku, meta = {}) {
   const origin = (process.env.SITE_URL || 'https://www.littlepoppin.com').replace(/\/$/, '');
   const link = `${origin}/api/download?session_id=${session.id}&sku=${encodeURIComponent(sku)}`;
   const personalised = meta.type === 'personalised';
-  const label = personalised ? `${product.title || product.name} — personalised for ${meta.p_name}` : product.name;
+  const label = personalised ? `${product.title || product.name}, personalised for ${meta.p_name}` : product.name;
 
   const text = [
     'Thank you for your Little Poppin order!',
@@ -304,21 +304,21 @@ async function emailDownloadLink(session, sku, meta = {}) {
     link,
     '',
     ...(personalised
-      ? ['Your PDF contains the same design at three print-ready sizes — 8×10 inch, A4 and',
+      ? ['Your PDF contains the same design at three print-ready sizes. 8×10 inch, A4 and',
          '16×20 inch (in that order). Print whichever suits your frame; matte paper looks loveliest.',
          '']
       : []),
-    'Tip: download and save the file to your device — the link is tied to your order.',
+    'Tip: download and save the file to your device. The link is tied to your order.',
   ].join('\n');
 
-  if (!apiKey) { console.log('[digital download link — set RESEND_API_KEY to email it]\n' + link); return; }
+  if (!apiKey) { console.log('[digital download link. Set RESEND_API_KEY to email it]\n' + link); return; }
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: process.env.ORDER_FROM_EMAIL || 'Little Poppin <onboarding@resend.dev>',
       to: [to],
-      subject: `Your Little Poppin download — ${label}`,
+      subject: `Your Little Poppin download. ${label}`,
       text,
     }),
   });

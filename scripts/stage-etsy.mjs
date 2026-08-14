@@ -1,7 +1,7 @@
-// stage-etsy.mjs — assemble everything the Etsy listing run needs into etsy-stage/<sku>/.
+// stage-etsy.mjs. Assemble everything the Etsy listing run needs into etsy-stage/<sku>/.
 //
 // Each listing folder ends up with:
-//   photo-*.jpg   listing photos (framed mockup first — it is what people actually see)
+//   photo-*.jpg   listing photos (framed mockup first. It is what people actually see)
 //   file-*.png    the digital files the buyer downloads
 //   listing.json  title / tags / price / description, so the browser run is pure data entry
 //
@@ -87,7 +87,7 @@ for (const listing of ETSY_LISTINGS) {
         const zip = path.join(dir, `file-part-${i + 1}-of-${listing.zipParts}.zip`);
         execFileSync('zip', ['-j', '-q', zip, ...chunk]);
         const mb = fs.statSync(zip).size / 1048576;
-        if (mb > 20) problems.push(`${sku}: ${path.basename(zip)} is ${mb.toFixed(0)}MB — over Etsy's 20MB limit`);
+        if (mb > 20) problems.push(`${sku}: ${path.basename(zip)} is ${mb.toFixed(0)}MB. Over Etsy's 20MB limit`);
       }
     } else {
       if (product.items.length > 5) problems.push(`${sku}: ${product.items.length} files exceeds Etsy's 5-file cap`);
@@ -101,7 +101,7 @@ for (const listing of ETSY_LISTINGS) {
     // A printable: the deliverable is a PDF that exists only in the private Blob store.
     if (!product.file) { problems.push(`${sku}: no file in the catalogue`); continue; }
     const url = await presignGet(product.file);
-    const res = await fetch(url);                       // GET — the signature covers GET only
+    const res = await fetch(url);                       // GET. The signature covers GET only
     if (!res.ok) { problems.push(`${sku}: Blob fetch returned ${res.status}`); continue; }
     const buf = Buffer.from(await res.arrayBuffer());
     const mb = buf.length / 1048576;

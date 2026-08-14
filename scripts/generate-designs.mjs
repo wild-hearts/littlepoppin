@@ -1,4 +1,4 @@
-// generate-designs.mjs — Little Poppin design generator via Replicate.
+// generate-designs.mjs. Little Poppin design generator via Replicate.
 // Reads prompts from ../docs/COLLECTION-*.md, strips Midjourney params, runs a Replicate
 // image model, downloads PNGs to ~/Downloads/LittlePoppin-Designs/. Skips images already made.
 //
@@ -42,7 +42,7 @@ function parseCollection(file, tag) {
           const aspect = arM ? arM[1] : '4:5';
           const prompt = raw.replace(/--\S+(\s+\S+)?/g, '').replace(/\s+/g, ' ').trim();
           const num = ((name.match(/^(\d+)/) || [])[1] || String(out.length + 1)).padStart(2, '0');
-          const title = name.replace(/^\d+\.\s*/, '').split('—')[0].trim();
+          const title = name.replace(/^\d+\.\s*/, '').split(', ')[0].trim();
           const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
           out.push({ tag, num, name: title, slug, prompt, aspect });
         }
@@ -95,7 +95,7 @@ async function main() {
     const outDir = path.join(OUT_ROOT, `collection-${d.tag}`);
     fs.mkdirSync(outDir, { recursive: true });
     const outFile = path.join(outDir, `${d.num}-${d.slug}.png`);
-    if (fs.existsSync(outFile)) { console.log(`  • [${d.tag}] ${d.num} ${d.name} — skip (exists)`); skipped++; continue; }
+    if (fs.existsSync(outFile)) { console.log(`  • [${d.tag}] ${d.num} ${d.name}, skip (exists)`); skipped++; continue; }
     process.stdout.write(`  … [${d.tag}] ${d.num} ${d.name} `);
     try { await generate(token, d, outFile); console.log('✓'); made++; }
     catch (e) { console.log('✗ ' + e.message); failed++; }

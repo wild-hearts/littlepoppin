@@ -1,4 +1,4 @@
-# Little Poppin — Digital Downloads (instant print delivery)
+# Little Poppin. Digital Downloads (instant print delivery)
 
 Sell digital art prints through the existing Stripe checkout. No shipping, no inventory,
 ~100% margin. Flow: **Buy → Stripe checkout → success page download button + emailed link.**
@@ -28,7 +28,7 @@ the webhook/`/api/download` confirms the payment.
    ```js
    'print-moon-goddess': {
      sku: 'print-moon-goddess',
-     name: 'Moon Goddess — Digital Art Print',
+     name: 'Moon Goddess Digital Art Print',
      description: 'High-resolution digital download (4:5) for personal printing.',
      price: 1200,                 // $12.00 AUD (cents)
      preview: 'https://<blob>/preview-moon-goddess.png', // optional public thumbnail
@@ -38,17 +38,17 @@ the webhook/`/api/download` confirms the payment.
 3. **Add a buy button** anywhere on the site (store.js wires it automatically):
    ```html
    <button type="button" data-sku="print-moon-goddess" class="btn btn--primary">
-     Download Print — $12
+     Download Print. $12
    </button>
    ```
    (Best: build a dedicated "Prints" / gallery page listing all of them.)
-4. **Commit + deploy.** Done — buyers can purchase and download instantly.
+4. **Commit + deploy.** Done. Buyers can purchase and download instantly.
 
 ## Notes
 - **Previews:** the `file` is private (only sent after payment). For the checkout thumbnail and
   the storefront, upload a separate lower-res/watermarked `preview` image (also public Blob).
 - **Buyer emails** send from `ORDER_FROM_EMAIL` (your verified `wildheartspublishing.com.au`),
-  so they reach any inbox — already configured.
+  so they reach any inbox. Already configured.
 - **Security:** the link is gated by Stripe payment + tied to the order. Unguessable Blob URL.
   Good enough for low-stakes art; not hardened DRM (a buyer could re-share their own link).
 - **Pricing:** digital is near-pure profit (minus Stripe ~2.9% + 30¢). Typical $9–15 per print.

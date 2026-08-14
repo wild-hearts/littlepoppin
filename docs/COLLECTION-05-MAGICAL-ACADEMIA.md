@@ -1,6 +1,6 @@
-# Little Poppin — Collection 05: Magical Academia (wizarding-inspired)
+# Little Poppin. Collection 05: Magical Academia (wizarding-inspired)
 
-Enchanted "magic school" aesthetic — the wizarding-academia vibe (potions, spellbooks, wands,
+Enchanted "magic school" aesthetic. The wizarding-academia vibe (potions, spellbooks, wands,
 owls, floating candles, magic castles) WITHOUT any Harry Potter IP, so it's legally sellable.
 Warm candlelit magical watercolour. All `--ar 4:5 --stylize 600`.
 

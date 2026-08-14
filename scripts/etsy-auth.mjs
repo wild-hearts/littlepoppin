@@ -1,8 +1,7 @@
-// etsy-auth.mjs — one-time OAuth so the publisher can create listings on Naomi's behalf.
+// etsy-auth.mjs. One-time OAuth so the publisher can create listings on Naomi's behalf.
 //
 // Etsy's API is OAuth 2.0 with PKCE. There is no way around the browser step: Etsy has to
-// show Naomi what the app is asking for and have her approve it. This script does the rest —
-// generates the challenge, opens the consent page, catches the redirect on localhost, swaps
+// show Naomi what the app is asking for and have her approve it. This script does the rest, // generates the challenge, opens the consent page, catches the redirect on localhost, swaps
 // the code for tokens, and stores them.
 //
 //   node scripts/etsy-auth.mjs
@@ -63,7 +62,7 @@ const code = await new Promise((resolve, reject) => {
     // Reject a mismatched state: it means the redirect did not come from the request we made.
     if (url.searchParams.get('state') !== state) {
       res.writeHead(400, { 'Content-Type': 'text/html' });
-      res.end('<h2>State mismatch — not the request we started. Nothing was saved.</h2>');
+      res.end('<h2>State mismatch. Not the request we started. Nothing was saved.</h2>');
       server.close(); return reject(new Error('state mismatch'));
     }
     res.writeHead(200, { 'Content-Type': 'text/html' });

@@ -1,4 +1,4 @@
-// build-extras.mjs — build the printable ranges (colouring books, milestone cards,
+// build-extras.mjs. Build the printable ranges (colouring books, milestone cards,
 // wall calendar) from the existing art library. Outputs dist/extras/<sku>.pdf plus a
 // web preview image for each, then publish-extras.mjs uploads and registers them.
 //
@@ -7,7 +7,7 @@
 // and a colour-dodge blend inverted into dark blobs. `-morphology edgein` was the only
 // one that kept the subject, and the level/threshold pass after it is what turns a grey
 // pencil sketch into true black-on-white line art. Change it only by eye, on several
-// designs at once — some look fine and others lose their subject entirely.
+// designs at once. Some look fine and others lose their subject entirely.
 //
 // Usage:  node scripts/build-extras.mjs [sku ...]     (no args = build everything)
 
@@ -51,7 +51,7 @@ const sourceIndex = (() => {
 const printsIn = (section) =>
   catalogue.prints.filter((p) => p.section === section && sourceIndex[p.sku]);
 
-/** Convert one artwork to black-on-white line art (cached — this is the slow step). */
+/** Convert one artwork to black-on-white line art (cached. This is the slow step). */
 function lineArt(sku) {
   const out = path.join(CACHE, `${sku}-line.png`);
   if (fs.existsSync(out)) return out;
@@ -106,8 +106,8 @@ async function newDoc(title) {
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
   doc.setTitle(title);
-  doc.setCreator('Little Poppin — littlepoppin.com');
-  // subset:false — the bundled Cormorant is a variable font and fontkit's subsetter drops
+  doc.setCreator('Little Poppin. Littlepoppin.com');
+  // subset:false. The bundled Cormorant is a variable font and fontkit's subsetter drops
   // most of its glyphs (see lib/personalise.js). Do not "optimise" this.
   const font = await doc.embedFont(fontBytes, { subset: false });
   return { doc, font };
@@ -138,7 +138,7 @@ async function drawCover(doc, font, { title, blurb, artJpeg }) {
 async function buildColouring(extra) {
   const pool = printsIn(extra.fromSection).slice(0, extra.pages);
   if (!pool.length) throw new Error(`no prints for section ${extra.fromSection}`);
-  const { doc, font } = await newDoc(`${extra.title} — Little Poppin`);
+  const { doc, font } = await newDoc(`${extra.title}, Little Poppin`);
 
   await drawCover(doc, font, {
     title: extra.title, blurb: extra.coverBlurb,
@@ -166,14 +166,14 @@ async function buildCards(extra) {
   const pool = printsIn(extra.fromSection);
   if (pool.length < 4) throw new Error(`not enough prints in ${extra.fromSection}`);
   const labels = extra.labels;
-  const { doc, font } = await newDoc(`${extra.title} — Little Poppin`);
+  const { doc, font } = await newDoc(`${extra.title}, Little Poppin`);
 
   await drawCover(doc, font, {
     title: extra.title, blurb: extra.coverBlurb,
     artJpeg: path.join(REPO, pool[0].preview.replace(/^\//, '')),
   });
 
-  // Instructions page — this is a cut-out product, so say so.
+  // Instructions page. This is a cut-out product, so say so.
   const info = doc.addPage([A4.w, A4.h]);
   info.drawRectangle({ x: 0, y: 0, width: A4.w, height: A4.h, color: CREAM });
   centredText(info, font, extra.howToTitle || 'How to use your cards', { y: A4.h - 120, size: 26, color: INK });
@@ -182,7 +182,7 @@ async function buildCards(extra) {
 
   // Four large cards per page, 2x2. Big cards photograph better beside a baby than a
   // sheet of small ones, so the grid is centred on the page rather than pushed to the
-  // top — otherwise the lower third prints as blank paper.
+  // top. Otherwise the lower third prints as blank paper.
   const cardsPerPage = 4;
   const margin = 40;
   const gap = 18;
@@ -237,7 +237,7 @@ async function buildCalendar(extra) {
   const picks = MONTHS.map((_, i) =>
     i === 11 && festive.length ? festive[0] : spread[Math.floor((i * spread.length) / 12)]);
 
-  const { doc, font } = await newDoc(`${extra.title} — Little Poppin`);
+  const { doc, font } = await newDoc(`${extra.title}, Little Poppin`);
   await drawCover(doc, font, {
     title: extra.title, blurb: extra.coverBlurb,
     artJpeg: path.join(REPO, picks[0].preview.replace(/^\//, '')),
@@ -254,7 +254,7 @@ async function buildCalendar(extra) {
     centredText(page, font, MONTHS[m], { y: A4.h - 52 - box.h - 40, size: 30, color: INK });
 
     // Undated grid: 7 columns x 5 rows, numbered 1..31 from the top-left. Undated on
-    // purpose — it makes the calendar reusable in any year, which is the whole point of
+    // purpose. It makes the calendar reusable in any year, which is the whole point of
     // a printable one. Rows are sized to fill the space left under the month name, so
     // the grid reads as part of the design rather than a small table floating on it.
     const ROWS = Math.ceil(31 / 7);
@@ -292,7 +292,7 @@ async function buildCalendar(extra) {
 async function buildBookmarks(extra) {
   const pool = printsIn(extra.fromSection);
   if (!pool.length) throw new Error(`no prints in ${extra.fromSection}`);
-  const { doc, font } = await newDoc(`${extra.title} — Little Poppin`);
+  const { doc, font } = await newDoc(`${extra.title}, Little Poppin`);
 
   await drawCover(doc, font, {
     title: extra.title, blurb: extra.coverBlurb,

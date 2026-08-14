@@ -1,6 +1,6 @@
 // api/order.js
 // Read-only: returns a safe summary of a completed Checkout Session for success.html.
-// Never exposes secret data — only payment status, masked email and the amount paid.
+// Never exposes secret data. Only payment status, masked email and the amount paid.
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

@@ -1,6 +1,6 @@
-// publish-prints.mjs — ONE-COMMAND launch for the digital prints shop.
+// publish-prints.mjs. ONE-COMMAND launch for the digital prints shop.
 // Uploads every print's high-res original to Vercel Blob and writes the resulting
-// `file` URLs into lib/digital-products.generated.js — flipping the shop from
+// `file` URLs into lib/digital-products.generated.js. Flipping the shop from
 // "blocked" to "sellable". Run this AFTER enabling Vercel Blob.
 //
 // Setup once: Vercel → Storage → Create → Blob → connect, then put the token in
@@ -46,7 +46,7 @@ for (const mm of matches) {
   const { sku, preview } = mm.groups;
   const base = path.basename(preview).replace(/\.jpg$/, '');
   const src = findSource(base);
-  if (!src) { console.log(`  ✗ ${sku} — original not found (${base}.png)`); missing++; continue; }
+  if (!src) { console.log(`  ✗ ${sku}, original not found (${base}.png)`); missing++; continue; }
   try {
     const blob = await put('prints/' + base + '.png', fs.readFileSync(src), {
       access: 'private', token: tok, addRandomSuffix: true, contentType: 'image/png',
@@ -55,8 +55,8 @@ for (const mm of matches) {
     // short-lived presigned URL from this pathname at delivery time.
     gen = gen.replace(new RegExp(`('${sku}':\\s*\\{[^}]*?file:\\s*)null`), `$1'${blob.pathname}'`);
     done++; process.stdout.write('.');
-  } catch (e) { console.log(`\n  ✗ ${sku} — ${e.message}`); }
+  } catch (e) { console.log(`\n  ✗ ${sku}, ${e.message}`); }
 }
 fs.writeFileSync(GEN, gen);
-console.log(`\n\nDone — ${done} uploaded & wired${missing ? `, ${missing} missing` : ''}.`);
+console.log(`\n\nDone. ${done} uploaded & wired${missing ? `, ${missing} missing` : ''}.`);
 console.log('Next: git add -A && commit && push, then add an "Art Prints" link to index.html nav.');

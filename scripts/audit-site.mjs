@@ -1,4 +1,4 @@
-// audit-site.mjs — whole-site sweep after the "go global" change.
+// audit-site.mjs. Whole-site sweep after the "go global" change.
 //
 // This is deliberately separate from scripts/test.mjs: test.mjs guards invariants during
 // normal development, this answers "is the site actually consistent right now?" across
@@ -140,5 +140,5 @@ for (const f of pages) {
 broken.length ? broken.slice(0, 10).forEach(bad) : ok(`${refs} local references across ${pages.length} pages, none broken`);
 
 console.log(`\n${'='.repeat(60)}`);
-console.log(problems ? `${problems} problem(s) found` : 'Clean — no problems found');
+console.log(problems ? `${problems} problem(s) found` : 'Clean. No problems found');
 process.exit(problems ? 1 : 0);

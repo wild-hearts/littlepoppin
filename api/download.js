@@ -58,7 +58,7 @@ export default async function handler(req, res) {
         line2: cleanField(s.metadata.p_line2, LIMITS.line2),
         line3: cleanField(s.metadata.p_line3, LIMITS.line3),
       };
-      if (!fields.name) return res.status(422).send('This order is missing its personalisation details — please contact us.');
+      if (!fields.name) return res.status(422).send('This order is missing its personalisation details. Please contact us.');
 
       const artResp = await fetch(await fileUrl(product.file));
       if (!artResp.ok) throw new Error(`art fetch failed: ${artResp.status}`);
@@ -81,10 +81,10 @@ export default async function handler(req, res) {
       if (!comps.length || comps.some((c) => !c.file)) return res.status(404).send('Files not found');
       const urls = await Promise.all(comps.map((c) => fileUrl(c.file)));
       const links = comps.map((c, i) =>
-        `<a class="dl" href="${esc(urls[i])}" download>⬇ ${esc((c.name || c.sku).replace(' — Art Print', ''))}</a>`).join('\n');
+        `<a class="dl" href="${esc(urls[i])}" download>⬇ ${esc((c.name || c.sku).replace(' Art Print', ''))}</a>`).join('\n');
       const many = comps.length > 6;
       return res.status(200).send(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Your prints — Little Poppin</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Your prints. Little Poppin</title>
 <style>
 body{font-family:system-ui,-apple-system,sans-serif;background:#FDFAF7;color:#2C2C2C;text-align:center;
      padding:56px 20px;margin:0}
@@ -100,8 +100,7 @@ p{color:#6B6B6B;max-width:620px;margin:0 auto 8px}
 </style></head>
 <body><h1>Your ${esc(product.title || 'Little Poppin')} is ready 🌙</h1>
 <span class="count">${comps.length} high-resolution print${comps.length === 1 ? '' : 's'}</span>
-<p style="margin-top:14px">Tap each one to download and save it. These links stay fresh for an hour —
-revisit this page from your email any time for new ones.</p>
+<p style="margin-top:14px">Tap each one to download and save it. These links stay fresh for an hour. Revisit this page from your email any time for new ones.</p>
 <div class="grid">${links}</div>
 </body></html>`);
     }

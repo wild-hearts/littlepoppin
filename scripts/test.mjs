@@ -1,8 +1,8 @@
-// test.mjs — regression suite for the Little Poppin shop.  Run: npm test
+// test.mjs. Regression suite for the Little Poppin shop.  Run: npm test
 //
 // No framework, no dependencies: this has to stay runnable in a year by whoever opens
 // the repo next. Every check here exists because the thing it checks actually broke
-// during development — this is a net under the specific holes we fell through, not a
+// during development. This is a net under the specific holes we fell through, not a
 // box-ticking exercise. If a check fails, read the message: it says what broke and why
 // it matters, not just "expected true".
 //
@@ -82,7 +82,7 @@ let ordinaryMonths = 0;
 let decembers = 0;
 
 // A finite catalogue must eventually cycle. What matters is that it uses EVERY print
-// before reusing any — the rotation should exhaust the pool, not orbit a subset. So we
+// before reusing any. The rotation should exhaust the pool, not orbit a subset. So we
 // assert uniqueness only up to capacity, and separately that capacity is actually reached.
 const ordinaryCapacity = Math.floor(rot.length / PRINT_CLUB.printsPerMonth);
 const festiveCapacity = Math.floor(festivePool.length / PRINT_CLUB.printsPerMonth);
@@ -102,7 +102,7 @@ for (let i = 0; i < 36; i++) {
   const withinCapacity = isDec ? decembers < festiveCapacity : ordinaryMonths < ordinaryCapacity;
   for (const sku of picks) {
     if (withinCapacity && bucket.has(sku)) {
-      rotationProblems.push(`month ${i}: early repeat of ${sku} (first sent month ${bucket.get(sku)}) — the pool should be exhausted first`);
+      rotationProblems.push(`month ${i}: early repeat of ${sku} (first sent month ${bucket.get(sku)}). The pool should be exhausted first`);
     }
     bucket.set(sku, i);
   }
@@ -184,7 +184,7 @@ check('page sizes are 8x10, A4 and 16x20', sizes.join(' ') === '8.00x10.00 8.27x
 // which rendered "Willow Rose" as "llow o". A subset font produces a much smaller file.
 const personaliseSrc = fs.readFileSync('lib/personalise.js', 'utf8');
 check('font is embedded without subsetting', /subset:\s*false/.test(personaliseSrc),
-  'subset:true silently drops most glyphs from the variable Cormorant — verify by rendering, never by byte count.');
+  'subset:true silently drops most glyphs from the variable Cormorant. Verify by rendering, never by byte count.');
 
 // ---------------------------------------------------------------------------
 group('Cron endpoint auth');
@@ -197,7 +197,7 @@ const sendMod = await import('../api/printclub-send.js');
 const reviewMod = await import('../api/review-request.js');
 const reviewSrc = fs.readFileSync('api/review-request.js', 'utf8');
 check('review-request also fails closed without CRON_SECRET', /if\s*\(\s*!secret\s*\)/.test(reviewSrc),
-  'It emails customers and spends Resend quota — an unset secret must disable it, not open it.');
+  'It emails customers and spends Resend quota. An unset secret must disable it, not open it.');
 const mkRes = () => { const r = {}; r.status = (c) => { r.code = c; return r; }; r.json = (b) => { r.body = b; return r; }; return r; };
 delete process.env.CRON_SECRET;
 let r1 = mkRes(); await sendMod.default({ headers: {}, query: {} }, r1);
@@ -280,7 +280,7 @@ check('print-options.json agrees with the Printify config',
   `json says ${opts.configured}, lib says ${printifyConfigured()}`);
 check('no Printify ids leak to the browser',
   !JSON.stringify(opts).match(/blueprintId|providerId|variantId/),
-  'data/print-options.json is public — it must carry labels and prices only.');
+  'data/print-options.json is public. It must carry labels and prices only.');
 
 const sampleProduct = fs.readFileSync('print/sleepy-moon-and-stars.html', 'utf8');
 check('product pages carry the physical picker', sampleProduct.includes('data-physical-for'));
@@ -318,7 +318,7 @@ check('bundles containing the song cost more than the song alone',
 
 // Charity claims must stay scoped to the swaddles, which are the only range that funds
 // the giving. An unqualified "a portion of every sale" across a shop that is now mostly
-// digital is misleading conduct under Australian Consumer Law, not loose copy — and it
+// digital is misleading conduct under Australian Consumer Law, not loose copy. And it
 // was live on ~130 pages until August 2026. Anything that reintroduces it fails here.
 {
   const pages = [];

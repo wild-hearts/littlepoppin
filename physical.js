@@ -3,7 +3,7 @@
 function lpTrack(event, params) {
   try { if (typeof window.gtag === 'function') window.gtag('event', event, params || {}); } catch (e) {}
 }
-// physical.js — the "have it printed and posted" picker on a product page.
+// physical.js. The "have it printed and posted" picker on a product page.
 //
 // api/checkout.js has always accepted { sku, format, size } for a Printify order, but no
 // page offered the controls, so physical prints were unreachable. This supplies them.
@@ -11,7 +11,7 @@ function lpTrack(event, params) {
 // It is deliberately inert until Printify is set up: data/print-options.json is written
 // on every build and reports `configured: false` while lib/printify-config.generated.js
 // is still empty. In that state the block stays hidden rather than showing a control that
-// 409s — nothing to remove or re-add when the token finally lands.
+// 409s. Nothing to remove or re-add when the token finally lands.
 (function () {
   'use strict';
 
@@ -35,7 +35,7 @@ function lpTrack(event, params) {
     fmt.sizes.forEach(function (s) {
       var o = document.createElement('option');
       o.value = s.key;
-      o.textContent = s.label + ' — ' + money(s.price);
+      o.textContent = s.label + ', ' + money(s.price);
       sizeSel.appendChild(o);
     });
     updateLabel();
@@ -47,9 +47,9 @@ function lpTrack(event, params) {
     var setCount = parseInt(block.getAttribute('data-physical-set') || '0', 10);
     if (size && setCount > 1) {
       var setPrice = Math.round(size.price * setCount * 0.9 / 100) * 100;   // matches SET_PRINT_SAVING
-      buyBtn.textContent = 'Order the printed set — ' + money(setPrice);
+      buyBtn.textContent = 'Order the printed set, ' + money(setPrice);
     } else {
-      buyBtn.textContent = size ? 'Order a printed copy — ' + money(size.price) : 'Order a printed copy';
+      buyBtn.textContent = size ? 'Order a printed copy, ' + money(size.price) : 'Order a printed copy';
     }
   }
 
@@ -64,7 +64,7 @@ function lpTrack(event, params) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sku: sku, format: formatSel.value, size: sizeSel.value,
         // Destination decides the postage rate, and Stripe fixes rates when the session
-        // is created — so it has to be sent now, not collected on the Stripe page.
+        // is created. So it has to be sent now, not collected on the Stripe page.
         country: countrySel ? countrySel.value : '' }),
     })
       .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
@@ -75,7 +75,7 @@ function lpTrack(event, params) {
       .catch(function (e) {
         buyBtn.disabled = false;
         buyBtn.textContent = label;
-        errEl.textContent = e.message || 'Sorry — checkout hiccuped. Please try again.';
+        errEl.textContent = e.message || 'Sorry. Checkout hiccuped. Please try again.';
       });
   }
 

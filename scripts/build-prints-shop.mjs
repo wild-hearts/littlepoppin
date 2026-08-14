@@ -1,4 +1,4 @@
-// build-prints-shop.mjs — generate the Little Poppin prints shop from the art library.
+// build-prints-shop.mjs. Generate the Little Poppin prints shop from the art library.
 // Sections let different collections appear as their own shop categories.
 // Outputs: web previews (images/prints/*.jpg), lib/digital-products.generated.js,
 // and prints.html (with jump-nav, lightbox, FAQ, JSON-LD). Re-runnable: skips existing previews.
@@ -12,7 +12,7 @@ const REPO = '/Users/naomishiels/Downloads/skills/littlepoppin';
 
 // Carry forward the Vercel Blob pathnames from the previous build. Without this every
 // rebuild resets `file` to null, which silently blocks checkout on every print until
-// publish-prints.mjs is re-run — the single easiest way to take the shop offline.
+// publish-prints.mjs is re-run. The single easiest way to take the shop offline.
 const PUBLISHED = await (async () => {
   try {
     const { GENERATED_DIGITAL_PRODUCTS } = await import('../lib/digital-products.generated.js');
@@ -30,102 +30,102 @@ const SRC = path.join(os.homedir(), 'Downloads', 'LittlePoppin-Designs');
 const OUT_IMG = path.join(REPO, 'images', 'prints');
 const SITE = 'https://www.littlepoppin.com';
 
-// Shop sections (collection-04 Mystic is intentionally excluded — own brand).
+// Shop sections (collection-04 Mystic is intentionally excluded. Own brand).
 const SECTIONS = [
   { id: 'nursery', title: 'Nursery Art Prints', nav: 'Nursery',
-    blurb: 'Dreamy, magical nursery art — delivered instantly, ready to print and frame.',
+    blurb: 'Dreamy, magical nursery art. Delivered instantly, ready to print and frame.',
     colls: ['collection-01', 'collection-02', 'collection-03', 'collection-08'], price: 1200 },
   { id: 'zodiac', title: '⭐ Little Zodiac', nav: 'Zodiac',
-    blurb: 'A magical print for every star sign — the personalised gift for every new arrival.',
+    blurb: 'A magical print for every star sign. The personalised gift for every new arrival.',
     colls: ['collection-07'], price: 1200 },
   { id: 'academia', title: '✨ Magical Academia', nav: 'Academia',
     blurb: 'Enchanted, candlelit, wizarding-inspired wall art for magic lovers of every age.',
     colls: ['collection-05', 'collection-09'], price: 1200 },
   { id: 'festive', title: '🎄 Festive Magic', nav: 'Festive',
-    blurb: 'Enchanted Christmas prints — glowing trees, sleepy reindeer and candlelit windows.',
+    blurb: 'Enchanted Christmas prints. Glowing trees, sleepy reindeer and candlelit windows.',
     colls: ['collection-06', 'collection-10'], price: 1200 },
 ];
 
-// Curated gallery sets — 3 matching prints for $30 (save $6 vs 3 × $12).
+// Curated gallery sets. 3 matching prints for $30 (save $6 vs 3 × $12).
 // Prints may appear in more than one set; that is deliberate, the same way a bookshop
 // puts one title on several tables.
 const SETS = [
   { sku: 'set-sweet-dreams', title: 'Sweet Dreams Set',
-    description: 'Three sleepy friends — Sleepy Bunny, Dreamy Bear Cub and Sleepy Lamb — a ready-made gallery wall of pure bedtime calm.',
+    description: 'Three sleepy friends. Sleepy Bunny, Dreamy Bear Cub and Sleepy Lamb. A ready-made gallery wall of pure bedtime calm.',
     items: ['print-sleepy-bunny', 'print-dreamy-bear-cub', 'print-sleepy-lamb-on-a-cloud'], price: 3000 },
   { sku: 'set-night-sky', title: 'Night Sky Set',
-    description: 'Sleepy Moon & Stars, Cloud Dreams and Star Catcher — a celestial trio for little stargazers.',
+    description: 'Sleepy Moon & Stars, Cloud Dreams and Star Catcher. A celestial trio for little stargazers.',
     items: ['print-sleepy-moon-and-stars', 'print-cloud-dreams', 'print-star-catcher'], price: 3000 },
   { sku: 'set-enchanted-adventure', title: 'Enchanted Adventure Set',
-    description: 'Unicorn Dreams, the Dream Castle and a friendly Baby Dragon — a fairytale wall in three prints.',
+    description: 'Unicorn Dreams, the Dream Castle and a friendly Baby Dragon. A fairytale wall in three prints.',
     items: ['print-unicorn-dreams', 'print-dream-castle-in-the-clouds', 'print-baby-dragon'], price: 3000 },
   { sku: 'set-magical-academia', title: 'Magical Academia Set',
-    description: 'The Enchanted Library, Floating Candles and Owl Post — the wizarding study wall, complete.',
+    description: 'The Enchanted Library, Floating Candles and Owl Post. The wizarding study wall, complete.',
     items: ['print-the-enchanted-library', 'print-floating-candles', 'print-owl-post'], price: 3000 },
   { sku: 'set-woodland-friends', title: 'Woodland Friends Set',
-    description: 'Little Fawn, Autumn Fox Kit and the Owl Family — a soft, storybook forest for the nursery wall.',
+    description: 'Little Fawn, Autumn Fox Kit and the Owl Family. A soft, storybook forest for the nursery wall.',
     items: ['print-little-fawn', 'print-autumn-fox-kit', 'print-owl-family'], price: 3000 },
   { sku: 'set-garden-magic', title: 'Garden Magic Set',
-    description: 'Butterfly Garden, Hummingbird Garden and Bumblebee Meadow — a glowing trio of tiny garden wonders.',
+    description: 'Butterfly Garden, Hummingbird Garden and Bumblebee Meadow. A glowing trio of tiny garden wonders.',
     items: ['print-butterfly-garden', 'print-hummingbird-garden', 'print-bumblebee-meadow'], price: 3000 },
   { sku: 'set-ocean-dreams', title: 'Ocean Dreams Set',
-    description: 'Under the Sea, Mermaid Lagoon and Little Sailboat — a calm, watery world for small adventurers.',
+    description: 'Under the Sea, Mermaid Lagoon and Little Sailboat. A calm, watery world for small adventurers.',
     items: ['print-under-the-sea', 'print-mermaid-lagoon', 'print-little-sailboat'], price: 3000 },
   { sku: 'set-little-australians', title: 'Little Australians Set',
-    description: 'Sleepy Koala, Gum Blossom Dreams and Little Penguin — a gentle Australian bedtime, in three prints.',
+    description: 'Sleepy Koala, Gum Blossom Dreams and Little Penguin. A gentle Australian bedtime, in three prints.',
     items: ['print-sleepy-koala', 'print-gum-blossom-dreams', 'print-little-penguin'], price: 3000 },
   { sku: 'set-up-and-away', title: 'Up & Away Set',
-    description: 'Hot Air Balloon Dreams, Balloon Voyage and Up & Away — for the little one with somewhere to be.',
+    description: 'Hot Air Balloon Dreams, Balloon Voyage and Up & Away. For the little one with somewhere to be.',
     items: ['print-hot-air-balloon-dreams', 'print-hot-air-balloon-voyage', 'print-up-and-away'], price: 3000 },
   { sku: 'set-fairy-hollow', title: 'Fairy Hollow Set',
-    description: 'Enchanted Fairy Garden, Fairy Blossom and Mushroom Hollow — a secret world at the bottom of the garden.',
+    description: 'Enchanted Fairy Garden, Fairy Blossom and Mushroom Hollow. A secret world at the bottom of the garden.',
     items: ['print-enchanted-fairy-garden', 'print-fairy-blossom', 'print-mushroom-hollow'], price: 3000 },
   { sku: 'set-brave-explorers', title: 'Brave Explorers Set',
-    description: 'Dreamy Space Adventure, Jungle Explorers and Little Dinosaurs — three big adventures for a small room.',
+    description: 'Dreamy Space Adventure, Jungle Explorers and Little Dinosaurs. Three big adventures for a small room.',
     items: ['print-dreamy-space-adventure', 'print-jungle-explorers', 'print-little-dinosaurs'], price: 3000 },
   { sku: 'set-sunshine-and-rainbows', title: 'Sunshine & Rainbows Set',
-    description: 'Rainbow & Clouds, Sunshine Smile and Swan Lake Dream — the brightest, happiest corner of the nursery.',
+    description: 'Rainbow & Clouds, Sunshine Smile and Swan Lake Dream. The brightest, happiest corner of the nursery.',
     items: ['print-rainbow-and-clouds', 'print-sunshine-smile', 'print-swan-lake-dream'], price: 3000 },
   { sku: 'set-wizarding-study', title: 'Wizarding Study Set',
-    description: 'The Open Spellbook, Quill & Ink and the Study Nook — for the desk of someone who reads late.',
+    description: 'The Open Spellbook, Quill & Ink and the Study Nook. For the desk of someone who reads late.',
     items: ['print-the-open-spellbook', 'print-quill-and-ink', 'print-the-study-nook'], price: 3000 },
   { sku: 'set-potions-and-spells', title: 'Potions & Spells Set',
-    description: "The Potions Shelf, the Cauldron and the Alchemist's Desk — bottled magic, three ways.",
+    description: "The Potions Shelf, the Cauldron and the Alchemist's Desk. Bottled magic, three ways.",
     items: ['print-potions-shelf', 'print-the-cauldron', 'print-the-alchemist-s-desk'], price: 3000 },
   { sku: 'set-star-gazing', title: 'Star Gazing Set',
-    description: "The Observatory, the Astronomer's Desk and the Crystal Ball — for anyone who looks up.",
+    description: "The Observatory, the Astronomer's Desk and the Crystal Ball. For anyone who looks up.",
     items: ['print-the-observatory', 'print-the-astronomer-s-desk', 'print-the-crystal-ball'], price: 3000 },
   { sku: 'set-christmas-magic', title: 'Christmas Magic Set',
-    description: "The Christmas Tree, Little Reindeer and Santa's Sleigh Ride — the three that make it feel like Christmas.",
+    description: "The Christmas Tree, Little Reindeer and Santa's Sleigh Ride. The three that make it feel like Christmas.",
     items: ['print-the-christmas-tree', 'print-little-reindeer', 'print-santa-s-sleigh-ride'], price: 3000 },
   { sku: 'set-winter-friends', title: 'Winter Friends Set',
-    description: "Skating Penguins, Polar Bear's First Christmas and the Christmas Robin — snowy, cosy and full of heart.",
+    description: "Skating Penguins, Polar Bear's First Christmas and the Christmas Robin. Snowy, cosy and full of heart.",
     items: ['print-skating-penguins', 'print-polar-bear-s-first-christmas', 'print-christmas-robin'], price: 3000 },
   { sku: 'set-cosy-christmas', title: 'Cosy Christmas Set',
-    description: 'Hot Cocoa Night, the Candlelit Window and Kitten Under the Tree — Christmas with the lamps on.',
+    description: 'Hot Cocoa Night, the Candlelit Window and Kitten Under the Tree. Christmas with the lamps on.',
     items: ['print-hot-cocoa-night', 'print-the-candlelit-window', 'print-kitten-under-the-tree'], price: 3000 },
 ];
 
 // Whole-collection bundles. `fromSection` pulls in every print in that shop section;
 // `all: true` takes the entire catalogue. Priced as the "everything you were going to
-// buy anyway, plus the rest" tier — the marginal cost of a digital file is zero, so the
+// buy anyway, plus the rest" tier. The marginal cost of a digital file is zero, so the
 // job of these is to lift average order value, not to protect the single-print price.
-// To reprice, edit `price` here and rebuild — nothing else needs to change.
+// To reprice, edit `price` here and rebuild. Nothing else needs to change.
 // PRICING NOTE: collection prices were 69-87% off the per-print price, bottoming out at
 // $1.60 a print for the whole library. That is below the point where the rest of the shop
 // makes sense to buy at all. Raised so the ladder still rewards volume without gutting the
 // $12 print and $30 set tiers underneath it.
 const BUNDLES = [
   { sku: 'bundle-zodiac', title: 'The Complete Little Zodiac', fromSection: 'zodiac', price: 6900,
-    description: 'All twelve star-sign prints in one download — every birthday covered, for siblings, cousins and every baby shower this year.' },
+    description: 'All twelve star-sign prints in one download. Every birthday covered, for siblings, cousins and every baby shower this year.' },
   { sku: 'bundle-festive', title: 'The Complete Festive Collection', fromSection: 'festive', price: 8900,
-    description: 'All twenty enchanted Christmas prints — a whole season of decorating, and a new wall every December.' },
+    description: 'All twenty enchanted Christmas prints. A whole season of decorating, and a new wall every December.' },
   { sku: 'bundle-academia', title: 'The Complete Magical Academia', fromSection: 'academia', price: 8900,
-    description: 'All twenty candlelit, wizarding-inspired prints — a full study wall for magic lovers of every age.' },
+    description: 'All twenty candlelit, wizarding-inspired prints. A full study wall for magic lovers of every age.' },
   { sku: 'bundle-nursery', title: 'The Complete Nursery Collection', fromSection: 'nursery', price: 14900,
-    description: 'Every one of our dreamy nursery prints in a single download — enough to style a whole nursery, playroom and hallway.' },
+    description: 'Every one of our dreamy nursery prints in a single download. Enough to style a whole nursery, playroom and hallway.' },
   { sku: 'bundle-everything', title: 'The Entire Little Poppin Library', all: true, price: 24900,
-    description: 'Every single print we make — nursery, star signs, magical academia and festive. The whole library, one download, yours forever.' },
+    description: 'Every single print we make. Nursery, star signs, magical academia and festive. The whole library, one download, yours forever.' },
 ];
 
 fs.mkdirSync(OUT_IMG, { recursive: true });
@@ -150,7 +150,7 @@ for (const sec of SECTIONS) {
       const meta = PRINT_META[sku] || {};
       const title = meta.title || titleCase(base);
       const description = meta.description || 'High-resolution digital art print (4:5). Instant download for personal printing.';
-      items.push({ sku, title, name: `${title} — Art Print`, description, price: sec.price, preview: `/images/prints/${outName}`, section: sec.id });
+      items.push({ sku, title, name: `${title} Art Print`, description, price: sec.price, preview: `/images/prints/${outName}`, section: sec.id });
       process.stdout.write('.');
     }
   }
@@ -158,13 +158,13 @@ for (const sec of SECTIONS) {
   all.push(...items);
   navLinks.push({ id: sec.id, nav: sec.nav });
   const cards = items.map(it => `          <article class="print-card">
-            <button type="button" class="print-card__img lightbox-open" data-full="${it.preview}" data-title="${it.title}" aria-label="View ${it.title} larger"><img src="${it.preview}" alt="${it.title} — magical art print by Little Poppin" loading="lazy" /></button>
+            <button type="button" class="print-card__img lightbox-open" data-full="${it.preview}" data-title="${it.title}" aria-label="View ${it.title} larger"><img src="${it.preview}" alt="${it.title}, a magical art print by Little Poppin" loading="lazy" /></button>
             <div class="print-card__body">
               <h3><a href="print/${it.sku.replace(/^print-/, '')}.html">${it.title}</a></h3>
               <p class="print-card__desc">${it.description}</p>
               <p class="print-card__price">$${(it.price / 100).toFixed(0)} <span>AUD · instant download</span></p>
-              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Download Print — $${(it.price / 100).toFixed(0)}</button>
-              <a class="print-card__personalise" href="personalise.html?print=${encodeURIComponent(it.sku)}">✨ Add their name — $19</a>
+              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Download Print. $${(it.price / 100).toFixed(0)}</button>
+              <a class="print-card__personalise" href="personalise.html?print=${encodeURIComponent(it.sku)}">✨ Add their name. $19</a>
             </div>
           </article>`).join('\n');
   const finder = sec.id === 'zodiac' ? `
@@ -194,30 +194,30 @@ fs.mkdirSync(setsDir, { recursive: true });
 const setItems = [];
 for (const s of SETS) {
   const comps = s.items.map(sku => bySku[sku]).filter(Boolean);
-  if (comps.length !== s.items.length) { console.log(`! skipping ${s.sku} — missing component(s)`); continue; }
+  if (comps.length !== s.items.length) { console.log(`! skipping ${s.sku}, missing component(s)`); continue; }
   const compositePath = path.join(setsDir, `${s.sku}.jpg`);
   if (!fs.existsSync(compositePath)) {
     execFileSync('magick', [
       ...comps.map(c => path.join(REPO, c.preview.slice(1))),
       '-resize', 'x600', '-background', 'white', '+smush', '16', compositePath]);
   }
-  setItems.push({ ...s, name: `${s.title} — 3 Digital Prints`, preview: `/images/prints/sets/${s.sku}.jpg` });
+  setItems.push({ ...s, name: `${s.title}, 3 Digital Prints`, preview: `/images/prints/sets/${s.sku}.jpg` });
   process.stdout.write('+');
 }
 const setCards = setItems.map(it => `          <article class="print-card print-card--set">
-            <button type="button" class="print-card__img print-card__img--set lightbox-open" data-full="${it.preview}" data-title="${it.title}" aria-label="View ${it.title} larger"><img src="${it.preview}" alt="${it.title} — gallery set of three magical art prints" loading="lazy" /></button>
+            <button type="button" class="print-card__img print-card__img--set lightbox-open" data-full="${it.preview}" data-title="${it.title}" aria-label="View ${it.title} larger"><img src="${it.preview}" alt="${it.title}, gallery set of three magical art prints" loading="lazy" /></button>
             <div class="print-card__body">
               <span class="print-card__badge-save">Save $${((it.items.length * 1200 - it.price) / 100).toFixed(0)}</span>
               <h3><a href="set/${it.sku.replace(/^set-/, '')}.html">${it.title}</a></h3>
               <p class="print-card__desc">${it.description}</p>
               <p class="print-card__price">$${(it.price / 100).toFixed(0)} <span>AUD · 3 prints · instant download</span></p>
-              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Download Set — $${(it.price / 100).toFixed(0)}</button>
+              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Download Set. $${(it.price / 100).toFixed(0)}</button>
             </div>
           </article>`).join('\n');
 const setsSection = setItems.length ? `    <section class="prints prints--sets" id="sets">
       <div class="container">
         <h2 class="prints-section__title">Gallery Sets</h2>
-        <p class="prints-section__blurb">Three matching prints, one ready-made gallery wall — $30 the set (worth $36).</p>
+        <p class="prints-section__blurb">Three matching prints, one ready-made gallery wall. $30 the set (worth $36).</p>
         <div class="print-grid print-grid--sets">
 ${setCards}
         </div>
@@ -229,7 +229,7 @@ console.log(` ${setItems.length} gallery sets.`);
 const bundleItems = [];
 for (const b of BUNDLES) {
   const comps = b.all ? all.slice() : all.filter(it => it.section === b.fromSection);
-  if (comps.length < 3) { console.log(`! skipping ${b.sku} — not enough prints`); continue; }
+  if (comps.length < 3) { console.log(`! skipping ${b.sku}, not enough prints`); continue; }
   const compositePath = path.join(setsDir, `${b.sku}.jpg`);
   if (!fs.existsSync(compositePath)) {
     // A 4x2 grid of covers sampled evenly across the collection, so the preview reads
@@ -248,7 +248,7 @@ for (const b of BUNDLES) {
   }
   bundleItems.push({
     ...b, items: comps.map(c => c.sku), count: comps.length,
-    name: `${b.title} — ${comps.length} Digital Prints`,
+    name: `${b.title}, ${comps.length} Digital Prints`,
     preview: `/images/prints/sets/${b.sku}.jpg`,
   });
   process.stdout.write('#');
@@ -257,13 +257,13 @@ for (const b of BUNDLES) {
 const bundleCards = bundleItems.map(it => {
   const worth = it.count * 1200;
   return `          <article class="print-card print-card--set print-card--bundle">
-            <button type="button" class="print-card__img print-card__img--set lightbox-open" data-full="${it.preview}" data-title="${it.title}" aria-label="View ${it.title} larger"><img src="${it.preview}" alt="${it.title} — ${it.count} magical art prints" loading="lazy" /></button>
+            <button type="button" class="print-card__img print-card__img--set lightbox-open" data-full="${it.preview}" data-title="${it.title}" aria-label="View ${it.title} larger"><img src="${it.preview}" alt="${it.title}, ${it.count} magical art prints" loading="lazy" /></button>
             <div class="print-card__body">
               <span class="print-card__badge-save">${it.count} prints · save $${((worth - it.price) / 100).toFixed(0)}</span>
               <h3><a href="set/${it.sku.replace(/^bundle-/, 'bundle-')}.html">${it.title}</a></h3>
               <p class="print-card__desc">${it.description}</p>
               <p class="print-card__price">$${(it.price / 100).toFixed(0)} <span>AUD · ${it.count} prints · worth $${(worth / 100).toFixed(0)}</span></p>
-              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Get the Collection — $${(it.price / 100).toFixed(0)}</button>
+              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Get the Collection. $${(it.price / 100).toFixed(0)}</button>
             </div>
           </article>`;
 }).join('\n');
@@ -271,7 +271,7 @@ const bundleCards = bundleItems.map(it => {
 const bundlesSection = bundleItems.length ? `    <section class="prints prints--sets" id="bundles">
       <div class="container">
         <h2 class="prints-section__title">✨ Complete Collections</h2>
-        <p class="prints-section__blurb">Every print in a collection, in one download — the best value we offer.</p>
+        <p class="prints-section__blurb">Every print in a collection, in one download. The best value we offer.</p>
         <div class="print-grid print-grid--sets">
 ${bundleCards}
         </div>
@@ -286,10 +286,10 @@ const entries = all.map(it =>
   `  '${it.sku}': { sku: '${it.sku}', name: ${JSON.stringify(it.name)}, description: ${JSON.stringify(it.description)}, price: ${it.price}, preview: '${it.preview}', title: ${JSON.stringify(it.title)}, items: ${JSON.stringify(it.items)}, file: ${fileFor(it.sku)} },`
 )).join('\n');
 fs.writeFileSync(path.join(REPO, 'lib', 'digital-products.generated.js'),
-  `// AUTO-GENERATED by build-prints-shop.mjs — do not edit by hand.
+  `// AUTO-GENERATED by build-prints-shop.mjs. Do not edit by hand.
 // 'file' is the PRIVATE Vercel Blob pathname; null until the high-res original is uploaded
 // (scripts/publish-prints.mjs). Checkout is blocked while file is null, so nothing sells
-// without a deliverable. Rebuilds PRESERVE already-published paths — see PUBLISHED above.
+// without a deliverable. Rebuilds PRESERVE already-published paths. See PUBLISHED above.
 export const GENERATED_DIGITAL_PRODUCTS = {
 ${entries}
 };
@@ -299,7 +299,7 @@ console.log(`wrote lib/digital-products.generated.js (${kept} published file pat
 
 // --- public catalogue (safe for the browser) --------------------------------
 // Consumed by personalise.html and the product-page generator. Contains only what is
-// already visible on the shop — never the private Blob pathnames.
+// already visible on the shop. Never the private Blob pathnames.
 const publicCatalogue = {
   prints: all.map(it => ({
     sku: it.sku, title: it.title, description: it.description,
@@ -338,13 +338,13 @@ const faqLd = JSON.stringify({
   '@type': 'FAQPage',
   mainEntity: [
     { '@type': 'Question', name: 'What do I get when I buy a Little Poppin art print?',
-      acceptedAnswer: { '@type': 'Answer', text: 'A high-resolution digital file (4:5 ratio, around 300 DPI) delivered instantly — a download button appears the moment payment completes, and the link is also emailed. Nothing is posted, so there is no shipping cost or wait.' } },
+      acceptedAnswer: { '@type': 'Answer', text: 'A high-resolution digital file (4:5 ratio, around 300 DPI) delivered instantly. A download button appears the moment payment completes, and the link is also emailed. Nothing is posted, so there is no shipping cost or wait.' } },
     { '@type': 'Question', name: 'What sizes can Little Poppin digital prints be printed at?',
       acceptedAnswer: { '@type': 'Answer', text: 'The 4:5 ratio prints beautifully at 4×5″, 8×10″ and 16×20″, and fits A4 or A3 frames with a small trim or mat. Local print shops can print directly from the file for larger sizes.' } },
     { '@type': 'Question', name: 'How do I print a digital art print?',
       acceptedAnswer: { '@type': 'Answer', text: 'Print at home on good photo paper, upload the file to an online print service that posts to your address, or take it to any local print shop. Matte paper suits the soft watercolour style best.' } },
     { '@type': 'Question', name: 'Can I resell or share a Little Poppin digital print?',
-      acceptedAnswer: { '@type': 'Answer', text: 'No — downloads are licensed for personal use: print them for your home, nursery, or as a gift. They cannot be resold, shared, or used commercially.' } },
+      acceptedAnswer: { '@type': 'Answer', text: 'No. Downloads are licensed for personal use: print them for your home, nursery, or as a gift. They cannot be resold, shared, or used commercially.' } },
     { '@type': 'Question', name: 'Are refunds available on digital downloads?',
       acceptedAnswer: { '@type': 'Answer', text: 'Change-of-mind refunds are not available once a digital file has been downloaded, but if anything is wrong with a file Little Poppin will make it right. Australian Consumer Law guarantees always apply.' } },
   ],
@@ -359,18 +359,18 @@ const page = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Art Prints — Instant Digital Downloads | Little Poppin</title>
-  <meta name="description" content="Dreamy magical art prints — instant high-resolution digital downloads. Nursery art, star-sign prints, magical academia and festive collections." />
+  <title>Art Prints. Instant Digital Downloads | Little Poppin</title>
+  <meta name="description" content="Dreamy magical art prints. Instant high-resolution digital downloads. Nursery art, star-sign prints, magical academia and festive collections." />
   <link rel="canonical" href="${SITE}/prints.html" />
   <!-- Open Graph / social sharing -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Little Poppin" />
-  <meta property="og:title" content="Magical Art Prints — Instant Digital Downloads | Little Poppin" />
+  <meta property="og:title" content="Magical Art Prints. Instant Digital Downloads | Little Poppin" />
   <meta property="og:description" content="Dreamy nursery art, star-sign prints and enchanted magical-academia prints, delivered instantly as high-resolution downloads." />
   <meta property="og:url" content="${SITE}/prints.html" />
   <meta property="og:image" content="${SITE}/images/prints/10-dream-castle-in-the-clouds.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Magical Art Prints — Instant Digital Downloads | Little Poppin" />
+  <meta name="twitter:title" content="Magical Art Prints. Instant Digital Downloads | Little Poppin" />
   <meta name="twitter:description" content="Dreamy nursery art and enchanted magical prints, delivered instantly as high-resolution downloads." />
   <meta name="twitter:image" content="${SITE}/images/prints/10-dream-castle-in-the-clouds.jpg" />
   <script type="application/ld+json">${jsonLd}</script>
@@ -411,7 +411,7 @@ const page = `<!DOCTYPE html>
     <div class="container">
       <div class="section-label">Instant Digital Downloads</div>
       <h1>Little Poppin Art Prints</h1>
-      <p>Dreamy, magical art — delivered as a high-resolution file the moment you buy.
+      <p>Dreamy, magical art. Delivered as a high-resolution file the moment you buy.
          Print it at home or your local print shop, frame it, and fill the room with wonder.</p>
     </div>
   </header>
@@ -434,7 +434,7 @@ ${sectionCards.join('\n\n')}
       <div class="faq">
         <details>
           <summary>What exactly do I get?</summary>
-          <p>A high-resolution digital file (4:5 ratio, ~300&nbsp;DPI) delivered instantly — a download button appears the moment your payment completes, and we email you the link too. Nothing is posted; there's no shipping cost or wait.</p>
+          <p>A high-resolution digital file (4:5 ratio, ~300&nbsp;DPI) delivered instantly. A download button appears the moment your payment completes, and we email you the link too. Nothing is posted; there's no shipping cost or wait.</p>
         </details>
         <details>
           <summary>What sizes can I print?</summary>
@@ -446,11 +446,11 @@ ${sectionCards.join('\n\n')}
         </details>
         <details>
           <summary>Can I use it for anything else?</summary>
-          <p>Your download is for <strong>personal use</strong> — print it for your home, your nursery, or as a gift. It can't be resold, shared, or used commercially.</p>
+          <p>Your download is for <strong>personal use</strong>, print it for your home, your nursery, or as a gift. It can't be resold, shared, or used commercially.</p>
         </details>
         <details>
           <summary>Refunds on digital downloads?</summary>
-          <p>Because digital files can't be returned, change-of-mind refunds aren't available once the file has been downloaded — but if anything's wrong with your file, contact us and we'll make it right. Australian Consumer Law guarantees always apply. See our <a href="refunds.html">Refunds &amp; Returns</a> policy.</p>
+          <p>Because digital files can't be returned, change-of-mind refunds aren't available once the file has been downloaded. But if anything's wrong with your file, contact us and we'll make it right. Australian Consumer Law guarantees always apply. See our <a href="refunds.html">Refunds &amp; Returns</a> policy.</p>
         </details>
       </div>
     </div>
@@ -488,7 +488,7 @@ ${sectionCards.join('\n\n')}
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
     })();
 
-    // Zodiac sign finder — birthday -> highlight that sign's print.
+    // Zodiac sign finder. Birthday -> highlight that sign's print.
     (function () {
       var go = document.getElementById('signGo');
       if (!go) return;

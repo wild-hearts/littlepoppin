@@ -3,7 +3,7 @@
 function lpTrack(event, params) {
   try { if (typeof window.gtag === 'function') window.gtag('event', event, params || {}); } catch (e) {}
 }
-// store.js — Little Poppin storefront checkout wiring.
+// store.js. Little Poppin storefront checkout wiring.
 // Any <button data-sku="pink|green|bundle"> starts Stripe Checkout when clicked.
 (function () {
   async function startCheckout(btn) {
@@ -40,8 +40,8 @@ function lpTrack(event, params) {
       btn.parentNode.insertBefore(note, btn.nextSibling);
     }
     note.textContent = status === 409
-      ? (message || 'This one isn’t quite ready — check back soon! ✨')
-      : 'Sorry — checkout hiccuped. Please try again, or contact us to order.';
+      ? (message || 'This one isn’t quite ready. Check back soon! ✨')
+      : 'Sorry. Checkout hiccuped. Please try again, or contact us to order.';
   }
 
   function markSoldOut(btn) {
@@ -53,7 +53,7 @@ function lpTrack(event, params) {
   // --- mobile navigation ----------------------------------------------------
   // At <=768px the stylesheet slides .nav__links off-screen and expects a hamburger
   // to bring it back. prints.html and custom.html shipped without that button, so the
-  // shop has had NO navigation on mobile — where most of its visitors are. Handling it
+  // shop has had NO navigation on mobile. Where most of its visitors are. Handling it
   // here means every page that loads store.js gets a working menu, rather than each new
   // page having to remember to copy the markup and the script.
   //
@@ -106,22 +106,22 @@ function lpTrack(event, params) {
           note.hidden = false;
           if (res.ok) {
             note.textContent = data.gift
-              ? 'You’re on the list — your free print is on its way to your inbox! ✨'
+              ? 'You’re on the list. Your free print is on its way to your inbox! ✨'
               : 'You’re on the list! Your free print will follow shortly. ✨';
             form.querySelector('.subscribe__row').hidden = true;
           } else {
-            note.textContent = data.error || 'Something hiccuped — please try again.';
+            note.textContent = data.error || 'Something hiccuped. Please try again.';
             btn.disabled = false;
           }
         } catch (err) {
           note.hidden = false;
-          note.textContent = 'Something hiccuped — please try again.';
+          note.textContent = 'Something hiccuped. Please try again.';
           btn.disabled = false;
         }
       });
     }
 
-    // Reflect live stock — disable + relabel any sold-out SKU.
+    // Reflect live stock. Disable + relabel any sold-out SKU.
     fetch('/api/stock')
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (stock) {

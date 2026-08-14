@@ -1,4 +1,4 @@
-// site-config.mjs — the few settings that are Naomi's to fill in, kept out of the code.
+// site-config.mjs. The few settings that are Naomi's to fill in, kept out of the code.
 
 /**
  * Google Analytics 4 measurement ID, e.g. 'G-XXXXXXXXXX'.
@@ -8,7 +8,7 @@
  *   1. analytics.google.com → Admin → Create property → Web → littlepoppin.com
  *   2. copy the Measurement ID (starts with G-)
  *   3. paste it here, then `npm run build:site` and deploy
- * Everything else — the snippet on all 135 pages, the ecommerce events — is already wired.
+ * Everything else. The snippet on all 135 pages, the ecommerce events. Is already wired.
  */
 export const GA4_ID = '';
 

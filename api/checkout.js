@@ -21,7 +21,7 @@ function baseUrl(req) {
 // EU/UK consumers lose their 14-day withdrawal right on digital content ONLY if they
 // expressly asked for immediate delivery and acknowledged losing it. Stating it on the
 // Stripe payment page is what makes the waiver on refunds.html real rather than decorative.
-// Uses custom_text.submit, which needs no Stripe dashboard configuration — consent_collection
+// Uses custom_text.submit, which needs no Stripe dashboard configuration. Consent_collection
 // .terms_of_service would additionally require a ToS URL set on the account, and a session
 // that fails to create is a checkout that does not work.
 const INSTANT_DELIVERY_NOTICE = {
@@ -104,14 +104,14 @@ export default async function handler(req, res) {
 
     // --- Personalised name print: body { sku (art), personalise: {name, line2, line3} } ---
     // The buyer's text is stored on the session metadata, which is the ONLY source of truth
-    // used at render time — /api/download never trusts text from the request that fetches it.
+    // used at render time, /api/download never trusts text from the request that fetches it.
     if (body.personalise) {
       const parsed = parsePersonalisation(body.personalise);
       if (!parsed.ok) return res.status(400).json({ error: parsed.error });
       const art = getDigital(sku);
       if (!art) return res.status(400).json({ error: 'Unknown print' });
-      if (art.items) return res.status(400).json({ error: 'Gallery sets cannot be personalised — please choose a single print.' });
-      if (!isDeliverable(art)) return res.status(409).json({ error: 'This print isn’t available yet — check back soon.' });
+      if (art.items) return res.status(400).json({ error: 'Gallery sets cannot be personalised. Please choose a single print.' });
+      if (!isDeliverable(art)) return res.status(409).json({ error: 'This print isn’t available yet. Check back soon.' });
 
       const origin = baseUrl(req);
       const { name, line2, line3 } = parsed.data;
@@ -123,7 +123,7 @@ export default async function handler(req, res) {
             currency: CURRENCY,
             unit_amount: PERSONALISE_PRICE,
             product_data: {
-              name: `${art.title || art.name} — Personalised for ${name}`,
+              name: `${art.title || art.name}, Personalised for ${name}`,
               description: 'Personalised keepsake print. Instant download, print-ready at 8×10", A4 and 16×20".',
               ...(art.preview ? { images: [art.preview.startsWith('http') ? art.preview : `${origin}${art.preview}`] } : {}),
               metadata: { sku: art.sku, brand: 'little_poppin', type: 'personalised' },
@@ -148,9 +148,9 @@ export default async function handler(req, res) {
       const opt = art?.items
         ? getSetPrintOption(art.items, String(body.format), String(body.size))
         : getPrintOption(sku, String(body.format), String(body.size));
-      if (!opt) return res.status(409).json({ error: 'That print option isn’t available yet — check back soon.' });
+      if (!opt) return res.status(409).json({ error: 'That print option isn’t available yet. Check back soon.' });
       const origin = baseUrl(req);
-      // Postage is charged separately by destination — see PRINT_SHIPPING in lib/products.js
+      // Postage is charged separately by destination. See PRINT_SHIPPING in lib/products.js
       // for why. The buyer picks their country before checkout, so the session is created
       // with the right rate and locked to that country; without a country we fall back to
       // the rest-of-world rate, which never under-charges.
@@ -167,7 +167,7 @@ export default async function handler(req, res) {
             currency: CURRENCY,
             unit_amount: opt.price,
             product_data: {
-              name: `${art?.title || sku} — ${opt.label}`,
+              name: `${art?.title || sku}, ${opt.label}`,
               ...(art?.preview ? { images: [`${origin}${art.preview}`] } : {}),
               metadata: { sku, brand: 'little_poppin', type: 'print', format: String(body.format), size: String(body.size) },
             },
@@ -194,7 +194,7 @@ export default async function handler(req, res) {
     const digital = getDigital(sku);
     if (digital) {
       // Safety: never take money for a print (or set) whose high-res file(s) aren't hosted yet.
-      if (!isDeliverable(digital)) return res.status(409).json({ error: 'This print isn’t available for download yet — check back soon.' });
+      if (!isDeliverable(digital)) return res.status(409).json({ error: 'This print isn’t available for download yet. Check back soon.' });
       const origin = baseUrl(req);
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',

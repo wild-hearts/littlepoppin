@@ -1,12 +1,11 @@
-// inject-analytics.mjs — stamp GA4 into every page as a post-build step.
+// inject-analytics.mjs. Stamp GA4 into every page as a post-build step.
 //
 // WHY A SEPARATE PASS: the shop pages are generated, but index.html, the swaddle pages and
 // the legal pages are hand-written. Anything added only to the generators would silently
-// miss a third of the site — including the homepage, which is the page that matters most.
+// miss a third of the site. Including the homepage, which is the page that matters most.
 // This walks every .html and injects once, idempotently.
 //
-// GA4_ID is empty until Naomi creates a GA4 property. With no id, NOTHING is injected —
-// no dead script tag, no cookie banner obligation, no pretending we have data we do not.
+// GA4_ID is empty until Naomi creates a GA4 property. With no id, NOTHING is injected, // no dead script tag, no cookie banner obligation, no pretending we have data we do not.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,7 +33,7 @@ if (!GA4_ID) {
     fs.writeFileSync(f, src.replace(/\n?\s*<!-- analytics -->[\s\S]*?<!-- \/analytics -->/g, ''));
     cleaned++;
   }
-  console.log(`analytics: GA4_ID not set — no tracking injected${cleaned ? `, removed from ${cleaned} pages` : ''}`);
+  console.log(`analytics: GA4_ID not set. No tracking injected${cleaned ? `, removed from ${cleaned} pages` : ''}`);
   process.exit(0);
 }
 

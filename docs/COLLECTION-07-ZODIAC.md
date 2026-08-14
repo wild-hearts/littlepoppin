@@ -1,6 +1,6 @@
-# Little Poppin — Collection 07: Little Zodiac (12 star-sign prints)
+# Little Poppin. Collection 07: Little Zodiac (12 star-sign prints)
 
-One print per star sign — a cute magical baby animal/figure with its glowing constellation
+One print per star sign. A cute magical baby animal/figure with its glowing constellation
 in the sky. Strong gift/personalisation angle (every baby has a sign). House FULL MAGIC style,
 no text in the art (sign names go in the product title). All `--ar 4:5 --stylize 500`.
 

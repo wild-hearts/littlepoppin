@@ -1,7 +1,7 @@
-// build-mockups.mjs — framed-on-wall mockups for every print, set and bundle.
+// build-mockups.mjs. Framed-on-wall mockups for every print, set and bundle.
 //
 // WHY: the shop showed every design as flat artwork on a white card. People buying wall
-// art are not buying a JPEG, they are buying how it will look above the cot — and every
+// art are not buying a JPEG, they are buying how it will look above the cot. And every
 // competitor on Etsy leads with a framed mockup. This is the highest-leverage image work
 // on the site, and it feeds the product pages, Etsy listings and social posts alike.
 //

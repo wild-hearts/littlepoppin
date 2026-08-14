@@ -1,4 +1,4 @@
-# Little Poppin — Collection 09: Magical Academia II (10 more wizarding-inspired prints)
+# Little Poppin. Collection 09: Magical Academia II (10 more wizarding-inspired prints)
 
 Expands the Magical Academia section. Warm candlelit magical watercolour, no HP IP.
 All `--ar 4:5 --stylize 600`.

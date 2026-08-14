@@ -1,9 +1,9 @@
-// printify-costs.mjs — find the REAL production cost of each candidate variant.
+// printify-costs.mjs. Find the REAL production cost of each candidate variant.
 //
 // Printify's catalog API does not expose variant cost; it is only returned once a product
 // exists. So this creates one throwaway product per format in the (disconnected) store,
 // reads back `variants[].cost`, prints it, and DELETES the product. Nothing is published
-// and nothing is charged — but it means retail prices come from real numbers rather than
+// and nothing is charged. But it means retail prices come from real numbers rather than
 // a guess, which matters because postage alone ranges $5.19 (US) to $18.89 (rest of world).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -62,11 +62,11 @@ for (const c of CANDIDATES) {
       console.log(`  ${String(v.id).padEnd(8)} ${String(v.title).padEnd(28)} cost ${(v.cost / 100).toFixed(2)}`);
     }
   } catch (e) {
-    console.log(`${c.name}: FAILED — ${e.message.slice(0, 200)}`);
+    console.log(`${c.name}: FAILED. ${e.message.slice(0, 200)}`);
   } finally {
     if (created?.id) {
       try { await pf(`/shops/${SHOP}/products/${created.id}.json`, { method: 'DELETE' }); console.log('  (probe product deleted)'); }
-      catch (e) { console.log(`  !! could not delete probe product ${created.id} — remove it manually`); }
+      catch (e) { console.log(`  !! could not delete probe product ${created.id}, remove it manually`); }
     }
   }
   console.log('');

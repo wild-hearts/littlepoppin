@@ -1,4 +1,4 @@
-// build-product-pages.mjs — one indexable page per print and per gallery set.
+// build-product-pages.mjs. One indexable page per print and per gallery set.
 //
 // WHY: prints.html holds ~97 products on a single URL, so Google only has one page to
 // rank. A page per product gives each design its own shot at long-tail search
@@ -19,7 +19,7 @@ import { GUIDES } from './guides-content.mjs';
 import { PRINT_COUNTRIES } from '../lib/products.js';
 
 // Destination is chosen BEFORE checkout because Stripe fixes shipping rates when the
-// session is created — it cannot re-price after the buyer types an address. The list is
+// session is created. It cannot re-price after the buyer types an address. The list is
 // exactly the countries PRINT_SHIPPING covers, so every option has a real rate behind it.
 const countryName = (() => {
   const dn = new Intl.DisplayNames(['en'], { type: 'region' });
@@ -163,7 +163,7 @@ const foot = (up, viewItemSku = '') => `
   <script src="${up}store.js" defer></script>
   <script src="${up}physical.js" defer></script>${viewItemSku ? `
   <script>
-    // GA4 view_item — no-ops without analytics configured.
+    // GA4 view_item. No-ops without analytics configured.
     (function(){ try { if (typeof window.gtag === 'function') window.gtag('event', 'view_item', { items: [{ item_id: '${viewItemSku}' }] }); } catch(e){} })();
   </script>` : ''}
 </body>
@@ -176,7 +176,7 @@ const relatedGrid = (items, up) => !items.length ? '' : `
       <h2>You might also love</h2>
       <div class="related__grid">
 ${items.map((r) => `        <a class="related__card" href="${up}print/${slugOf(r.sku)}.html">
-          <img src="${up}${r.preview.replace(/^\//, '')}" alt="${esc(r.title)} — magical art print" loading="lazy" />
+          <img src="${up}${r.preview.replace(/^\//, '')}" alt="${esc(r.title)}, magical art print" loading="lazy" />
           <span>${esc(r.title)}</span>
         </a>`).join('\n')}
       </div>
@@ -195,7 +195,7 @@ for (const p of data.prints) {
   const url = `${SITE}/print/${slug}.html`;
   const img = SITE + p.preview;
   const sectionName = sectionTitle[p.section] || 'Art Prints';
-  const title = `${p.title} — ${sectionName} Print | Little Poppin`;
+  const title = `${p.title}, ${sectionName} Print | Little Poppin`;
 
   // Related: the next four prints from the same collection, wrapping around.
   const pool = data.prints.filter((x) => x.section === p.section && x.available);
@@ -207,7 +207,7 @@ for (const p of data.prints) {
   const jsonLd = [
     {
       '@context': 'https://schema.org', '@type': 'Product',
-      name: `${p.title} — Art Print`, description: p.description, image: img, sku: p.sku,
+      name: `${p.title} Art Print`, description: p.description, image: img, sku: p.sku,
       brand: { '@type': 'Brand', name: 'Little Poppin' },
       offers: {
         '@type': 'Offer', price: money(p.price), priceCurrency: 'AUD', url,
@@ -232,19 +232,19 @@ for (const p of data.prints) {
          <a href="${up}prints.html#${p.section}">${esc(sectionName)}</a> › ${esc(p.title)}</p>
       <div class="pd__grid">
         <div>
-          <img class="pd__art" src="${up}${p.preview.replace(/^\//, '')}" alt="${esc(p.title)} — magical art print by Little Poppin" />
+          <img class="pd__art" src="${up}${p.preview.replace(/^\//, '')}" alt="${esc(p.title)}, a magical art print by Little Poppin" />
           <img class="pd__mockup" src="${up}images/mockups/${slug}.jpg" loading="lazy"
                alt="${esc(p.title)} shown framed on a wall" />
-          <p class="pd__mockupNote">Shown framed — frame not included with the digital download.</p>
+          <p class="pd__mockupNote">Shown framed. The frame is not included with the digital download.</p>
         </div>
         <div class="pd__body">
           <h1>${esc(p.title)}</h1>
           <p class="pd__lead">${esc(p.description)}</p>
           <p class="pd__price">$${(p.price / 100).toFixed(0)} <span>AUD · instant download</span></p>
           <div class="pd__buy">
-            <button type="button" data-sku="${p.sku}" class="btn btn--primary btn--lg">Download Print — $${(p.price / 100).toFixed(0)}</button>
+            <button type="button" data-sku="${p.sku}" class="btn btn--primary btn--lg">Download Print. $${(p.price / 100).toFixed(0)}</button>
           </div>
-          <a class="pd__alt" href="${up}personalise.html?print=${encodeURIComponent(p.sku)}">✨ Or add their name — personalise this print for $19</a>
+          <a class="pd__alt" href="${up}personalise.html?print=${encodeURIComponent(p.sku)}">✨ Or add their name and personalise this print for $19</a>
 
           <!-- Printed copies. Hidden until Printify is configured; physical.js reveals it
                only when data/print-options.json says this design is orderable. -->
@@ -265,13 +265,12 @@ for (const p of data.prints) {
             <p class="pd__physicalNote">Printed close to you and posted &mdash; postage shown at checkout</p>
             <p class="pd__err" data-physical-err role="alert"></p>
           </div>
-          <p class="pd__guarantee"><strong>Our promise:</strong> if your file isn't right —
-             wrong size, won't open, anything at all — tell us and we'll fix it or refund you.
+          <p class="pd__guarantee"><strong>Our promise:</strong> if your file isn't right. Wrong size, won't open, anything at all. Tell us and we'll fix it or refund you.
              No argument, no forms.</p>
           <ul class="pd__list">
             <li>High-resolution PNG (4:5 ratio, ~300 DPI)</li>
             <li>Prints beautifully at 4×5&Prime;, 8×10&Prime; and 16×20&Prime;</li>
-            <li>Instant download — nothing is posted</li>
+            <li>Instant download. Nothing is posted</li>
             <li>Personal-use licence for your home, nursery or as a gift</li>
           </ul>
         </div>
@@ -292,13 +291,13 @@ for (const s of data.sets) {
   const slug = slugOf(s.sku);
   const url = `${SITE}/set/${slug}.html`;
   const img = SITE + s.preview;
-  const title = `${s.title} — Set of 3 Art Prints | Little Poppin`;
+  const title = `${s.title} Set of 3 Art Prints | Little Poppin`;
   const comps = s.items.map((sku) => bySku[sku]).filter(Boolean);
 
   const jsonLd = [
     {
       '@context': 'https://schema.org', '@type': 'Product',
-      name: `${s.title} — 3 Digital Prints`, description: s.description, image: img, sku: s.sku,
+      name: `${s.title}, 3 Digital Prints`, description: s.description, image: img, sku: s.sku,
       brand: { '@type': 'Brand', name: 'Little Poppin' },
       offers: {
         '@type': 'Offer', price: money(s.price), priceCurrency: 'AUD', url,
@@ -325,17 +324,17 @@ for (const s of data.sets) {
          <a href="${up}prints.html#sets">Gallery Sets</a> › ${esc(s.title)}</p>
       <div class="pd__grid">
         <div>
-          <img class="pd__art" src="${up}${s.preview.replace(/^\//, '')}" alt="${esc(s.title)} — set of magical art prints" />
+          <img class="pd__art" src="${up}${s.preview.replace(/^\//, '')}" alt="${esc(s.title)}, set of magical art prints" />
           <img class="pd__mockup" src="${up}images/mockups/${s.sku}.jpg" loading="lazy"
                alt="${esc(s.title)} shown as a framed gallery wall" />
-          <p class="pd__mockupNote">Shown framed — frames not included with the digital download.</p>
+          <p class="pd__mockupNote">Shown framed. Frames not included with the digital download.</p>
         </div>
         <div class="pd__body">
           <h1>${esc(s.title)}</h1>
           <p class="pd__lead">${esc(s.description)}</p>
           <p class="pd__price">$${(s.price / 100).toFixed(0)} <span>AUD · ${comps.length} prints · instant download${saving > 0 ? ` · save $${(saving / 100).toFixed(0)}` : ''}</span></p>
           <div class="pd__buy">
-            <button type="button" data-sku="${s.sku}" class="btn btn--primary btn--lg">Download Set — $${(s.price / 100).toFixed(0)}</button>
+            <button type="button" data-sku="${s.sku}" class="btn btn--primary btn--lg">Download Set. $${(s.price / 100).toFixed(0)}</button>
           </div>
           <ul class="pd__sets">
 ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">${esc(c.title)}</a></li>`).join('\n')}
@@ -361,13 +360,12 @@ ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">$
             <p class="pd__physicalNote">All ${comps.length} prints, printed close to you and posted together &mdash; postage shown at checkout</p>
             <p class="pd__err" data-physical-err role="alert"></p>
           </div>` : ''}
-          <p class="pd__guarantee"><strong>Our promise:</strong> if any file isn't right —
-             wrong size, won't open, anything at all — tell us and we'll fix it or refund you.
+          <p class="pd__guarantee"><strong>Our promise:</strong> if any file isn't right. Wrong size, won't open, anything at all. Tell us and we'll fix it or refund you.
              No argument, no forms.</p>
           <ul class="pd__list">
             <li>${comps.length} high-resolution PNGs (4:5 ratio, ~300 DPI)</li>
             <li>A ready-made gallery wall, designed to hang together</li>
-            <li>Instant download — nothing is posted</li>
+            <li>Instant download. Nothing is posted</li>
           </ul>
         </div>
       </div>
@@ -392,13 +390,13 @@ ${relatedGrid(comps, up)}`;
   })).filter((f) => f.sizes.length);
 
   const configured = !!PRINTIFY_CONFIG.shopId && formats.length > 0;
-  // Which art has a Printify product built for it — the picker only offers those.
+  // Which art has a Printify product built for it. The picker only offers those.
   const availableFor = Object.keys(PRINTIFY_CONFIG.products || {});
 
   fs.mkdirSync(path.join(REPO, 'data'), { recursive: true });
   fs.writeFileSync(path.join(REPO, 'data', 'print-options.json'),
     JSON.stringify({ configured, formats, availableFor }));
-  console.log(`wrote data/print-options.json (${configured ? `${formats.length} formats, ${availableFor.length} prints` : 'not configured yet — picker stays hidden'})`);
+  console.log(`wrote data/print-options.json (${configured ? `${formats.length} formats, ${availableFor.length} prints` : 'not configured yet. Picker stays hidden'})`);
 }
 
 // --- printables shop page ---------------------------------------------------
@@ -429,30 +427,30 @@ ${relatedGrid(comps, up)}`;
       '@context': 'https://schema.org', '@type': 'FAQPage',
       mainEntity: [
         { '@type': 'Question', name: 'What format are Little Poppin printables?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Every printable is a print-ready PDF sized for A4, so it prints correctly at home, at a print shop, or at any print shop. Nothing is posted — the file downloads instantly after payment.' } },
+          acceptedAnswer: { '@type': 'Answer', text: 'Every printable is a print-ready PDF sized for A4, so it prints correctly at home, at a print shop, or at any print shop. Nothing is posted. The file downloads instantly after payment.' } },
         { '@type': 'Question', name: 'Can I print a colouring book more than once?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Print as many copies as you like for your own family — that is the point of a printable. The licence is personal use only, so they cannot be resold or shared.' } },
+          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Print as many copies as you like for your own family. That is the point of a printable. The licence is personal use only, so they cannot be resold or shared.' } },
         { '@type': 'Question', name: 'What paper should I use for the milestone cards?',
           acceptedAnswer: { '@type': 'Answer', text: 'White card of 200–300 gsm gives the nicest result. Cut along the outside of each square; a paper trimmer makes short work of it.' } },
         { '@type': 'Question', name: 'Is the wall calendar dated to a particular year?',
-          acceptedAnswer: { '@type': 'Answer', text: 'No — the day grids are undated on purpose, so the same file works whichever year you print it.' } },
+          acceptedAnswer: { '@type': 'Answer', text: 'No. The day grids are undated on purpose, so the same file works whichever year you print it.' } },
       ],
     },
   ];
 
   const cards = extras.map((e) => `          <article class="print-card">
-            ${e.preview ? `<button type="button" class="print-card__img lightbox-open" data-full="${e.preview}" data-title="${esc(e.title)}" aria-label="View ${esc(e.title)} larger"><img src="${e.preview.replace(/^\//, '')}" alt="${esc(e.title)} — printable from Little Poppin" loading="lazy" /></button>` : ''}
+            ${e.preview ? `<button type="button" class="print-card__img lightbox-open" data-full="${e.preview}" data-title="${esc(e.title)}" aria-label="View ${esc(e.title)} larger"><img src="${e.preview.replace(/^\//, '')}" alt="${esc(e.title)}, printable from Little Poppin" loading="lazy" /></button>` : ''}
             <div class="print-card__body">
               <h3>${esc(e.title)}</h3>
               <p class="print-card__desc">${esc(e.description)}</p>
               <p class="print-card__price">$${(e.price / 100).toFixed(2)} <span>AUD · instant download</span></p>
-              <button type="button" data-sku="${e.sku}" class="btn btn--primary print-card__buy">Download — $${(e.price / 100).toFixed(2)}</button>
+              <button type="button" data-sku="${e.sku}" class="btn btn--primary print-card__buy">Download. $${(e.price / 100).toFixed(2)}</button>
             </div>
           </article>`).join('\n');
 
   const page = head({
-    title: 'Printables — Colouring Books, Milestone Cards & Calendar | Little Poppin',
-    description: 'Printable colouring books, baby milestone cards and a magical wall calendar — all drawn from the Little Poppin art collection. Instant PDF download, print at home as often as you like.',
+    title: 'Printables. Colouring Books, Milestone Cards & Calendar | Little Poppin',
+    description: 'Printable colouring books, baby milestone cards and a magical wall calendar. All drawn from the Little Poppin art collection. Instant PDF download, print at home as often as you like.',
     canonical: url,
     image: extras[0]?.preview ? SITE + extras[0].preview : `${SITE}/images/prints/05-sleepy-moon-and-stars.jpg`,
     jsonLd, up: '',
@@ -461,7 +459,7 @@ ${relatedGrid(comps, up)}`;
     <div class="container">
       <div class="section-label">Printables</div>
       <h1>More Than Wall Art</h1>
-      <p>Colouring books, milestone cards and a wall calendar — all drawn from the same
+      <p>Colouring books, milestone cards and a wall calendar. All drawn from the same
          magical collection. Print them at home, as many times as you like.</p>
     </div>
   </header>
@@ -484,15 +482,15 @@ ${cards}
         </details>
         <details>
           <summary>Can I print it more than once?</summary>
-          <p>Yes — print as many copies as you like for your own family. That's rather the point of a printable. The licence is personal use only, so please don't resell or share the file.</p>
+          <p>Yes. Print as many copies as you like for your own family. That's rather the point of a printable. The licence is personal use only, so please don't resell or share the file.</p>
         </details>
         <details>
           <summary>What paper works best?</summary>
-          <p>Ordinary printer paper is fine for colouring pages. For the milestone cards, white card of 200–300&nbsp;gsm gives a much nicer result — then just cut along the outside of each square.</p>
+          <p>Ordinary printer paper is fine for colouring pages. For the milestone cards, white card of 200–300&nbsp;gsm gives a much nicer result. Then just cut along the outside of each square.</p>
         </details>
         <details>
           <summary>Is the calendar for a specific year?</summary>
-          <p>No — the day grids are undated on purpose, so the same file works whichever year you print it.</p>
+          <p>No. The day grids are undated on purpose, so the same file works whichever year you print it.</p>
         </details>
       </div>
     </div>
@@ -598,7 +596,7 @@ ${g.faq.map(([q, a]) => `        <details><summary>${esc(q)}</summary><p>${esc(a
   };
 
   fs.writeFileSync(path.join(REPO, 'guides.html'),
-    head({ title: 'Guides — Styling, Sizing &amp; Printing Nursery Art | Little Poppin',
+    head({ title: 'Guides. Styling, Sizing &amp; Printing Nursery Art | Little Poppin',
            description: 'Practical guides to nursery wall art: how to style a gallery wall, what size print to choose, and how to print a digital download anywtralia.',
            canonical: `${SITE}/guides.html`, image: SITE + GUIDES[0].image, jsonLd: [indexLd], up: '' }) + `
   <header class="prints-hero">
@@ -643,7 +641,7 @@ const urls = staticPages
 
 fs.writeFileSync(path.join(REPO, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>
-<!-- AUTO-GENERATED by scripts/build-product-pages.mjs — do not edit by hand. -->
+<!-- AUTO-GENERATED by scripts/build-product-pages.mjs. Do not edit by hand. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url>
     <loc>${u.loc}</loc>

@@ -1,4 +1,4 @@
-// printify-explore.mjs — read-only. Inspect a blueprint/provider's variants AND their
+// printify-explore.mjs. Read-only. Inspect a blueprint/provider's variants AND their
 // production cost, so retail prices are derived from real numbers instead of guessed.
 //
 // The catalog variants endpoint does not return cost. Cost lives on the shipping/profit

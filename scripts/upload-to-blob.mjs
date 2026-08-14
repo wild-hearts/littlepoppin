@@ -1,4 +1,4 @@
-// upload-to-blob.mjs — upload chosen high-res prints to Vercel Blob (private CDN).
+// upload-to-blob.mjs. Upload chosen high-res prints to Vercel Blob (private CDN).
 // Prints the resulting URLs to paste as `file` into lib/products.js DIGITAL_PRODUCTS.
 //
 // Setup: enable Blob in Vercel (Storage → Create → Blob), then put its token in
@@ -43,7 +43,7 @@ for (const f of files) {
     });
     console.log(`${path.basename(f)}\n  file: ${blob.url}\n`);
   } catch (e) {
-    console.error(`${path.basename(f)} — ✗ ${e.message}\n`);
+    console.error(`${path.basename(f)}, ✗ ${e.message}\n`);
   }
 }
 console.log('Paste each "file" URL into lib/products.js → DIGITAL_PRODUCTS.');

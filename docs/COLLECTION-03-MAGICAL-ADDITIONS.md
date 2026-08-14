@@ -1,4 +1,4 @@
-# Little Poppin — Collection 03 — FULL MAGIC (magical additions)
+# Little Poppin. Collection 03. FULL MAGIC (magical additions)
 
 Enchanted, glowing, immersive fairytale style. All `--ar 4:5 --stylize 500`. Completes the 30-design series.
 

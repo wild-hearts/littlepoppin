@@ -1,4 +1,4 @@
-# Little Poppin — Collection 01 — FULL MAGIC (enchanted nursery)
+# Little Poppin. Collection 01. FULL MAGIC (enchanted nursery)
 
 Enchanted, glowing, immersive fairytale style (see POD_DESIGN_PLAYBOOK.md). All `--ar 4:5 --stylize 500`.
 Best for art prints, posters, wallpaper. (Cleaner cutout versions can be made later for apparel.)

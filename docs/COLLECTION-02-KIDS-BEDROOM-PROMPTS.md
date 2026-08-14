@@ -1,4 +1,4 @@
-# Little Poppin — Collection 02 — FULL MAGIC (enchanted adventures & creatures)
+# Little Poppin. Collection 02. FULL MAGIC (enchanted adventures & creatures)
 
 Enchanted, glowing, immersive fairytale style. All `--ar 4:5 --stylize 500`. Best for prints/posters/wallpaper.
 

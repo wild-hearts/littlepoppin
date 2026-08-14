@@ -1,6 +1,6 @@
-# Little Poppin — Collection 06: Festive Magic (Christmas nursery prints)
+# Little Poppin. Collection 06: Festive Magic (Christmas nursery prints)
 
-Seasonal collection in the house FULL MAGIC style — enchanted, glowing, sweet, never garish.
+Seasonal collection in the house FULL MAGIC style. Enchanted, glowing, sweet, never garish.
 All `--ar 4:5 --stylize 500`. High seasonal demand (prints, cards, gift-wrap later).
 
 ### 1. The Christmas Tree

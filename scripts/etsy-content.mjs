@@ -1,4 +1,4 @@
-// etsy-content.mjs — Etsy listing copy for the products not yet listed.
+// etsy-content.mjs. Etsy listing copy for the products not yet listed.
 //
 // NO CHARITY LINE. Only swaddle sales fund the children's-charity giving (confirmed
 // 8 Aug 2026); every listing here is a digital download, so the claim would be false and
@@ -6,8 +6,7 @@
 // Law. The ~97 listings already live still carry the old wording and need bulk-editing.
 //
 // PRICING follows the convention the live shop already set: Etsy sits at roughly two
-// thirds of the website price ($12 print -> $7.95, $30 set -> $19.95). Worth revisiting —
-// Etsy takes ~9% in fees, so the cheaper channel is also the less profitable one — but
+// thirds of the website price ($12 print -> $7.95, $30 set -> $19.95). Worth revisiting, // Etsy takes ~9% in fees, so the cheaper channel is also the less profitable one. But
 // changing it for 22 new listings while 97 keep the old ratio would just be inconsistent.
 //
 // Etsy limits: title <= 140 chars, exactly 13 tags, each tag <= 20 chars.
@@ -20,7 +19,7 @@ export const ETSY_PRICE = (cents) => {
 };
 
 const SET_BODY = (a, b, c) => `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — a ready-made gallery wall of 3 prints
+✨ INSTANT DOWNLOAD. A ready-made gallery wall of 3 prints
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
@@ -29,10 +28,10 @@ WHAT YOU GET
   2. ${b}
   3. ${c}
 • Each prints beautifully at 8×10" and 16×20", and fits an A4 frame with a small mat
-• No physical item is shipped — download instantly after purchase
+• No physical item is shipped. Download instantly after purchase
 
 WHY A SET
-Three prints chosen to hang together — same palette, same hand — so the wall reads as
+Three prints chosen to hang together. Same palette, same hand. So the wall reads as
 one piece instead of three separate pictures. Hang them in a row with 5–8 cm between
 frames, centred about 145 cm from the floor.
 
@@ -41,11 +40,11 @@ At home on matte photo paper, through an online print service, or at any local p
 shop. Matte (200–250 gsm) suits the soft watercolour style far better than gloss.
 
 IF ANYTHING IS WRONG
-Message me. Wrong size, won't open, anything at all — I'll fix it or refund you.
+Message me. Wrong size, won't open, anything at all. I'll fix it or refund you.
 No forms, no argument.
 
 LICENCE
-Personal use only — print for your home, nursery or as a gift. Not for resale.
+Personal use only. Print for your home, nursery or as a gift. Not for resale.
 
 💝 Personalised name prints, custom songs & stories at littlepoppin.com`;
 
@@ -130,7 +129,7 @@ export const ETSY_LISTINGS = [
     title: 'Complete Baby Zodiac Print Set, All 12 Star Sign Nursery Wall Art, Astrology Constellation Bundle Printable, Digital Download',
     tags: ['zodiac nursery art', 'star sign print', 'astrology baby art', 'zodiac wall art', 'zodiac baby gift', 'constellation art', 'nursery print set', 'celestial nursery', 'new baby gift', 'baby shower gift', 'printable nursery', 'digital download', 'instant download'],
     description: `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — all twelve star signs
+✨ INSTANT DOWNLOAD. All twelve star signs
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
@@ -138,12 +137,12 @@ WHAT YOU GET
   Aries · Taurus · Gemini · Cancer · Leo · Virgo
   Libra · Scorpio · Sagittarius · Capricorn · Aquarius · Pisces
 • Each print carries its own date range and constellation
-• Delivered as 4 zip files (Etsy limits each file to 20 MB) — unzip and you have all twelve
+• Delivered as 4 zip files (Etsy limits each file to 20 MB). Unzip and you have all twelve
 • Each prints beautifully at 8×10" and 16×20"
-• No physical item is shipped — download instantly after purchase
+• No physical item is shipped. Download instantly after purchase
 
 WHO BUYS THE WHOLE SET
-Anyone making baby gifts more than once — the sign is always right, whenever the baby
+Anyone making baby gifts more than once. The sign is always right, whenever the baby
 arrives. Also lovely as a set of twelve on a long wall.
 
 HOW TO PRINT
@@ -151,10 +150,10 @@ At home on matte photo paper, through an online print service, or at any local p
 shop. Matte (200–250 gsm) suits the soft watercolour style best.
 
 IF ANYTHING IS WRONG
-Message me. Wrong size, won't open, anything at all — I'll fix it or refund you.
+Message me. Wrong size, won't open, anything at all. I'll fix it or refund you.
 
 LICENCE
-Personal use only — print for your home, nursery or as a gift. Not for resale.
+Personal use only. Print for your home, nursery or as a gift. Not for resale.
 
 💝 Personalised name prints, custom songs & stories at littlepoppin.com`,
   },
@@ -165,14 +164,14 @@ Personal use only — print for your home, nursery or as a gift. Not for resale.
     title: 'Printable Nursery Colouring Book, 20 Page Baby Animal Colouring Pages PDF, Kids Activity Book, Instant Digital Download',
     tags: ['colouring book', 'coloring pages pdf', 'kids activity book', 'printable colouring', 'baby animal pages', 'toddler activity', 'quiet time activity', 'nursery colouring', 'rainy day activity', 'kids printable', 'digital download', 'instant download', 'homeschool printable'],
     description: `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — 20-page printable colouring book
+✨ INSTANT DOWNLOAD. 20-page printable colouring book
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
 • A print-ready PDF, 20 pages plus a cover, A4
-• Delivered as 2 files — Etsy caps each file at 20 MB, and I would rather split the
+• Delivered as 2 files. Etsy caps each file at 20 MB, and I would rather split the
   book than compress the line art and put grey halos around every drawing
-• Twenty of our dreamiest nursery designs redrawn as clean line art — bunnies,
+• Twenty of our dreamiest nursery designs redrawn as clean line art. Bunnies,
   balloons, whales, foxes and more
 • Print as many copies as you like, forever, for your own family
 
@@ -197,19 +196,19 @@ Personal and single-classroom use. Not for resale.
     title: 'Printable Dark Academia Colouring Book, 20 Page Adult Colouring Pages PDF, Magical Library Potions, Instant Digital Download',
     tags: ['adult colouring', 'dark academia', 'coloring pages pdf', 'colouring book', 'magical library', 'bookish gift', 'potion colouring', 'witchy printable', 'book lover gift', 'mindfulness activity', 'digital download', 'instant download', 'printable pdf'],
     description: `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — 20-page printable colouring book
+✨ INSTANT DOWNLOAD. 20-page printable colouring book
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
 • A print-ready PDF, 20 pages plus a cover, A4
-• Delivered as 2 files — Etsy caps each file at 20 MB, and I would rather split the
+• Delivered as 2 files. Etsy caps each file at 20 MB, and I would rather split the
   book than compress the line art and put grey halos around every drawing
 • Enchanted libraries, potion shelves, candlelit studies and observatories as
   intricate line art
 • Print as many copies as you like, forever, for your own use
 
 WHO IT IS FOR
-Grown-ups. The detail is finer than a children's book — closer to an hour with a cup
+Grown-ups. The detail is finer than a children's book. Closer to an hour with a cup
 of tea than ten minutes at the kitchen table.
 
 HOW TO PRINT
@@ -229,14 +228,14 @@ Personal use only. Not for resale.
     title: 'Printable Christmas Colouring Book, 20 Page Holiday Colouring Pages PDF, Kids Christmas Activity, Instant Digital Download',
     tags: ['christmas colouring', 'coloring pages pdf', 'kids activity book', 'holiday printable', 'christmas activity', 'advent activity', 'colouring book', 'xmas printable', 'stocking filler', 'kids printable', 'digital download', 'instant download', 'classroom activity'],
     description: `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — 20-page printable colouring book
+✨ INSTANT DOWNLOAD. 20-page printable colouring book
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
 • A print-ready PDF, 20 pages plus a cover, A4
-• Delivered as 2 files — Etsy caps each file at 20 MB, and I would rather split the
+• Delivered as 2 files. Etsy caps each file at 20 MB, and I would rather split the
   book than compress the line art and put grey halos around every drawing
-• Twenty enchanted Christmas scenes as line art — reindeer, gingerbread villages,
+• Twenty enchanted Christmas scenes as line art. Reindeer, gingerbread villages,
   candlelit windows, skating penguins
 • Print as many copies as you like, every December, forever
 
@@ -260,14 +259,14 @@ Personal and single-classroom use. Not for resale.
     title: 'Printable Baby Milestone Cards, 16 Card Monthly Photo Prop PDF, Watercolour Newborn Keepsake, Instant Digital Download',
     tags: ['milestone cards', 'baby milestone', 'monthly photo prop', 'newborn keepsake', 'baby shower gift', 'printable baby', 'first year cards', 'baby photo props', 'new baby gift', 'baby announcement', 'digital download', 'instant download', 'printable pdf'],
     description: `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — 16 printable milestone cards
+✨ INSTANT DOWNLOAD. 16 printable milestone cards
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
 • A print-ready PDF with 16 cards
 • Newborn, then every month to one year, plus the moments in between
 • Soft watercolour artwork in the same hand as our nursery prints
-• Print as many sets as you like — one for you, one for the grandparents
+• Print as many sets as you like. One for you, one for the grandparents
 
 HOW TO USE THEM
 Photograph the card beside your baby each month. Twelve months later you have a
@@ -290,13 +289,13 @@ Personal use only. Not for resale.
     title: 'Printable Nursery Name Banner, Full Alphabet Bunting PDF, Custom Baby Name Garland, Birthday Decor, Instant Digital Download',
     tags: ['name banner', 'nursery bunting', 'printable banner', 'baby name garland', 'birthday banner', 'nursery decor', 'party decoration', 'alphabet bunting', 'baby shower decor', 'printable party', 'digital download', 'instant download', 'printable pdf'],
     description: `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — spell any name you like
+✨ INSTANT DOWNLOAD. Spell any name you like
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
 • A print-ready PDF with every letter A–Z, each on its own piece of magical artwork
 • Plus stars and hearts to hang between the letters
-• Print only the letters you need — any name, any length, as many times as you like
+• Print only the letters you need. Any name, any length, as many times as you like
 
 WHY IT BEATS A SHOP-BOUGHT BANNER
 No waiting, no wrong spelling, and if a letter tears you simply print another one.
@@ -319,12 +318,12 @@ Personal use only. Not for resale.
     title: 'Printable Bookmarks Set of 8, Dark Academia Magical Library Bookmark PDF, Bookish Gift, Instant Digital Download',
     tags: ['printable bookmarks', 'bookish gift', 'dark academia', 'book lover gift', 'magical library', 'bookmark pdf', 'reader gift', 'stocking filler', 'book club gift', 'printable pdf', 'digital download', 'instant download', 'teacher gift'],
     description: `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — 8 printable bookmarks
+✨ INSTANT DOWNLOAD. 8 printable bookmarks
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
 • A print-ready PDF with 8 bookmarks, laid out to print together on one A4 sheet
-• Drawn from the Magical Academia collection — enchanted libraries, candlelit
+• Drawn from the Magical Academia collection. Enchanted libraries, candlelit
   studies, potion shelves, observatories
 • Print as many sheets as you like, forever
 
@@ -349,13 +348,13 @@ Personal use only. Not for resale.
     title: 'Printable Wall Calendar Undated, 12 Month Magical Art Calendar PDF, Perpetual Nursery Calendar, Instant Digital Download',
     tags: ['printable calendar', 'wall calendar', 'undated calendar', 'perpetual calendar', 'monthly calendar', '12 month calendar', 'nursery calendar', 'art calendar', 'home organisation', 'printable pdf', 'digital download', 'instant download', 'family calendar'],
     description: `━━━━━━━━━━━━━━━━━━
-✨ INSTANT DOWNLOAD — a full twelve-month wall calendar
+✨ INSTANT DOWNLOAD. A full twelve-month wall calendar
 ━━━━━━━━━━━━━━━━━━
 
 WHAT YOU GET
 • A print-ready PDF, 12 pages, A4
 • Each month led by one of our magical prints
-• Undated day grids with space to write — so it never expires, and you can start it
+• Undated day grids with space to write. So it never expires, and you can start it
   in any month of any year
 • Print it again next year at no extra cost
 

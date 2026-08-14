@@ -1,4 +1,4 @@
-// personalise-app.js — design picker + live preview for personalised name prints.
+// personalise-app.js. Design picker + live preview for personalised name prints.
 //
 // The preview MUST match what lib/personalise.js renders into the PDF, or buyers will
 // feel misled. To guarantee that, the layout is computed in PDF points against the same
@@ -126,7 +126,7 @@
     var list = visiblePrints();
     picker.innerHTML = '';
     if (!list.length) {
-      picker.innerHTML = '<p class="pz__empty">No designs match that — try another word.</p>';
+      picker.innerHTML = '<p class="pz__empty">No designs match that. Try another word.</p>';
       return;
     }
     var frag = document.createDocumentFragment();
@@ -202,7 +202,7 @@
       .catch(function (e) {
         buyBtn.disabled = false;
         buyBtn.textContent = original;
-        errEl.textContent = e.message || 'Sorry — checkout hiccuped. Please try again.';
+        errEl.textContent = e.message || 'Sorry. Checkout hiccuped. Please try again.';
       });
   }
 
@@ -232,7 +232,7 @@
       select(pre || prints.filter(function (p) { return p.available; })[0]);
     })
     .catch(function () {
-      picker.innerHTML = '<p class="pz__empty">Couldn\'t load the designs — please refresh.</p>';
+      picker.innerHTML = '<p class="pz__empty">Couldn\'t load the designs. Please refresh.</p>';
     });
 
   // Re-draw once the web font is ready, otherwise the first paint uses a fallback

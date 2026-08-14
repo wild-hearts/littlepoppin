@@ -1,6 +1,6 @@
-// printify-webhooks.mjs — register (or list, or remove) the Printify webhooks.
+// printify-webhooks.mjs. Register (or list, or remove) the Printify webhooks.
 //
-// Printify has NO dashboard page for webhooks — they are managed only through the API,
+// Printify has NO dashboard page for webhooks. They are managed only through the API,
 // which is why "Settings -> Webhooks" does not exist. This does it properly.
 //
 //   node scripts/printify-webhooks.mjs list
@@ -62,7 +62,7 @@ if (cmd === 'list') {
   const hooks = await pf(`/shops/${SHOP}/webhooks.json`);
   console.log(`${hooks.length} webhook(s) registered:`);
   for (const h of hooks) console.log(`  ${h.id}  ${String(h.topic).padEnd(28)} ${h.url}`);
-  if (!hooks.length) console.log('  (none — run `create`)');
+  if (!hooks.length) console.log('  (none. Run `create`)');
 
 } else if (cmd === 'create') {
   const existing = await pf(`/shops/${SHOP}/webhooks.json`);

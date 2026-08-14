@@ -1,6 +1,6 @@
-# Little Poppin — MYSTIC LINE (30 designs) — magical · mystical · ethereal
+# Little Poppin. MYSTIC LINE (30 designs). Magical · mystical · ethereal
 
-A separate, more grown-up line: celestial, cosmic, otherworldly — for teens/adults/boho decor,
+A separate, more grown-up line: celestial, cosmic, otherworldly. For teens/adults/boho decor,
 not newborn nursery. Style = mystical ethereal watercolour, luminous glow. All `--ar 4:5 --stylize 600`.
 Six veins of 5: Celestial · Mystic Animals · Cosmic Creatures · Enchanted Botanicals · Ethereal Figures · Mystic Realms.
 

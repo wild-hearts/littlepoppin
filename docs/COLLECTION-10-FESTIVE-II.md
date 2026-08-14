@@ -1,6 +1,6 @@
-# Little Poppin — Collection 10: Festive Magic II (10 more Christmas prints)
+# Little Poppin. Collection 10: Festive Magic II (10 more Christmas prints)
 
-Expands the Festive section. House FULL MAGIC style — enchanted, glowing, never garish.
+Expands the Festive section. House FULL MAGIC style. Enchanted, glowing, never garish.
 All `--ar 4:5 --stylize 500`.
 
 ### 1. Christmas Robin

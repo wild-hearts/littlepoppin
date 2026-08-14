@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thank You — Little Poppin</title>
+  <title>Thank You. Little Poppin</title>
   <meta name="robots" content="noindex" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,10 +27,6 @@
         <p class="status-card__lead" id="orderLead">Your payment was successful and your order is confirmed. We’ll email you if we need anything.</p>
         <p class="status-card__meta" id="orderMeta"></p>
         <div class="status-card__download" id="downloadArea"></div>
-        <!-- Populated by JS for SWADDLE orders only. Charity funding comes from swaddle
-             sales, so showing this to someone who bought a digital print would be a false
-             claim about their purchase. Empty by default — it must never render blind. -->
-        <div class="status-card__charity" id="charityNote" hidden></div>
         <a href="index.html" class="btn btn--primary">Back to Little Poppin</a>
       </div>
     </div>
@@ -60,12 +56,8 @@
         .then(function (o) {
           if (o && o.paid && o.amount_total != null) {
             var amount = '$' + (o.amount_total / 100).toFixed(2) + ' ' + (o.currency || 'aud').toUpperCase();
-            meta.textContent = 'Order confirmed — ' + amount + (o.email ? ' · receipt sent to ' + o.email : '');
+            meta.textContent = 'Order confirmed, ' + amount + (o.email ? ' · receipt sent to ' + o.email : '');
           }
-          // ONLY a swaddle funds the charity giving. Test for it positively: api/order.js
-          // reports 'physical' when no type is set (the swaddle path), while Printify
-          // orders report 'print'. An exclusion test ("not digital") silently swept the
-          // new print type in and thanked print buyers for a donation they never made.
           // GA4 purchase event. No-ops when analytics is not configured. Fired here rather
           // than in the webhook because GA4 needs the buyer's browser, not the server.
           try {
@@ -84,13 +76,6 @@
             if (o.type === 'print') lead.textContent = 'Your payment was successful. Your print is being made now at the production partner closest to you, and we\u2019ll email tracking once it ships.';
             else if (o.type === 'physical') lead.textContent = 'Your payment was successful and your order is confirmed. We\u2019ll get your swaddle on its way and email you if we need anything.';
           }
-          if (o && o.paid && o.type === 'physical') {
-            var ch = document.getElementById('charityNote');
-            if (ch) {
-              ch.textContent = '🌿 A portion of your swaddle purchase supports children’s charities worldwide. Thank you for making a difference.';
-              ch.hidden = false;
-            }
-          }
           if (o && o.paid && (o.type === 'digital' || o.type === 'personalised') && o.sku) {
             var dl = document.getElementById('downloadArea');
             if (dl) {
@@ -104,7 +89,7 @@
               if (o.type === 'personalised') {
                 var note = document.createElement('p');
                 note.className = 'status-card__note';
-                note.textContent = 'Your PDF has the same design at three print-ready sizes — 8×10 inch, A4 and 16×20 inch. '
+                note.textContent = 'Your PDF has the same design at three print-ready sizes. 8×10 inch, A4 and 16×20 inch. '
                   + 'It takes a moment to prepare, so the download may pause briefly before it starts.';
                 dl.appendChild(note);
               }
