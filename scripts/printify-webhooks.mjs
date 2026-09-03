@@ -29,12 +29,20 @@ const URL_BASE = process.env.SITE_URL || 'https://littlepoppin.com';
 const KEY_FILE = path.join(REPO, 'dist', '.printify-webhook-secret');
 const KEY = (() => {
   if (fs.existsSync(KEY_FILE)) return fs.readFileSync(KEY_FILE, 'utf8').trim();
+  if (process.env.PRINTIFY_WEBHOOK_SECRET) return process.env.PRINTIFY_WEBHOOK_SECRET.trim();
+  // dist/ is gitignored and routinely wiped, so a missing key file does NOT mean "first
+  // run". Verified 4 Sep 2026: dist/ did not exist on this machine while
+  // PRINTIFY_WEBHOOK_SECRET was live in Vercel. Silently minting a new key here would
+  // register webhooks whose URL carries a key the deployed endpoint does not hold, so
+  // every genuine delivery would 401 while `list` still showed four healthy webhooks.
+  // Refuse, and make the operator say what they mean.
+  if (!process.argv.includes('--new-key')) return null;
   const k = crypto.randomBytes(24).toString('base64url');
   fs.mkdirSync(path.dirname(KEY_FILE), { recursive: true });
   fs.writeFileSync(KEY_FILE, k, { mode: 0o600 });
   return k;
 })();
-const ENDPOINT = `${URL_BASE}/api/printify-webhook?key=${KEY}`;
+const ENDPOINT = KEY ? `${URL_BASE}/api/printify-webhook?key=${KEY}` : null;
 
 // Only the topics api/printify-webhook.js actually does something with. Subscribing to
 // everything would just add noise and more chances to email a customer by accident.
@@ -65,6 +73,15 @@ if (cmd === 'list') {
   if (!hooks.length) console.log('  (none. Run `create`)');
 
 } else if (cmd === 'create') {
+  if (!ENDPOINT) {
+    console.error('No webhook key available.');
+    console.error('  dist/.printify-webhook-secret is absent and PRINTIFY_WEBHOOK_SECRET is unset.');
+    console.error('  Registering now would mint a NEW key that the deployed endpoint does not hold,');
+    console.error('  and every Printify delivery would 401 while `list` looked healthy.');
+    console.error('  Either export PRINTIFY_WEBHOOK_SECRET with the value already in Vercel, or');
+    console.error('  pass --new-key to deliberately rotate (then update Vercel and redeploy).');
+    process.exit(1);
+  }
   const existing = await pf(`/shops/${SHOP}/webhooks.json`);
   const have = new Set(existing.filter((h) => h.url === ENDPOINT).map((h) => h.topic));
   for (const topic of TOPICS) {

@@ -473,6 +473,40 @@ group('Published price matches charged price');
 }
 
 // ---------------------------------------------------------------------------
+// DEAD HOST. Added 4 Sep 2026. www.littlepoppin.com is NXDOMAIN and the apex is the
+// primary domain. Every place the old host survived was a live defect: a fallback in
+// api/stripe-webhook.js emailed a paying customer a download link on a domain that does
+// not resolve, and scripts/printify-webhooks.mjs registered Printify webhooks against
+// it. Nothing owned this, so the host came back twice. It fails here now.
+// LP-DEADHOST-SCANNER
+group('No reference to the dead www host');
+{
+  const SCAN = ['.html', '.txt', '.json', '.js', '.mjs', '.xml', '.md'];
+  const files = [];
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === 'node_modules' || e.name === 'dist' || e.name.startsWith('.')) continue;
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (SCAN.includes(path.extname(e.name))) files.push(full);
+    }
+  };
+  walk(REPO);
+  const bad = [];
+  for (const f of files) {
+    const src = fs.readFileSync(f, 'utf8');
+    if (src.includes('LP-DEADHOST-SCANNER')) continue;   // this file names the host on purpose
+    src.split('\n').forEach((line, i) => {
+      if (line.includes('www.littlepoppin.com')) {
+        bad.push(`${path.relative(REPO, f)}:${i + 1}  ${line.trim().slice(0, 90)}`);
+      }
+    });
+  }
+  check('no file references www.littlepoppin.com (NXDOMAIN since at least 3 Sep 2026)',
+    bad.length === 0, bad.slice(0, 8).join('\n      '));
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${'─'.repeat(60)}`);
 if (skipped.length) {
   console.log(`${skipped.length} SKIPPED, not checked:\n`);
