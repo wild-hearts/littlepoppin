@@ -1,10 +1,12 @@
 # Etsy Listing Pack. LittlePoppin (top 20 digital-print listings)
 
-> **DO NOT reinstate the charity line in these descriptions.** Only Little Poppin *swaddle*
-> sales fund the children's-charity giving (confirmed 8 Aug 2026). Every Etsy listing here is
-> a digital download, which funds none of it. So the claim is false on all of them, and an
-> unsubstantiated donation claim is misleading conduct under the Australian Consumer Law.
-> **The ~97 listings already live were published with the old body text and still carry it, > they need editing in Etsy's bulk editor.**
+> **NO CHARITY CLAIM, ANYWHERE, ON ANY RANGE.** Superseded the 8 Aug 2026 "swaddles only"
+> position: brand.yaml sets `charity_claims.permitted: false` outright from 13 Aug 2026 on
+> Naomi's instruction. Never state or imply that any purchase supports a charity, a donation,
+> a good cause or a proceeds share. An unsubstantiated donation claim is misleading conduct
+> under the Australian Consumer Law.
+> **The ~97 Etsy listings already live still carry the old body text and still need editing
+> in Etsy's bulk editor. That is an open, live exposure, not a historical note.**
 
 Copy-paste pack for etsy.com/your/shops. Files live in `~/Downloads/LittlePoppin-Designs/`
 (upload the full-res PNG as the digital file; the web preview JPG in the repo's

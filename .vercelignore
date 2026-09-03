@@ -3,3 +3,14 @@
 dist/
 node_modules/
 .git/
+
+# Internal notes and build tooling. Both were being served publicly as plain text:
+# https://littlepoppin.com/docs/TOMORROW.md and /scripts/test.mjs both returned 200
+# on 3 Sep 2026. Neither is imported by anything in api/ at runtime (checked: every
+# api/ import resolves to ../lib/), so excluding them from the upload is safe.
+# lib/ CANNOT go here, because the serverless functions import it. It is handled by
+# the redirect rule in vercel.json instead.
+docs/
+scripts/
+etsy-stage/
+README_FORGE.md

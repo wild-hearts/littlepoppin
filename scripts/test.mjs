@@ -14,15 +14,23 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+const __filenameish = fileURLToPath(import.meta.url);
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.chdir(REPO);
 process.env.STRIPE_SECRET_KEY ||= 'sk_test_dummy_for_tests';
 
 let passed = 0;
 const failures = [];
+const skipped = [];
 let currentGroup = '';
 
 const group = (name) => { currentGroup = name; console.log(`\n${name}`); };
+// A SKIP is not a pass. It is recorded and reported at the end, so a suite that could not
+// check something never reads as a suite that checked it and was happy.
+function skip(what, why) {
+  skipped.push(`${currentGroup} \u2192 ${what}: ${why}`);
+  console.log(`  \u25CB SKIPPED ${what}\n      ${why}`);
+}
 function check(what, ok, detail = '') {
   if (ok) { passed++; console.log(`  ✓ ${what}`); }
   else { failures.push(`${currentGroup} → ${what}${detail ? `\n      ${detail}` : ''}`); console.log(`  ✗ ${what}${detail ? `\n      ${detail}` : ''}`); }
@@ -169,16 +177,26 @@ check('newlines cannot be injected into the print',
 check('over-long input is truncated, not rejected',
   personalise.parsePersonalisation({ name: 'x'.repeat(200) }).data.name.length === personalise.LIMITS.name);
 
-const art = fs.readFileSync(path.join(process.env.HOME, 'Downloads/LittlePoppin-Designs/collection-01/05-sleepy-moon-and-stars.png'));
-const font = fs.readFileSync('assets/fonts/CormorantGaramond.ttf');
-const pdf = await personalise.renderPersonalisedPdf(art, { name: 'Willow Rose', line2: 'Born 3rd March 2026', line3: '3.2kg' }, { regular: font });
-check('renders a PDF', pdf.length > 10000 && Buffer.from(pdf.slice(0, 5)).toString() === '%PDF-');
+// The master artwork lives in ~/Downloads/LittlePoppin-Designs, which is NOT in the repo
+// and is not present on every machine. Until 3 Sep 2026 a missing file threw ENOENT and
+// killed the whole run here, a third of the way in, so every check below this point
+// (including the charity-claim check) silently never ran. A missing local asset must
+// SKIP, loudly, and let the rest of the suite finish.
+const ART = path.join(process.env.HOME, 'Downloads/LittlePoppin-Designs/collection-01/05-sleepy-moon-and-stars.png');
+if (!fs.existsSync(ART)) {
+  skip('PDF rendering checks', `master artwork not on this machine: ${ART}`);
+} else {
+  const art = fs.readFileSync(ART);
+  const font = fs.readFileSync('assets/fonts/CormorantGaramond.ttf');
+  const pdf = await personalise.renderPersonalisedPdf(art, { name: 'Willow Rose', line2: 'Born 3rd March 2026', line3: '3.2kg' }, { regular: font });
+  check('renders a PDF', pdf.length > 10000 && Buffer.from(pdf.slice(0, 5)).toString() === '%PDF-');
 
-const { PDFDocument } = await import('pdf-lib');
-const doc = await PDFDocument.load(pdf);
-check(`PDF has ${personalise.PAGE_SIZES.length} page sizes`, doc.getPageCount() === personalise.PAGE_SIZES.length);
-const sizes = doc.getPages().map((p) => `${(p.getWidth() / 72).toFixed(2)}x${(p.getHeight() / 72).toFixed(2)}`);
-check('page sizes are 8x10, A4 and 16x20', sizes.join(' ') === '8.00x10.00 8.27x11.69 16.00x20.00', sizes.join(' '));
+  const { PDFDocument } = await import('pdf-lib');
+  const doc = await PDFDocument.load(pdf);
+  check(`PDF has ${personalise.PAGE_SIZES.length} page sizes`, doc.getPageCount() === personalise.PAGE_SIZES.length);
+  const sizes = doc.getPages().map((p) => `${(p.getWidth() / 72).toFixed(2)}x${(p.getHeight() / 72).toFixed(2)}`);
+  check('page sizes are 8x10, A4 and 16x20', sizes.join(' ') === '8.00x10.00 8.27x11.69 16.00x20.00', sizes.join(' '));
+}
 
 // Glyph coverage: fontkit's subsetter silently drops glyphs from this variable font,
 // which rendered "Willow Rose" as "llow o". A subset font produces a much smaller file.
@@ -316,34 +334,111 @@ check('bundles containing the song cost more than the song alone',
   CUSTOM_PRODUCTS['bundle-song-story'].price > song && CUSTOM_PRODUCTS['bundle-first-year'].price > song,
   `song $${song / 100}, song+story $${CUSTOM_PRODUCTS['bundle-song-story'].price / 100}, first-year $${CUSTOM_PRODUCTS['bundle-first-year'].price / 100}`);
 
-// Charity claims must stay scoped to the swaddles, which are the only range that funds
-// the giving. An unqualified "a portion of every sale" across a shop that is now mostly
-// digital is misleading conduct under Australian Consumer Law, not loose copy. And it
-// was live on ~130 pages until August 2026. Anything that reintroduces it fails here.
+// NO CHARITY CLAIM, ON ANY RANGE. brand.yaml sets `charity_claims.permitted: false`
+// outright from 13 Aug 2026, superseding the earlier "swaddles only" position. An
+// unsubstantiated donation claim is misleading conduct under Australian Consumer Law.
+//
+// This check was rewritten on 3 Sep 2026 because the old one was green while a live
+// charity claim sat on llms.txt. It failed in three ways, all worth remembering:
+//   1. it only matched the exact phrase "A portion of", so "funds the shop's charitable
+//      giving" sailed straight past it;
+//   2. it only walked .html, and the live claim was in llms.txt;
+//   3. it PASSED anything containing the word "swaddle", which is no longer permitted.
+// A test that encodes a superseded rule is worse than no test, because it is mistaken
+// for coverage.
 {
-  const pages = [];
+  const CHARITY = /\b(charit(y|ies|able)|donation|donates?|proceeds|good cause|fundrais)/i;
+  // Lines that talk ABOUT the prohibition rather than making the claim.
+  const META = /(permitted: false|prohibit|misleading conduct|no charitable claim|NO CHARITY|never state or imply|Medaria)/i;
+  const SCAN = ['.html', '.txt', '.json', '.js', '.mjs'];
+  const files = [];
   const walk = (dir) => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (e.name === 'node_modules' || e.name.startsWith('.')) continue;
+      if (e.name === 'node_modules' || e.name === 'dist' || e.name === 'docs' || e.name.startsWith('.')) continue;
       const full = path.join(dir, e.name);
       if (e.isDirectory()) walk(full);
-      else if (e.name.endsWith('.html')) pages.push(full);
+      else if (SCAN.includes(path.extname(e.name))) files.push(full);
     }
   };
   walk(REPO);
   const bad = [];
-  for (const f of pages) {
-    const html = fs.readFileSync(f, 'utf8');
-    for (const m of html.matchAll(/A portion of[^.<"]{0,120}/g)) {
-      // "swaddle" anywhere in the sentence makes the scope explicit and truthful.
-      // "this sale" is fine only on the two swaddle product pages.
-      const sent = m[0];
-      if (/swaddle/i.test(sent)) continue;
-      if (/this sale/i.test(sent) && /swaddle/.test(path.basename(f))) continue;
-      bad.push(`${path.relative(REPO, f)}: "${sent.trim().slice(0, 70)}"`);
+  for (const f of files) {
+    if (path.resolve(f) === path.resolve(__filenameish)) continue;
+    const src = fs.readFileSync(f, 'utf8');
+    // A scanner has to name the words it looks for. Files that declare themselves as
+    // scanners are exempt; nothing else is.
+    if (src.includes('LP-CHARITY-SCANNER')) continue;
+    for (const line of src.split('\n')) {
+      if (!CHARITY.test(line) || META.test(line)) continue;
+      bad.push(`${path.relative(REPO, f)}: "${line.trim().slice(0, 80)}"`);
     }
   }
-  check('charity claims are scoped to swaddles', bad.length === 0, bad.slice(0, 6).join('\n      '));
+  check('no charity, donation or proceeds claim anywhere', bad.length === 0, bad.slice(0, 8).join('\n      '));
+}
+
+
+// ---------------------------------------------------------------------------
+// PUBLISHED PRICE vs CHARGED PRICE. Added 3 Sep 2026 after custom.html was found
+// publishing JSON-LD offers of $15, $29 and $49 for products that charge $45, $55 and
+// $85. Nothing owned this: "custom.html prices match lib/products.js" above checks the
+// VISIBLE price only, and structured data is what Google shows in a rich result. A price
+// advertised below what is charged is a misleading price representation under Australian
+// Consumer Law, and it is the dangerous direction of the error.
+//
+// Every JSON-LD Offer with a price, on every page, resolved by product name back to the
+// catalogue. Names that do not resolve are reported, not silently passed, because an
+// unresolvable name is how a mismatch hides.
+group('Published price matches charged price');
+{
+  const truth = new Map();
+  const key = (n) => String(n).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const add = (n, c) => { if (n && c != null) truth.set(key(n), c); };
+  const { PRODUCTS: PHYS, CUSTOM_PRODUCTS: CUST, DIGITAL_PRODUCTS: DIG } = await import('../lib/products.js');
+  for (const p of Object.values(CUST || {})) add(p.name, p.price);
+  for (const p of Object.values(PHYS || {})) add(p.name, p.price);
+  for (const p of Object.values({ ...DIG, ...GENERATED_DIGITAL_PRODUCTS })) {
+    add(p.name, p.price); add(p.title, p.price);
+    if (p.items) add(`${p.title}, ${p.items.length} Digital Prints`, p.price);
+  }
+  add(PRINT_CLUB.name, PRINT_CLUB.price);
+  // Personalised prints price from lib/personalise.js, not the products catalogue.
+  add('Personalised Name Print. Little Poppin', personalise.PERSONALISE_PRICE);
+
+  const htmls = [];
+  (function walk(dir) {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (['node_modules', 'dist', 'docs', '.git', '.vercel', 'etsy-stage'].includes(e.name) || e.name.startsWith('.')) continue;
+      const f = path.join(dir, e.name);
+      if (e.isDirectory()) walk(f); else if (e.name.endsWith('.html')) htmls.push(f);
+    }
+  })(REPO);
+
+  let checkedOffers = 0; const mismatch = []; const unresolved = new Set(); let unparseable = 0;
+  for (const f of htmls) {
+    const src = fs.readFileSync(f, 'utf8');
+    for (const m of src.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      let json; try { json = JSON.parse(m[1]); } catch { unparseable++; continue; }
+      (function walkNode(node) {
+        if (!node || typeof node !== 'object') return;
+        if (Array.isArray(node)) return node.forEach(walkNode);
+        if (node.name && node.offers) {
+          for (const o of [].concat(node.offers)) {
+            if (o.price == null) continue;
+            checkedOffers++;
+            const cents = Math.round(parseFloat(o.price) * 100);
+            const real = truth.get(key(node.name));
+            if (real == null) unresolved.add(`${path.relative(REPO, f)}: "${node.name}"`);
+            else if (real !== cents) mismatch.push(`${path.relative(REPO, f)}: "${node.name}" schema $${o.price} but charged $${(real / 100).toFixed(2)}`);
+          }
+        }
+        for (const v of Object.values(node)) walkNode(v);
+      })(json);
+    }
+  }
+  check(`${checkedOffers} structured-data prices match the charged price`, mismatch.length === 0, mismatch.slice(0, 8).join('\n      '));
+  check('all structured data parses as JSON', unparseable === 0, `${unparseable} unparseable ld+json block(s)`);
+  check('every priced offer resolves to a catalogue product', unresolved.size === 0,
+    [...unresolved].slice(0, 8).join('\n      ') + '\n      An unresolvable name cannot be price-checked, so it is not covered.');
 }
 
 // Every symbol an api/ handler uses from a lib must actually be imported. `node --check`
@@ -379,9 +474,14 @@ check('bundles containing the song cost more than the song alone',
 
 // ---------------------------------------------------------------------------
 console.log(`\n${'─'.repeat(60)}`);
+if (skipped.length) {
+  console.log(`${skipped.length} SKIPPED, not checked:\n`);
+  skipped.forEach((sk) => console.log(`  \u25CB ${sk}`));
+  console.log('');
+}
 if (failures.length) {
-  console.log(`${passed} passed, ${failures.length} FAILED\n`);
+  console.log(`${passed} passed, ${failures.length} FAILED, ${skipped.length} skipped\n`);
   failures.forEach((f) => console.log(`  ✗ ${f}`));
   process.exit(1);
 }
-console.log(`All ${passed} checks passed.`);
+console.log(`All ${passed} checks passed${skipped.length ? `, ${skipped.length} skipped (see above)` : ''}.`);

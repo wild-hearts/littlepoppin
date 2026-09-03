@@ -290,7 +290,7 @@ async function emailDownloadLink(session, sku, meta = {}) {
   const to = session.customer_details?.email;
   const product = getDigital(sku);
   if (!to || !product) return;
-  const origin = (process.env.SITE_URL || 'https://www.littlepoppin.com').replace(/\/$/, '');
+  const origin = (process.env.SITE_URL || 'https://littlepoppin.com').replace(/\/$/, '');
   const link = `${origin}/api/download?session_id=${session.id}&sku=${encodeURIComponent(sku)}`;
   const personalised = meta.type === 'personalised';
   const label = personalised ? `${product.title || product.name}, personalised for ${meta.p_name}` : product.name;

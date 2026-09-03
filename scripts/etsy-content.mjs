@@ -1,9 +1,9 @@
 // etsy-content.mjs. Etsy listing copy for the products not yet listed.
 //
-// NO CHARITY LINE. Only swaddle sales fund the children's-charity giving (confirmed
-// 8 Aug 2026); every listing here is a digital download, so the claim would be false and
-// an unsubstantiated donation claim is misleading conduct under the Australian Consumer
-// Law. The ~97 listings already live still carry the old wording and need bulk-editing.
+// NO CHARITY LINE, ON ANY RANGE. brand.yaml sets charity_claims.permitted: false outright
+// from 13 Aug 2026, superseding the 8 Aug "swaddles only" position. An unsubstantiated
+// donation claim is misleading conduct under the Australian Consumer Law.
+// The ~97 listings already live still carry the old wording and need bulk-editing.
 //
 // PRICING follows the convention the live shop already set: Etsy sits at roughly two
 // thirds of the website price ($12 print -> $7.95, $30 set -> $19.95). Worth revisiting, // Etsy takes ~9% in fees, so the cheaper channel is also the less profitable one. But

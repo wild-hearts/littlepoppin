@@ -28,7 +28,7 @@ const PUBLISHED = await (async () => {
 const fileFor = (sku) => (PUBLISHED[sku] ? `'${PUBLISHED[sku]}'` : 'null');
 const SRC = path.join(os.homedir(), 'Downloads', 'LittlePoppin-Designs');
 const OUT_IMG = path.join(REPO, 'images', 'prints');
-const SITE = 'https://www.littlepoppin.com';
+const SITE = 'https://littlepoppin.com';
 
 // Shop sections (collection-04 Mystic is intentionally excluded. Own brand).
 const SECTIONS = [
@@ -201,7 +201,8 @@ for (const s of SETS) {
       ...comps.map(c => path.join(REPO, c.preview.slice(1))),
       '-resize', 'x600', '-background', 'white', '+smush', '16', compositePath]);
   }
-  setItems.push({ ...s, name: `${s.title}, 3 Digital Prints`, preview: `/images/prints/sets/${s.sku}.jpg` });
+  // Count from the data, never a literal. See build-product-pages.mjs. (3 Sep 2026)
+  setItems.push({ ...s, name: `${s.title}, ${s.items.length} Digital Prints`, preview: `/images/prints/sets/${s.sku}.jpg` });
   process.stdout.write('+');
 }
 const setCards = setItems.map(it => `          <article class="print-card print-card--set">

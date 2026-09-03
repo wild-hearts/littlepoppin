@@ -34,7 +34,7 @@ const countryOptions = ['AU', 'US', 'GB', 'CA', 'NZ']
   .map((c) => `<option value="${c}">${countryName(c)}</option>`).join('');
 
 const REPO = path.resolve(new URL('..', import.meta.url).pathname);
-const SITE = 'https://www.littlepoppin.com';
+const SITE = 'https://littlepoppin.com';
 
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'prints.json'), 'utf8'));
 const sectionTitle = Object.fromEntries(data.sections.map((s) => [s.id, s.nav]));
@@ -297,7 +297,11 @@ for (const s of data.sets) {
   const jsonLd = [
     {
       '@context': 'https://schema.org', '@type': 'Product',
-      name: `${s.title}, 3 Digital Prints`, description: s.description, image: img, sku: s.sku,
+      // Was hardcoded to "3 Digital Prints". True for the 18 three-print sets, wrong for the
+      // five collection bundles, which hold 12 to 93. It published "3 Digital Prints" as the
+      // structured-data name of a $249 product containing 93, on the highest-value pages in
+      // the shop. Count from the data. (3 Sep 2026)
+      name: `${s.title}, ${s.items.length} Digital Prints`, description: s.description, image: img, sku: s.sku,
       brand: { '@type': 'Brand', name: 'Little Poppin' },
       offers: {
         '@type': 'Offer', price: money(s.price), priceCurrency: 'AUD', url,

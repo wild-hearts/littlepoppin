@@ -62,17 +62,24 @@ if (auHits.length) { for (const h of auHits.slice(0, 15)) bad(h); if (auHits.len
 else ok('no stray Australia/retailer references (swaddle, ACL and artwork mentions kept by design)');
 
 // ── 2. Charity claims ────────────────────────────────────────────────────────
-section('2. Charity claims scoped to swaddles');
+// LP-CHARITY-SCANNER. This file names the forbidden vocabulary, so it exempts itself.
+//
+// Rewritten 3 Sep 2026. The previous version checked only that claims were "scoped to
+// swaddles", which was the 8 Aug position, superseded on 13 Aug by brand.yaml
+// charity_claims.permitted: false. It also matched only the literal phrase "A portion of"
+// and only scanned .html, so the live claim on llms.txt was invisible to it.
+section('2. No charity, donation or proceeds claim, on any range');
+const CHARITY_RE = /\b(charit(y|ies|able)|donation|donates?|proceeds|good cause|fundrais)/i;
+const CHARITY_META = /(permitted: false|prohibit|misleading conduct|no such claim|NO CHARITY|never state or imply|LP-CHARITY-SCANNER|Medaria)/i;
 const charity = [];
-for (const f of pages) {
-  for (const m of read(f).matchAll(/A portion of[^.<"]{0,120}/g)) {
-    const s = m[0];
-    if (/swaddle/i.test(s)) continue;
-    if (/this sale/i.test(s) && /swaddle/.test(path.basename(f))) continue;
-    charity.push(`${f}: "${s.trim().slice(0, 70)}"`);
+for (const f of [...pages, 'llms.txt']) {
+  let src; try { src = read(f); } catch { continue; }
+  for (const line of String(src).split('\n')) {
+    if (!CHARITY_RE.test(line) || CHARITY_META.test(line)) continue;
+    charity.push(`${f}: "${line.trim().slice(0, 80)}"`);
   }
 }
-charity.length ? charity.forEach(bad) : ok('every charity claim is swaddle-scoped');
+charity.length ? charity.forEach(bad) : ok('no charity, donation or proceeds claim anywhere');
 
 // ── 3. Printify / physical prints ────────────────────────────────────────────
 section('3. Physical prints (Printify)');
@@ -118,7 +125,10 @@ auNote.length ? bad(`${auNote.length} print pages still say "Australia-wide ship
 // ── 6. Success page order types ──────────────────────────────────────────────
 section('6. Success page');
 const su = read('success.html');
-/o\.type === 'physical'/.test(su) ? ok("charity note tests type === 'physical' (swaddle only)") : bad('charity note may fire for print orders');
+// Relabelled 3 Sep 2026. The charity note itself is gone from success.html; this only
+// ever checked that the physical-order branch narrows on type, and the old wording told
+// a reader there was still a charity note on the page. There is not.
+/o\.type === 'physical'/.test(su) ? ok("physical-order wording is narrowed to type === 'physical' (swaddles)") : bad('physical-order wording may fire for print orders');
 /o\.type !== 'digital' && o\.type !== 'personalised'/.test(su) && bad("still uses the exclusion test that swept in 'print'");
 /o\.type === 'print'/.test(su) ? ok('print orders get their own confirmation wording') : bad('print orders get swaddle wording');
 

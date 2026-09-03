@@ -10,7 +10,13 @@
  *   3. paste it here, then `npm run build:site` and deploy
  * Everything else. The snippet on all 135 pages, the ecommerce events. Is already wired.
  */
+// LEFT EMPTY DELIBERATELY, and it is NOT an accurate description of the live site.
+// GA4 G-TD4975MVCS is live on 128 pages right now, hand-added rather than injected by
+// scripts/inject-analytics.mjs, and WITHOUT anonymize_ip or allow_google_signals: false.
+// Turning this on is a privacy and consent decision for Naomi, not a technical one (the
+// same call brand.yaml records for the Pinterest conversion tag), so it stays empty and
+// the question is on the escalation list instead of being answered here at 2am.
 export const GA4_ID = '';
 
 /** Canonical site origin, used for sitemap and structured data. */
-export const SITE_URL = 'https://www.littlepoppin.com';
+export const SITE_URL = 'https://littlepoppin.com';

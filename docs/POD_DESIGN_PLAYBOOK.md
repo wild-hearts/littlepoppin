@@ -67,8 +67,8 @@ is fine. Large prints = upscale externally to 300 DPI at full size. All-over (sw
 ① Printify with a first new collection on 3–4 small-print products → ② expand collections →
 ③ automate Stripe→Printify fulfilment (extend the existing LP webhook to call Printify's API on
 paid order) → ④ digital downloads → ⑤ gift cards (branded voucher + redemption logic; manual to
-start). Use an AU/nearby Printify print provider per product. Price for POD base cost + the
-children's-charity cut.
+start). Use an AU/nearby Printify print provider per product. Price for POD base cost plus margin.
+No charitable cut: brand.yaml prohibits charity claims outright from 13 Aug 2026.
 
 **Product ladder (one art library, zero inventory):** swaddles → nursery prints → stationery
 (notebooks, journals, cards, stickers, gift tags) → kids' bedroom art → wall decals → wallpaper/murals.
@@ -126,6 +126,6 @@ The Mystic designs (`collection-04`) suit a grown-up celestial/boho audience and
 | Sticker sheet | $2–3 | $9 | ~$6–7 |
 
 Pricing logic: physical ≈ **3–4× base cost**; digital is near-pure profit. Bundle 3 prints as a "gallery set"
-at a small discount to lift order value. Build the children's-charity cut into the margin. Numbers are
+at a small discount to lift order value. Numbers are
 indicative. Verify against the actual Printify provider before publishing.
 
