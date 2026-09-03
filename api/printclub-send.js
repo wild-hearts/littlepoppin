@@ -50,6 +50,41 @@ export default async function handler(req, res) {
   }
   const dry = req.query.dry === '1';
 
+  // APPROVAL GATE, added 4 Sep 2026.
+  //
+  // brand.yaml routes print_club_selection_due and print_club_approval_due to the
+  // ESCALATE lane, meaning a human is supposed to approve the month's selection before it
+  // goes out. Nothing in this file enforced that. The cron fired, picksForMonth() derived
+  // three prints deterministically, and they were emailed to every paying member with no
+  // human anywhere in the path. An approval that is required in the brief and enforced by
+  // nothing is worse than no approval at all, because it reads as oversight on paper.
+  //
+  // The gate is deliberately the same shape as CRON_SECRET above: fail CLOSED. Naomi sets
+  // PRINTCLUB_APPROVED_MONTH to the month she has actually approved, as YYYY-MM. If it is
+  // missing, or it names a different month, this refuses to send and says so loudly.
+  // Refusing costs one late email that a human then sends on purpose. Not refusing spends
+  // real money emailing paying members a selection nobody chose.
+  //
+  // A dry run is exempt: its whole purpose is to show what WOULD be sent so it can be
+  // approved. It sends nothing.
+  const nowForGate = new Date();
+  const targetMonth = `${nowForGate.getUTCFullYear()}-${String(nowForGate.getUTCMonth() + 1).padStart(2, '0')}`;
+  const approvedMonth = (process.env.PRINTCLUB_APPROVED_MONTH || '').trim();
+  if (!dry && approvedMonth !== targetMonth) {
+    console.error(
+      `Print Club: REFUSING TO SEND for ${targetMonth}. PRINTCLUB_APPROVED_MONTH is ` +
+      `${approvedMonth ? `"${approvedMonth}"` : 'not set'}. ` +
+      `Approve the selection, then set PRINTCLUB_APPROVED_MONTH=${targetMonth} in Vercel. ` +
+      `Preview what would go out with ?dry=1.`
+    );
+    return res.status(412).json({
+      error: 'Print Club selection is not approved for this month',
+      month: targetMonth,
+      approved_month: approvedMonth || null,
+      how_to_approve: `Set PRINTCLUB_APPROVED_MONTH=${targetMonth} in the Vercel production environment`,
+    });
+  }
+
   try {
     const now = new Date();
     const prints = picksForMonth(GENERATED_DIGITAL_PRODUCTS, now)

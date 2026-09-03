@@ -69,6 +69,37 @@ async function onOrderPaid(session) {
     expand: ['line_items'],
   });
 
+  // ORDER RECORD, added 4 Sep 2026 (Porter).
+  //
+  // Before this, only the Printify branch wrote an event. A CUSTOM order and a SWADDLE
+  // order wrote nothing at all, which meant the two classes that fail SILENTLY were also
+  // the two with no trace. That is exactly backwards on the one brand whose defining risk
+  // is the silent default: a custom order placed Tuesday and forgotten is a broken promise
+  // the following Tuesday with no alarm anywhere.
+  //
+  // Active ageing needs a durable record with a timestamp and a class. Everything needed
+  // is already in this payload; nothing new has to be collected from the customer. This is
+  // the input fulfilment.yaml's `ageing: CANNOT_RUN` was waiting on.
+  //
+  // Deliberately non-fatal: the payment already succeeded, so a logging failure must never
+  // throw here or Stripe retries the whole event and the customer is emailed twice.
+  try {
+    await recordEvent('order-paid', {
+      sessionId: session.id,
+      sku: sku || null,
+      qty,
+      // class drives the promised window in fulfilment.yaml
+      class: session.metadata?.type || (session.metadata?.fulfil === 'printify' ? 'print' : 'swaddle'),
+      fulfil: session.metadata?.fulfil || null,
+      amountTotal: session.amount_total ?? null,
+      currency: session.currency || null,
+      placedAt: new Date((session.created || Date.now() / 1000) * 1000).toISOString(),
+      email: full.customer_details?.email || null,
+    });
+  } catch (err) {
+    console.error('order-paid event not recorded (payment is unaffected):', err);
+  }
+
   if (session.metadata?.type === 'custom') {
     await handleCustomOrder(full, sku);  // made-to-order: brief to Naomi + confirmation to buyer
     return;
