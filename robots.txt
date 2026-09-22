@@ -4,4 +4,4 @@ Disallow: /success.html
 Disallow: /cancel.html
 Disallow: /api/
 
-Sitemap: https://www.littlepoppin.com/sitemap.xml
+Sitemap: https://littlepoppin.com/sitemap.xml

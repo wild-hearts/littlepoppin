@@ -28,7 +28,7 @@ const PUBLISHED = await (async () => {
 const fileFor = (sku) => (PUBLISHED[sku] ? `'${PUBLISHED[sku]}'` : 'null');
 const SRC = path.join(os.homedir(), 'Downloads', 'LittlePoppin-Designs');
 const OUT_IMG = path.join(REPO, 'images', 'prints');
-const SITE = 'https://www.littlepoppin.com';
+const SITE = 'https://littlepoppin.com';
 
 // Shop sections (collection-04 Mystic is intentionally excluded. Own brand).
 const SECTIONS = [

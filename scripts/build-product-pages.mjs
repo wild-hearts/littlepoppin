@@ -34,7 +34,7 @@ const countryOptions = ['AU', 'US', 'GB', 'CA', 'NZ']
   .map((c) => `<option value="${c}">${countryName(c)}</option>`).join('');
 
 const REPO = path.resolve(new URL('..', import.meta.url).pathname);
-const SITE = 'https://www.littlepoppin.com';
+const SITE = 'https://littlepoppin.com';
 
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'prints.json'), 'utf8'));
 const sectionTitle = Object.fromEntries(data.sections.map((s) => [s.id, s.nav]));
