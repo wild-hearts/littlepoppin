@@ -9,5 +9,15 @@
       "path": "/api/review-request",
       "schedule": "0 23 * * *"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/i/:code",
+      "destination": "/api/invite-page?code=:code"
+    },
+    {
+      "source": "/invite-preview",
+      "destination": "/api/invite-page?preview=1"
+    }
   ]
 }

@@ -7,6 +7,7 @@ import { getProduct, getDigital, getCustom, isDeliverable, shippingFor, CURRENCY
 import { getPrintOption, getSetPrintOption } from '../lib/printify.js';
 import { parsePersonalisation, PERSONALISE_PRICE } from '../lib/personalise.js';
 import { PRINT_CLUB } from '../lib/printclub.js';
+import { normaliseInvite, saveDraft, INVITE_PRICE, INVITE_SKU, themeById as inviteTheme } from '../lib/invites.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -40,6 +41,41 @@ export default async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     const sku = String(body.sku || '');
     const quantity = Math.max(1, Math.min(10, parseInt(body.quantity, 10) || 1));
+
+    // --- Website invitation: body { sku:'invite', invite: {...} } ---
+    // The design is validated and saved as a draft BEFORE Stripe, and only the draft id
+    // travels in the session metadata (Stripe caps metadata values at 500 chars, and an
+    // invitation's message alone can be longer). Publishing happens after payment in
+    // lib/invites.js activateInvite(), from the webhook or the success page.
+    if (sku === INVITE_SKU) {
+      const parsed = normaliseInvite(body.invite || {});
+      if (!parsed.ok) return res.status(400).json({ error: parsed.error });
+      const draft = await saveDraft(parsed.data);
+      const origin = baseUrl(req);
+      const theme = inviteTheme(parsed.data.theme);
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        customer_email: parsed.data.hostEmail,
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: CURRENCY,
+            unit_amount: INVITE_PRICE,
+            product_data: {
+              name: `Website Invitation. ${parsed.data.title}`,
+              description: `${theme.name} design for ${parsed.data.honouree}. Your own link with RSVP, countdown and map, live for 12 months, unlimited guests.`,
+              images: [`${origin}${theme.art}`],
+              metadata: { sku: INVITE_SKU, brand: 'little_poppin', type: 'invite' },
+            },
+          },
+        }],
+        custom_text: { submit: { message: 'Your invitation is published the moment payment completes and the link is emailed to you. If you are in the EU or UK, you accept that this ends your 14-day right to withdraw. Anything wrong with it and we will fix it or refund you.' } },
+        success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/invite-builder.html?theme=${encodeURIComponent(parsed.data.theme)}&cancelled=1`,
+        metadata: { brand: 'little_poppin', sku: INVITE_SKU, type: 'invite', draft, theme: parsed.data.theme, instantDeliveryConsent: 'shown' },
+      });
+      return res.status(200).json({ url: session.url });
+    }
 
     // --- Made-to-order custom product: brief collected via Stripe custom fields ---
     const custom = getCustom(sku);
