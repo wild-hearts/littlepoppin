@@ -24,8 +24,8 @@ function injectStyles() {
                  font-variant-numeric: lining-nums; font-feature-settings:'lnum' 1; }
   .iv * { box-sizing:border-box; }
   .iv { max-width: 560px; margin: 0 auto; padding: 0 0 40px; position:relative; }
-  .iv .script { font-family: var(--iv-script); font-weight:400; color: var(--iv-accent); line-height:1.1; }
-  .iv .caps { font-family: var(--iv-sans); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iv-deep); }
+  .iv-body .script { font-family: var(--iv-script); font-weight:400; color: var(--iv-accent); line-height:1.1; }
+  .iv-body .caps { font-family: var(--iv-sans); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iv-deep); }
   .iv .caps--soft { color: var(--iv-ink); opacity:.7; letter-spacing:.16em; }
   .iv-section { padding: 34px 26px; text-align:center; }
   .iv-rule { width: 64px; height:1px; background: var(--iv-ribbon); margin: 18px auto; position:relative; }
@@ -62,7 +62,7 @@ function injectStyles() {
   .iv-seal { position:absolute; left:50%; top: 92px; transform: translate(-50%,-50%); width: 62px; height: 62px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--iv-deep) 70%, #fff), var(--iv-deep) 65%);
              box-shadow: 0 3px 10px rgba(0,0,0,.25), inset 0 0 0 4px rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center; color:#fff; font-family: var(--iv-script); font-size: 1.9rem; z-index:4;
              transition: opacity .4s ease; }
-  .iv-seal::before { content:''; position:absolute; inset:-5px; border-radius:50%; border: 3px solid color-mix(in srgb, var(--iv-deep) 80%, #000); opacity:.35; clip-path: polygon(0 0, 100% 0, 100% 40%, 60% 100%, 0 70%); }
+  .iv-seal::before { content:''; position:absolute; inset:-4px; border-radius:50%; border: 2px solid var(--iv-deep); opacity:.45; }
   .iv-env--open .iv-seal { opacity:0; }
   .iv-cover__open { font-family: var(--iv-sans); font-size:.72rem; letter-spacing:.3em; text-transform:uppercase; color: var(--iv-deep); background:none; border:0; cursor:pointer; padding: 10px; animation: iv-pulse 2.2s ease-in-out infinite; }
   @keyframes iv-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
