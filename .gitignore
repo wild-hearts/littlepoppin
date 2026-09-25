@@ -10,3 +10,4 @@ etsy-stage/
 # Build output: generated PDFs for the printable ranges. Large (160MB+) and fully
 # regenerable with scripts/build-extras.mjs; the sellable copies live in Vercel Blob.
 dist/
+.env*

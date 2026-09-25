@@ -136,6 +136,7 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
         <li><a href="${up}index.html#products">Swaddles</a></li>
         <li><a href="${up}prints.html">Art Prints</a></li>
         <li><a href="${up}personalise.html">Personalise</a></li>
+        <li><a href="${up}invites.html">Invitations</a></li>
         <li><a href="${up}printclub.html">Print Club</a></li>
         <li><a href="${up}printables.html">Printables</a></li>
         <li><a href="${up}guides.html">Guides</a></li>

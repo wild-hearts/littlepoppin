@@ -13,6 +13,7 @@ api/order.js             GET ?session_id= -> safe order summary for success.html
 api/stock.js             GET -> { sku: stockLeft } so the storefront can show "Sold out"
 store.js                 Wires every <button data-sku> to checkout + sold-out check
 success.html / cancel.html
+invites.html, invite-builder.html, invite-*.js, api/invite*.js, api/rsvp.js   Website invitations (docs/WEBSITE-INVITATIONS.md)
 privacy/terms/refunds/shipping.html   Legal pages (drafts. See [CONFIRM] markers)
 .env.example             Env var names (never commit real keys)
 ```

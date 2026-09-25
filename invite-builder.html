@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Your Website Invitation | Little Poppin</title>
+  <meta name="description" content="Build your invitation and watch it come to life as you type. Pick a design, add the details, pay once and share the link." />
+  <link rel="canonical" href="https://littlepoppin.com/invite-builder.html" />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TD4975MVCS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TD4975MVCS');
+  </script>
+  <style>
+    body { background: var(--cream); }
+    .bld { padding: 96px 0 60px; }
+    .bld__grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 34px; align-items: start; }
+    @media (max-width: 960px) { .bld__grid { grid-template-columns: 1fr; } .bld__preview { position: static !important; } }
+    .bld h1 { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 400; margin: 0 0 6px; }
+    .bld__lead { color: var(--mid-grey); margin: 0 0 22px; }
+    .bld__step { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 22px 24px; margin-bottom: 16px; }
+    .bld__step h2 { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600; margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+    .bld__step h2 b { display: inline-flex; width: 28px; height: 28px; border-radius: 50%; background: var(--pink-light); color: var(--pink); align-items: center; justify-content: center; font-size: 1rem; }
+    .bld label { display: block; font-family: var(--font-sans); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mid-grey); margin: 12px 0 5px; }
+    .bld label small { text-transform: none; letter-spacing: 0; opacity: .8; }
+    .bld input, .bld textarea, .bld select { width: 100%; padding: 11px 13px; border: 1px solid var(--light-grey); border-radius: 10px; font: inherit; font-size: 1rem; background: #fff; color: var(--charcoal); }
+    .bld input:focus, .bld textarea:focus, .bld select:focus { outline: 2px solid var(--pink); outline-offset: 1px; }
+    .bld__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 520px) { .bld__row { grid-template-columns: 1fr; } }
+    .bld__themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
+    .bld__theme { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 4/5; cursor: pointer; border: 3px solid transparent; }
+    .bld__theme img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .bld__theme span { position: absolute; left: 0; right: 0; bottom: 0; font-size: .6rem; font-family: var(--font-sans); padding: 14px 4px 4px; text-align: center; color: #fff; background: linear-gradient(to top, rgba(0,0,0,.6), transparent); line-height: 1.15; }
+    .bld__theme.is-on { border-color: var(--red); }
+    .bld__toggles { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 8px; }
+    .bld__toggles label { display: inline-flex; align-items: center; gap: 6px; margin: 0; text-transform: none; letter-spacing: 0; font-size: .9rem; color: var(--charcoal); }
+    .bld__toggles input { width: auto; }
+    .bld__preview { position: sticky; top: 90px; }
+    .bld__phone { width: 100%; max-width: 360px; margin: 0 auto; aspect-ratio: 9/18; border-radius: 40px; background: #1d1d1f; padding: 12px; box-shadow: var(--shadow-lg); position: relative; }
+    .bld__phone::before { content: ''; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 100px; height: 26px; background: #1d1d1f; border-radius: 0 0 16px 16px; z-index: 2; }
+    .bld__phone iframe { width: 100%; height: 100%; border: 0; border-radius: 30px; background: #fbf3f5; display: block; }
+    .bld__previewnote { text-align: center; font-size: .8rem; color: var(--mid-grey); margin: 10px 0 0; }
+    .bld__previewnote button { background: none; border: 0; color: var(--red); font: inherit; cursor: pointer; text-decoration: underline; }
+    .bld__buy { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; margin-top: 16px; text-align: center; }
+    .bld__buy .price { font-family: var(--font-serif); font-size: 2rem; margin: 0; }
+    .bld__buy .price span { font-family: var(--font-sans); font-size: .8rem; color: var(--mid-grey); }
+    .bld__buy .btn { width: 100%; margin-top: 12px; }
+    .bld__buy ul { list-style: none; padding: 0; margin: 12px 0 0; font-size: .85rem; color: var(--mid-grey); text-align: left; }
+    .bld__buy li { padding-left: 20px; position: relative; margin-bottom: 4px; }
+    .bld__buy li::before { content: '\2713'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+    .bld__err { color: var(--red); font-size: .9rem; margin-top: 10px; min-height: 1.2em; }
+    .bld__cancel { background: var(--pink-light); border-radius: 10px; padding: 12px 14px; font-size: .9rem; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <nav class="nav nav--scrolled" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo"><img src="images/logo.jpg" alt="Little Poppin" /></a>
+      <button class="nav__toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <ul class="nav__links">
+        <li><a href="index.html#products">Swaddles</a></li>
+        <li><a href="prints.html">Art Prints</a></li>
+        <li><a href="personalise.html">Personalise</a></li>
+        <li><a href="invites.html">Invitations</a></li>
+        <li><a href="printclub.html">Print Club</a></li>
+        <li><a href="printables.html">Printables</a></li>
+        <li><a href="custom.html">Made for You</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="bld">
+    <div class="container">
+      <p class="section-label"><a href="invites.html">Invitations</a> / Create</p>
+      <h1>Create your invitation</h1>
+      <p class="bld__lead">Everything you type appears in the phone on the right, exactly as your guests will see it.</p>
+      <div class="bld__cancel" id="cancelled" hidden>Your details are still here. Nothing was charged.</div>
+      <div class="bld__grid">
+        <form id="bld" novalidate>
+          <div class="bld__step">
+            <h2><b>1</b> Choose a design</h2>
+            <div class="bld__themes" id="themes"></div>
+            <label for="event">What are we celebrating?</label>
+            <select id="event" name="event"></select>
+          </div>
+
+          <div class="bld__step">
+            <h2><b>2</b> The words</h2>
+            <label for="title">Invitation title <small>(the big script heading)</small></label>
+            <input id="title" name="title" maxlength="60" placeholder="Baby in Bloom" />
+            <label for="intro">Small line above the name</label>
+            <input id="intro" name="intro" maxlength="120" />
+            <label for="honouree">Who is it for?</label>
+            <input id="honouree" name="honouree" maxlength="60" placeholder="Sophie Bennett" required />
+            <label for="hosts">Hosted by <small>(optional)</small></label>
+            <input id="hosts" name="hosts" maxlength="120" placeholder="Hosted with love by Emma and the girls" />
+            <label for="message">A message <small>(optional)</small></label>
+            <textarea id="message" name="message" rows="3" maxlength="600" placeholder="Come and celebrate with an afternoon of cake, games and far too many cuddles."></textarea>
+            <label for="dress">Dress code or a small note <small>(optional)</small></label>
+            <input id="dress" name="dress" maxlength="120" placeholder="Garden party dress, hats welcome" />
+          </div>
+
+          <div class="bld__step">
+            <h2><b>3</b> When and where</h2>
+            <div class="bld__row">
+              <div><label for="date">Date</label><input id="date" name="date" type="date" required /></div>
+              <div><label for="time">Start time</label><input id="time" name="time" type="time" /></div>
+            </div>
+            <div class="bld__row">
+              <div><label for="endTime">Finish time <small>(optional)</small></label><input id="endTime" name="endTime" type="time" /></div>
+              <div><label for="rsvpBy">RSVP by <small>(optional)</small></label><input id="rsvpBy" name="rsvpBy" type="date" /></div>
+            </div>
+            <label for="venue">Venue name</label>
+            <input id="venue" name="venue" maxlength="100" placeholder="The Garden Room" />
+            <label for="address">Address <small>(this powers the map button)</small></label>
+            <input id="address" name="address" maxlength="200" placeholder="42 Sunset Lane, Paddington QLD 4064" />
+          </div>
+
+          <div class="bld__step">
+            <h2><b>4</b> Gifts and RSVP</h2>
+            <label for="giftTitle">Gift note heading</label>
+            <input id="giftTitle" name="giftTitle" maxlength="60" />
+            <label for="giftText">Gift note</label>
+            <textarea id="giftText" name="giftText" rows="3" maxlength="500"></textarea>
+            <label for="registryUrl">Registry link <small>(optional, must start with https://)</small></label>
+            <input id="registryUrl" name="registryUrl" type="url" maxlength="300" placeholder="https://" />
+            <div class="bld__toggles">
+              <label><input type="checkbox" name="showCountdown" checked /> Show countdown</label>
+              <label><input type="checkbox" name="showMap" checked /> Show map button</label>
+              <label><input type="checkbox" name="showGift" checked /> Show gift note</label>
+              <label><input type="checkbox" name="showRsvp" checked /> Take RSVPs</label>
+            </div>
+          </div>
+
+          <div class="bld__step">
+            <h2><b>5</b> You, the host</h2>
+            <div class="bld__row">
+              <div><label for="hostName">Your first name <small>(guests see "your reply goes to Emma")</small></label><input id="hostName" name="hostName" maxlength="60" placeholder="Emma" /></div>
+              <div><label for="hostEmail">Your email <small>(RSVPs and your links go here)</small></label><input id="hostEmail" name="hostEmail" type="email" maxlength="120" required placeholder="you@example.com" /></div>
+            </div>
+          </div>
+        </form>
+
+        <aside class="bld__preview">
+          <div class="bld__phone"><iframe id="frame" src="/invite-preview" title="Live preview of your invitation"></iframe></div>
+          <p class="bld__previewnote">Live preview. <button type="button" id="showCover">Show the envelope opening</button></p>
+          <div class="bld__buy">
+            <p class="price">$29 <span>AUD, once</span></p>
+            <button type="button" class="btn btn--primary" id="buy">Publish my invitation</button>
+            <p class="bld__err" id="err"></p>
+            <ul>
+              <li>Your link is live the moment you pay</li>
+              <li>Unlimited guests, RSVPs emailed to you</li>
+              <li>Private host page with every reply</li>
+              <li>Live for 12 months; wording changes on request</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__bottom">
+        <nav class="footer__legal" aria-label="Legal">
+          <a href="refunds.html">Refunds &amp; Returns</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </nav>
+        <p>&copy; 2025 Little Poppin. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="store.js"></script>
+  <script type="module">
+    import { THEMES, EVENTS, themeById, eventById } from '/invite-themes.js';
+    const form = document.getElementById('bld'), frame = document.getElementById('frame'), themesEl = document.getElementById('themes'), eventEl = document.getElementById('event');
+    const params = new URLSearchParams(location.search);
+    const KEY = 'lp-invite-draft';
+    let cover = false, frameReady = false, theme = params.get('theme') && THEMES.some((t) => t.id === params.get('theme')) ? params.get('theme') : THEMES[0].id;
+    if (params.get('cancelled')) document.getElementById('cancelled').hidden = false;
+
+    eventEl.innerHTML = Object.entries(EVENTS).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+    themesEl.innerHTML = THEMES.map((t) => `<div class="bld__theme" data-id="${t.id}" role="button" tabindex="0" title="${t.name}"><img src="${t.art}" alt="${t.name}" loading="lazy" /><span>${t.name}</span></div>`).join('');
+
+    const f = (n) => form.elements[n];
+    function fillDefaultsForTheme(t, keepWords) {
+      const th = themeById(t);
+      const ev = eventById(th.event);
+      if (!keepWords) { eventEl.value = th.event; if (!f('title').value || f('title').dataset.auto === '1') { f('title').value = th.sampleTitle; f('title').dataset.auto = '1'; } }
+      if (!f('intro').value || f('intro').dataset.auto === '1') { f('intro').value = eventById(eventEl.value).intro; f('intro').dataset.auto = '1'; }
+      if (!f('giftTitle').value || f('giftTitle').dataset.auto === '1') { f('giftTitle').value = eventById(eventEl.value).gift.title; f('giftTitle').dataset.auto = '1'; }
+      if (!f('giftText').value || f('giftText').dataset.auto === '1') { f('giftText').value = eventById(eventEl.value).gift.text; f('giftText').dataset.auto = '1'; }
+    }
+    ['title', 'intro', 'giftTitle', 'giftText'].forEach((n) => f(n).addEventListener('input', () => { f(n).dataset.auto = '0'; }));
+
+    function config() {
+      const d = Object.fromEntries(new FormData(form).entries());
+      d.theme = theme;
+      d.showCountdown = f('showCountdown').checked; d.showMap = f('showMap').checked; d.showGift = f('showGift').checked; d.showRsvp = f('showRsvp').checked;
+      d.tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      d.startsAt = d.date ? new Date(`${d.date}T${d.time || '12:00'}:00`).getTime() : 0; // the host's own timezone
+      if (!d.intro) d.intro = eventById(d.event).intro;
+      return d;
+    }
+    function push() {
+      const c = config();
+      if (frameReady) frame.contentWindow.postMessage({ type: 'lp-invite', config: { ...c, title: c.title || 'Your title here', honouree: c.honouree || 'Their name' }, cover }, '*');
+      try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {}
+      themesEl.querySelectorAll('.bld__theme').forEach((el) => el.classList.toggle('is-on', el.dataset.id === theme));
+    }
+    window.addEventListener('message', (e) => { if (e.data && e.data.type === 'lp-invite-ready') { frameReady = true; push(); } });
+    form.addEventListener('input', push);
+    form.addEventListener('change', push);
+    eventEl.addEventListener('change', () => { ['intro', 'giftTitle', 'giftText'].forEach((n) => { if (f(n).dataset.auto !== '0') f(n).value = ''; }); fillDefaultsForTheme(theme, true); push(); });
+    themesEl.addEventListener('click', (e) => { const el = e.target.closest('.bld__theme'); if (!el) return; theme = el.dataset.id; fillDefaultsForTheme(theme, false); push(); });
+    themesEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.target.closest('.bld__theme')?.click(); } });
+    document.getElementById('showCover').addEventListener('click', () => { cover = true; push(); cover = false; });
+
+    // Restore an earlier draft (a cancelled checkout, a closed tab). Never restore the theme
+    // if the URL names one: the person clicked a specific design on the shop page.
+    let restored = null;
+    try { restored = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+    if (restored && typeof restored === 'object') {
+      for (const [k, v] of Object.entries(restored)) { const el = form.elements[k]; if (!el || k === 'theme') continue; if (el.type === 'checkbox') el.checked = !!v; else el.value = v ?? ''; }
+      if (!params.get('theme') && THEMES.some((t) => t.id === restored.theme)) theme = restored.theme;
+      ['title', 'intro', 'giftTitle', 'giftText'].forEach((n) => { if (f(n).value) f(n).dataset.auto = '0'; });
+    }
+    fillDefaultsForTheme(theme, !!(restored && restored.title));
+    if (!f('date').value) { const d = new Date(); d.setDate(d.getDate() + 42); f('date').value = d.toISOString().slice(0, 10); f('time').value = '14:00'; }
+    push();
+    const t0 = themeById(theme); document.title = `Create your ${t0.name} invitation | Little Poppin`;
+
+    document.getElementById('buy').addEventListener('click', async () => {
+      const err = document.getElementById('err'); err.textContent = '';
+      const c = config();
+      if (!c.honouree) { err.textContent = 'Please enter who the celebration is for.'; f('honouree').focus(); return; }
+      if (!c.date) { err.textContent = 'Please choose the date.'; f('date').focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.hostEmail || '')) { err.textContent = 'Please enter your email so the RSVPs can reach you.'; f('hostEmail').focus(); return; }
+      const btn = document.getElementById('buy'); btn.disabled = true; btn.textContent = 'Taking you to checkout…';
+      try {
+        if (typeof gtag === 'function') gtag('event', 'begin_checkout', { currency: 'AUD', value: 29, items: [{ item_id: 'invite', item_name: 'Website Invitation', item_variant: c.theme }] });
+        const r = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sku: 'invite', invite: c }) });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || !j.url) throw new Error(j.error || 'Checkout hiccuped. Please try again.');
+        location.href = j.url;
+      } catch (ex) { err.textContent = ex.message; btn.disabled = false; btn.textContent = 'Publish my invitation'; }
+    });
+  </script>
+</body>
+</html>

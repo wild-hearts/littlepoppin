@@ -11,6 +11,7 @@ import { recordEvent } from '../lib/events.js';
 import { getPrintOption, getSetPrintOption, submitPrintifyOrder } from '../lib/printify.js';
 import { GENERATED_DIGITAL_PRODUCTS } from '../lib/digital-products.generated.js';
 import { picksForMonth, monthLabel } from '../lib/printclub.js';
+import { publishInvite } from '../lib/invites.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -71,6 +72,10 @@ async function onOrderPaid(session) {
 
   if (session.metadata?.type === 'custom') {
     await handleCustomOrder(full, sku);  // made-to-order: brief to Naomi + confirmation to buyer
+    return;
+  }
+  if (session.metadata?.type === 'invite') {
+    await handleInviteOrder(full);       // website invitation: publish the draft + email the host their links
     return;
   }
   if (session.metadata?.type === 'club') {
@@ -171,6 +176,14 @@ async function notifyOrder(session, sku, qty) {
     }),
   });
   if (!resp.ok) console.error('Resend error:', resp.status, await resp.text());
+}
+
+// --- Website invitations: publish + email the links --------------------------
+// publishInvite is idempotent per session, so this is safe to race with /api/order
+// (the success page calls it too). Whoever gets there first sends the one email.
+async function handleInviteOrder(session) {
+  const l = await publishInvite(session);
+  if (l.emailed) await recordEvent('invite-published', { sessionId: session.id, code: l.code });
 }
 
 // --- Made-to-order custom products: emailed brief + buyer confirmation -------

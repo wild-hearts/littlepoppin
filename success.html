@@ -6,6 +6,13 @@
   <title>Thank You. Little Poppin</title>
   <meta name="robots" content="noindex" />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .status-card__label { font-family: var(--font-sans); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--red); margin: 18px 0 6px; }
+    .status-card__link { background: var(--light-grey); border-radius: 10px; padding: 12px 14px; font-size: .95rem; word-break: break-all; text-align: left; }
+    .status-card__link a { color: var(--charcoal); text-decoration: underline; }
+    .status-card__row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 12px; }
+    .status-card__row .btn { width: auto; }
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
@@ -75,6 +82,31 @@
           if (lead && o && o.paid) {
             if (o.type === 'print') lead.textContent = 'Your payment was successful. Your print is being made now at the production partner closest to you, and we\u2019ll email tracking once it ships.';
             else if (o.type === 'physical') lead.textContent = 'Your payment was successful and your order is confirmed. We\u2019ll get your swaddle on its way and email you if we need anything.';
+          }
+          if (o && o.paid && o.type === 'invite') {
+            lead.textContent = o.invite
+              ? 'Your invitation is live. Share the guest link below, and keep the host link for yourself: it shows every RSVP as it arrives. Both links have been emailed to you.'
+              : 'Your payment was successful. Your invitation is being published now and the links will be emailed to you within a minute.';
+            var dl = document.getElementById('downloadArea');
+            if (dl && o.invite) {
+              dl.innerHTML = ''
+                + '<p class="status-card__label">Guest link. Share this one</p>'
+                + '<div class="status-card__link" id="inviteUrl"></div>'
+                + '<div class="status-card__row">'
+                + '<button type="button" class="btn btn--primary" id="inviteCopy">Copy guest link</button>'
+                + '<a class="btn btn--primary" id="inviteWa" target="_blank" rel="noopener">Share on WhatsApp</a>'
+                + '<a class="btn btn--primary" id="inviteOpen" target="_blank" rel="noopener">Open invitation</a>'
+                + '</div>'
+                + '<p class="status-card__label" style="margin-top:22px">Host page. Keep this one private</p>'
+                + '<div class="status-card__link"><a id="inviteManage" target="_blank" rel="noopener"></a></div>';
+              document.getElementById('inviteUrl').textContent = o.invite.url;
+              document.getElementById('inviteOpen').href = o.invite.url;
+              document.getElementById('inviteWa').href = 'https://wa.me/?text=' + encodeURIComponent('You\u2019re invited! ' + o.invite.url);
+              var m = document.getElementById('inviteManage'); m.href = o.invite.manageUrl; m.textContent = o.invite.manageUrl;
+              document.getElementById('inviteCopy').addEventListener('click', function () {
+                navigator.clipboard.writeText(o.invite.url).then(function () { document.getElementById('inviteCopy').textContent = 'Copied!'; });
+              });
+            }
           }
           if (o && o.paid && (o.type === 'digital' || o.type === 'personalised') && o.sku) {
             var dl = document.getElementById('downloadArea');
