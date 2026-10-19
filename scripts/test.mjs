@@ -406,8 +406,14 @@ group('Cards and invitations');
   check('every occasion has at least one design', emptyOcc.length === 0, emptyOcc.map((o) => o.slug).join(', '));
   const badPal = ART.filter((a) => !/^#[0-9a-f]{6}$/.test(a.card.paper) || !/^#[0-9a-f]{6}$/.test(a.card.ink) || !['gold', 'rose', 'silver'].includes(a.foil));
   check('every print has a palette and a foil read from its picture', badPal.length === 0, badPal.map((a) => a.slug).join(', '));
-  const stale = ART.filter((a) => !getDigital(a.sku));
+  const stale = ART.filter((a) => a.kind !== 'card' && !getDigital(a.sku));
   check('the keepsake art matches the shop catalogue (re-run build:keepsakes after adding prints)', stale.length === 0 && ART.length >= 90, stale.map((a) => a.slug).join(', '));
+  // Every picture in the card-art brief is in the repo and in the catalogue, and leads its occasion's wall.
+  const brief = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'card-art.json'), 'utf8')).art;
+  const noPic = brief.filter((b) => !fs.existsSync(path.join(REPO, 'images', 'cards', `${b.slug}.jpg`)) || !ART.find((a) => a.kind === 'card' && a.slug === b.slug));
+  check(`every bespoke card picture (${brief.length}) is in images/cards and the catalogue`, noPic.length === 0, noPic.map((b) => b.slug).join(', '));
+  const notFirst = K.CARD_OCCASIONS.filter((o) => brief.some((b) => b.occasion === o.slug) && K.cardsFor(o.slug)[0]?.design.art.kind !== 'card');
+  check('bespoke art leads every occasion that has some', notFirst.length === 0, notFirst.map((o) => o.slug).join(', '));
   // The pages the build writes exist for every design, so no gallery tile links to a 404.
   const missingPages = [...K.CARDS.map((c) => `card/${c.slug}.html`), ...K.INVITES.map((d) => `invitation/${d.slug}.html`), ...K.CARD_OCCASIONS.map((o) => `cards/${o.slug}.html`), ...K.INVITE_OCCASIONS.map((o) => `invitations/${o.slug}.html`), 'cards.html', 'invitations.html', 'sent.html', 'open.html', 'manage.html', 'invite.html'].filter((f) => !fs.existsSync(path.join(REPO, f)));
   check('every gallery tile has its page (run `npm run build:keepsakes`)', missingPages.length === 0, missingPages.slice(0, 5).join(', '));

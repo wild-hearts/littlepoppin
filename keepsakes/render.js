@@ -124,9 +124,9 @@ ${to ? `<p class="lab">Dear ${esc(to)}</p>` : ''}<p class="ci-msg">${esc(message
 export function cardMotion(c) {
   if (['get-well', 'expecting'].includes(c.occasion)) return 'still';
   const s = c.design.art?.section;
-  if (s === 'zodiac') return 'starlight';
-  if (s === 'festive') return 'frost';
-  if (s === 'academia') return 'candlelight';
+  if (s === 'zodiac' || c.occasion === 'star-sign') return 'starlight';
+  if (s === 'festive' || ['christmas', 'first-christmas'].includes(c.occasion)) return 'frost';
+  if (s === 'academia' || c.occasion === 'halloween') return 'candlelight';
   return 'sunlight';
 }
 
