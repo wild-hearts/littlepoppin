@@ -13,7 +13,7 @@
 //   POST op=rsvp            a guest's reply (idempotent on guest_key)
 //   POST op=pay             start Checkout again for an unpaid card { key } or invitation { id }
 import { card as cardOf, withCardFont, CARD_PRICE, INVITE_PRICE } from '../keepsakes/designs.js';
-import { createCard, cardBySlug, cardBySenderKey, forSender, createEvent, eventById, eventBySlug, eventByHostKey, updateEvent, upsertRsvp, rsvpsFor, rsvpForHost, forHost, isLive, ID_RE, KEY_RE, setCardPaid } from '../lib/keepsakes/store.js';
+import { createCard, cardBySlug, cardBySenderKey, forSender, createEvent, eventById, eventBySlug, eventByHostKey, updateEvent, upsertRsvp, rsvpsFor, rsvpForHost, forHost, isLive, ID_RE, KEY_RE, setCardPaid, storeReady } from '../lib/keepsakes/store.js';
 import { cleanCard, cleanEvent, cleanRsvp } from '../lib/keepsakes/validate.js';
 import { createCardCheckout, createEventCheckout, getSession, cardPaidFor, eventPaidFor, keepsakePaid, stripeReady, devUnpaid } from '../lib/keepsakes/pay.js';
 import { send, savedCard, savedEvent } from '../lib/keepsakes/mail.js';
@@ -59,8 +59,17 @@ const publicEvent = (ev) => Object.fromEntries(GUEST_FIELDS.map((k) => [k, ev[k]
 const csvCell = (v) => { const s = String(v ?? ''); return /^[=+\-@]/.test(s) ? `'${s}` : s; };   // no formula injection in a spreadsheet
 const csvRow = (cells) => cells.map((c) => `"${csvCell(c).replace(/"/g, '""')}"`).join(',');
 
+const NOT_HERE = 'Cards and invitations aren’t switched on here yet: BLOB_READ_WRITE_TOKEN is not set for this environment.';
+
 export default async function handler(req, res) {
   const op = String(req.query.op || '');
+  // Without somewhere to keep records (a Preview deployment without the Blob token), say so plainly
+  // rather than fail every read with a 500.
+  if (!storeReady) {
+    res.setHeader('Cache-Control', 'no-store');
+    if (op === 'host') { res.setHeader('Content-Type', 'text/html; charset=utf-8'); return res.status(503).send(`<!doctype html><meta charset="utf-8"><title>Not available here</title><p style="font-family:sans-serif;padding:40px">${NOT_HERE}</p>`); }
+    return res.status(503).json({ error: NOT_HERE });
+  }
   try {
     // ---------------------------------------------------------------- cards
     if (op === 'create-card' && req.method === 'POST') {
