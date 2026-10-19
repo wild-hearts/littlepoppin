@@ -394,6 +394,13 @@ group('Cards and invitations');
   const dupes = [...dupesIn(K.CARDS), ...dupesIn(K.INVITES)];   // cards and invitations are separate namespaces (card/ and invitation/)
   check(`${K.CARDS.length} cards and ${K.INVITES.length} invitation designs, no two cards or two invitations with the same slug`, K.CARDS.length >= 150 && K.INVITES.length >= 100 && dupes.length === 0, dupes.join(', '));
   const noArt = [...K.CARDS.map((c) => c.design), ...K.INVITES].filter((d) => !d.preview || !fs.existsSync(path.join(REPO, d.preview.replace(/^\//, ''))));
+  // No two cards in an occasion say the same thing on the front (Naomi, 19 Oct 2026), and every line fits the plaque.
+  const sameFront = K.CARD_OCCASIONS.flatMap((o) => { const seen = new Map(); return K.cardsFor(o.slug).filter((c) => seen.has(c.front) || !seen.set(c.front, c.slug)).map((c) => `${c.slug} repeats "${c.front}"`); });
+  check('every card in an occasion has its own front line', sameFront.length === 0, sameFront.slice(0, 5).join('\n      '));
+  const generic = K.CARDS.filter((c) => c.occasion !== 'star-sign' && c.front === K.cardOccasion(c.occasion).greeting);
+  check('no card falls back to the bare occasion greeting (add a line to keepsakes/card-fronts.js)', generic.length === 0, generic.map((c) => c.slug).slice(0, 5).join(', '));
+  const tooLong = K.CARDS.filter((c) => c.front.length > 40);
+  check('every front line fits the plaque (40 characters or fewer)', tooLong.length === 0, tooLong.map((c) => `${c.slug} (${c.front.length})`).join(', '));
   check('every design has its preview image in the repo', noArt.length === 0, noArt.map((d) => d.slug).join(', '));
   const emptyOcc = [...K.CARD_OCCASIONS.filter((o) => !K.cardsFor(o.slug).length), ...K.INVITE_OCCASIONS.filter((o) => !K.invitesFor(o.slug).length)];
   check('every occasion has at least one design', emptyOcc.length === 0, emptyOcc.map((o) => o.slug).join(', '));
