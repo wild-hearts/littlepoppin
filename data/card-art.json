@@ -1,0 +1,84 @@
+{
+  "style": "Children's greeting card illustration for a premium baby and nursery shop, soft dreamy storybook style: digital watercolour with airbrushed glow, soft bokeh dots and a few small gold stars. Rounded, plump, gentle characters with rosy cheeks. Mood: tender, warm, a little magical. Vertical portrait composition with a calm, uncluttered lower third. No text, no lettering, no numbers, no border, no watermark.",
+  "art": [
+    { "slug": "moses-basket-fawn", "occasion": "new-baby", "title": "Moses Basket", "scene": "A tiny fawn asleep in a woven moses basket under a knitted cream blanket, a string of pastel bunting above, a soft morning window glow, dried flowers in a jug beside it.", "front": "Hello, little one." },
+    { "slug": "stork-at-dawn", "occasion": "new-baby", "title": "Stork at Dawn", "scene": "A white stork gliding over a sleepy pastel village at dawn, carrying a cloth bundle tied with ribbon in its beak, rooftops and chimneys below, peach and lilac sky.", "front": "Special delivery." },
+    { "slug": "bubble-bath-elephant", "occasion": "new-baby", "title": "Bubble Bath", "scene": "A baby elephant sitting in a little tin bath full of bubbles, a rubber duck, bubbles floating up and catching the light, soft blue and cream.", "front": "Splash! You're here." },
+    { "slug": "nursery-mobile", "occasion": "new-baby", "title": "Nursery Mobile", "scene": "A felt mobile of stars, clouds and a moon turning above a cradle, a small teddy tucked in the cradle, gentle afternoon light through a linen curtain.", "front": "Welcome to the world." },
+
+    { "slug": "constellation-cradle", "occasion": "star-sign", "title": "Constellation Cradle", "scene": "A baby fox asleep on a crescent moon, with a ring of faint gold constellation animals drawn in the night sky around it, deep navy and gold.", "front": "Born under lucky stars." },
+    { "slug": "star-chart", "occasion": "star-sign", "title": "Star Chart", "scene": "A vintage parchment star chart with gold constellations and a small bear cub standing on it reaching up for one bright star, warm sepia and gold.", "front": "Written in the stars." },
+    { "slug": "window-telescope", "occasion": "star-sign", "title": "Window Telescope", "scene": "A bear cub in pyjamas peering through a brass telescope out of an attic window at a sky full of stars and one comet, cosy lamp light.", "front": "The sky was waiting for you." },
+
+    { "slug": "birthday-cake-bear", "occasion": "birthday", "title": "Birthday Cake", "scene": "A bear cub in a paper party hat blowing out candles on a tall three-tier cake with pink icing and sprinkles, confetti in the air, streamers above.", "front": "Make a wish!" },
+    { "slug": "balloon-bunch-bunny", "occasion": "birthday", "title": "Balloon Bunch", "scene": "A bunny lifted gently off a flower meadow by a big bunch of pastel balloons, ears streaming, a wrapped present under one arm.", "front": "Up, up and hooray!" },
+    { "slug": "party-parade", "occasion": "birthday", "title": "Party Parade", "scene": "A line of woodland animals in paper party hats marching along a path carrying wrapped presents and a cake, bunting strung between trees.", "front": "Here comes the party." },
+    { "slug": "cupcake-mouse", "occasion": "birthday", "title": "Cupcake Mouse", "scene": "A tiny mouse sitting on top of a giant cupcake with swirled icing and a single lit candle, confetti and sprinkles everywhere, pink and mint.", "front": "A little treat for you." },
+    { "slug": "gift-box-kitten", "occasion": "birthday", "title": "Gift Box Kitten", "scene": "A kitten popping out of a big ribboned gift box in a burst of confetti and curling ribbon, surprised and happy.", "front": "Surprise!" },
+
+    { "slug": "one-candle-cake", "occasion": "first-birthday", "title": "One Candle", "scene": "A small round smash cake with pastel icing and a single tall lit candle, a baby bear with icing on its nose reaching for it, a high chair and balloons behind.", "front": "One whole year of you." },
+    { "slug": "golden-balloon-elephant", "occasion": "first-birthday", "title": "Golden Balloon", "scene": "A baby elephant in a tiny party hat holding the string of one big golden balloon, standing in a field of daisies, soft sunshine.", "front": "The first of many." },
+    { "slug": "high-chair-duckling", "occasion": "first-birthday", "title": "High Chair", "scene": "A duckling in a wooden high chair wearing a party hat, a cupcake with one candle on the tray, crumbs and confetti, a sunny kitchen.", "front": "Cake for breakfast." },
+    { "slug": "moon-swing", "occasion": "first-birthday", "title": "Moon Swing", "scene": "A baby bear on a swing hung from a crescent moon, one bright star above, soft clouds below, dusky pink and gold sky.", "front": "To the moon and back." },
+
+    { "slug": "knitted-booties", "occasion": "expecting", "title": "Knitted Booties", "scene": "A pair of tiny knitted cream baby booties on a windowsill beside a sprig of blossom in a glass jar, soft morning light, a folded blanket.", "front": "Something small is coming." },
+    { "slug": "pea-in-a-pod", "occasion": "expecting", "title": "Pea in a Pod", "scene": "A sleeping baby pea tucked in an open pea pod like a cradle, resting on a leaf, dew drops, soft greens and cream.", "front": "Oh, baby." },
+    { "slug": "robins-nest", "occasion": "expecting", "title": "Robin's Nest", "scene": "A nest in blossom branches holding one speckled egg, two robins perched close and watching over it, pale spring sky.", "front": "Nesting." },
+
+    { "slug": "dove-and-font", "occasion": "christening", "title": "Dove and Font", "scene": "A white dove with an olive sprig flying above a small stone font with water lilies, soft light through a stained-glass window, cream and gold.", "front": "Blessed, loved, welcomed." },
+    { "slug": "lamb-in-daisies", "occasion": "christening", "title": "Lamb in Daisies", "scene": "A little lamb with a white ribbon around its neck sitting among daisies and buttercups, gold afternoon light, a soft halo of bokeh.", "front": "A day of blessings." },
+    { "slug": "christening-candle", "occasion": "christening", "title": "Christening Candle", "scene": "A tall white candle tied with ribbon beside a scallop shell and a sprig of baby's breath, dawn light through an arched window.", "front": "Light and love, always." },
+
+    { "slug": "two-bunnies", "occasion": "big-sibling", "title": "Two Bunnies", "scene": "A bigger bunny proudly holding a tiny baby bunny wrapped in a blanket, both with rosy cheeks, a nursery with bunting behind.", "front": "You're a big sibling now." },
+    { "slug": "toy-pram-bear", "occasion": "big-sibling", "title": "Toy Pram", "scene": "A bear cub pushing a little wooden pram with a baby bear tucked inside along a garden path, flowers either side.", "front": "The best job in the world." },
+    { "slug": "bedtime-story-foxes", "occasion": "big-sibling", "title": "Bedtime Story", "scene": "A fox kit reading a picture book to a tiny baby fox in a cot, a night light glowing, stars on the wallpaper.", "front": "Someone to look up to." },
+
+    { "slug": "hedgehog-posy", "occasion": "thank-you", "title": "Hedgehog Posy", "scene": "A hedgehog holding up a bunch of wildflowers tied with twine, standing in a meadow, warm golden light.", "front": "Thank you, truly." },
+    { "slug": "tea-and-cake", "occasion": "thank-you", "title": "Tea and Cake", "scene": "A flowered teacup, a slice of cake on a plate and a sealed envelope on a linen tablecloth by a window, soft afternoon light.", "front": "This calls for cake." },
+    { "slug": "honey-bee-jar", "occasion": "thank-you", "title": "Honey Jar", "scene": "A round bumblebee carrying a small jar of honey tied with a gingham ribbon through a lavender field.", "front": "Sweet of you." },
+
+    { "slug": "soup-and-blanket", "occasion": "get-well", "title": "Soup and Blanket", "scene": "A bear cub tucked up in bed under a patchwork quilt with a bowl of soup on a tray, a hot water bottle and a teddy, cosy lamp light.", "front": "Rest up, little one." },
+    { "slug": "bandaged-bunny", "occasion": "get-well", "title": "Bandaged Bunny", "scene": "A bunny with a tiny bandage on one paw holding a bunch of cheerful balloons, sitting on a cushion, pastel colours.", "front": "Feel better soon." },
+    { "slug": "rainbow-after-rain", "occasion": "get-well", "title": "After the Rain", "scene": "A duckling in a yellow raincoat and wellies splashing in a puddle as the sun breaks through and a rainbow appears.", "front": "Sunshine's on its way." },
+
+    { "slug": "fireworks-fox", "occasion": "congratulations", "title": "Fireworks", "scene": "A fox cub sitting on a hilltop watching soft gold and pink fireworks bloom over a sleepy town below.", "front": "You did it!" },
+    { "slug": "trophy-mouse", "occasion": "congratulations", "title": "Trophy", "scene": "A tiny mouse holding a golden trophy above its head, confetti and streamers falling, a bright spotlight glow.", "front": "Champion!" },
+    { "slug": "graduation-owl", "occasion": "congratulations", "title": "Graduation Owl", "scene": "An owl in a little mortarboard cap holding a rolled scroll tied with ribbon, standing on a stack of books, warm library light.", "front": "So proud of you." },
+
+    { "slug": "backpack-bear", "occasion": "first-day-of-school", "title": "Backpack Bear", "scene": "A bear cub with a red backpack and lunchbox standing at a school gate, autumn leaves drifting, a little nervous and a little excited.", "front": "Big day, big kid." },
+    { "slug": "school-bus-bunnies", "occasion": "first-day-of-school", "title": "School Bus", "scene": "Bunnies climbing aboard a small round yellow school bus parked by a hedge, one waving from the window, morning sun.", "front": "Off you go!" },
+    { "slug": "desk-and-crayons", "occasion": "first-day-of-school", "title": "Desk and Crayons", "scene": "A wooden school desk with crayons, a shiny apple, a notebook and a lunchbox, a fox kit peeking over the edge, classroom light.", "front": "Ready, set, learn." },
+
+    { "slug": "mama-bear-hug", "occasion": "mothers-day", "title": "Mama Bear", "scene": "A mother bear hugging her cub close in a sunlit meadow of wildflowers, eyes closed, soft gold light.", "front": "Best mum, no contest." },
+    { "slug": "breakfast-in-bed", "occasion": "mothers-day", "title": "Breakfast in Bed", "scene": "A breakfast tray on a bed with toast, a pot of tea, a small vase of pink peonies and a sealed envelope, morning light through curtains.", "front": "Today is yours." },
+    { "slug": "elephant-mum", "occasion": "mothers-day", "title": "Elephant Mum", "scene": "A mother elephant and her baby with trunks gently entwined under falling pink blossom, soft dusky background.", "front": "Thank you for everything." },
+
+    { "slug": "papa-bear-shoulders", "occasion": "fathers-day", "title": "Papa Bear", "scene": "A big bear carrying a cub on his shoulders along a beach at sunset, both looking out at the sea, warm orange and blue.", "front": "Best seat in the house." },
+    { "slug": "fishing-jetty", "occasion": "fathers-day", "title": "Fishing Jetty", "scene": "A father duck and a duckling sitting at the end of a wooden jetty with fishing rods, mist on a still lake at dawn.", "front": "Hooked on you, Dad." },
+    { "slug": "birdhouse-build", "occasion": "fathers-day", "title": "Birdhouse", "scene": "A fox and his kit building a little birdhouse together in a garden shed, tools and sawdust, sunlight through the door.", "front": "Thanks for everything, Dad." },
+
+    { "slug": "cottage-key", "occasion": "new-home", "title": "Cottage Key", "scene": "A cosy stone cottage with a blue door, a big brass key resting on the doormat and a wreath on the door, climbing roses, evening lamplight in the windows.", "front": "Home sweet home." },
+    { "slug": "moving-boxes-kittens", "occasion": "new-home", "title": "Moving Boxes", "scene": "Two kittens peeking out of open cardboard moving boxes in a sunny empty room, a potted plant and a rolled rug beside them.", "front": "New place, same cuddles." },
+    { "slug": "treehouse-lantern", "occasion": "new-home", "title": "Treehouse", "scene": "A little treehouse in a big oak at dusk with a lantern glowing in the window and a rope ladder, fireflies around it.", "front": "Welcome home." },
+
+    { "slug": "letterbox-bluebird", "occasion": "just-because", "title": "Letterbox", "scene": "A bluebird dropping a sealed envelope into a red letterbox on a country lane, wildflowers at its base, soft morning light.", "front": "Thinking of you." },
+    { "slug": "rainy-window-cat", "occasion": "just-because", "title": "Rainy Window", "scene": "A cat curled on a window seat with a mug of hot chocolate and a blanket, rain on the glass, fairy lights, cosy and warm.", "front": "Just because." },
+    { "slug": "sunflower-bunny", "occasion": "just-because", "title": "Sunflowers", "scene": "A bunny standing in a field of tall sunflowers looking up, one sunflower bending toward it, bright summer light.", "front": "You make the days brighter." },
+    { "slug": "paper-planes", "occasion": "just-because", "title": "Paper Planes", "scene": "A mouse on a hilltop launching paper planes that trail tiny hearts across a pastel sky.", "front": "Sending this your way." },
+
+    { "slug": "pumpkin-patch-kitten", "occasion": "halloween", "title": "Pumpkin Patch", "scene": "A black kitten sitting in a pumpkin patch at twilight among glowing jack-o-lanterns with friendly faces, a full moon above.", "front": "Boo-tiful night for it." },
+    { "slug": "bedsheet-ghost-bear", "occasion": "halloween", "title": "Bedsheet Ghost", "scene": "A bear cub in a bedsheet ghost costume with eye holes, holding a pumpkin bucket of sweets on a leafy doorstep, porch light glowing.", "front": "Trick or treat?" },
+    { "slug": "witch-hat-bunny", "occasion": "halloween", "title": "Little Witch", "scene": "A bunny in an oversized purple witch hat sitting on a broom that hovers just above the ground, a black cat beside it, bats and stars.", "front": "Spooky season, little one." },
+    { "slug": "friendly-haunted-house", "occasion": "halloween", "title": "Haunted House", "scene": "A crooked, friendly haunted house on a hill with warm windows, pumpkins on the steps, little bats circling and a smiling moon.", "front": "Happy haunting." },
+
+    { "slug": "stockings-fireplace", "occasion": "christmas", "title": "Stockings", "scene": "Three knitted stockings hung on a stone fireplace with a crackling fire, a plate of cookies and a glass of milk on the hearth, fairy lights.", "front": "Merry everything." },
+    { "slug": "carolling-mice", "occasion": "christmas", "title": "Carolling Mice", "scene": "Three mice in scarves singing carols under a glowing lamppost in falling snow, holding a tiny songbook, a village behind.", "front": "Fa la la la la." },
+    { "slug": "tree-decorating-bears", "occasion": "christmas", "title": "Decorating the Tree", "scene": "A bear family hanging baubles on a Christmas tree, the smallest cub on tiptoe reaching up with the star, wrapped presents beneath.", "front": "The most wonderful time." },
+    { "slug": "sled-of-presents", "occasion": "christmas", "title": "Sled of Presents", "scene": "Penguins riding a wooden sled piled with wrapped presents down a snowy hill, scarves flying, pine trees and a starry sky.", "front": "Coming your way." },
+    { "slug": "gingerbread-baking", "occasion": "christmas", "title": "Gingerbread Baking", "scene": "A fox in an apron icing gingerbread people on a tray in a cosy kitchen, flour dust, a window with snow outside, warm oven light.", "front": "Baked with love." },
+
+    { "slug": "baby-in-a-stocking", "occasion": "first-christmas", "title": "Baby in a Stocking", "scene": "A baby bear asleep inside an oversized knitted Christmas stocking by a twinkling tree, one paw poking out, soft gold light.", "front": "Baby's first Christmas." },
+    { "slug": "first-bauble", "occasion": "first-christmas", "title": "First Bauble", "scene": "A tiny bunny reaching up to touch a glowing red bauble on a Christmas tree, its reflection in the bauble, parents' paws gently behind.", "front": "The first of many." },
+    { "slug": "first-snow-penguin", "occasion": "first-christmas", "title": "First Snow", "scene": "A baby penguin leaving its first little footprints in fresh snow under strings of fairy lights, snowflakes falling, dusk blue.", "front": "A very first Christmas." }
+  ]
+}
