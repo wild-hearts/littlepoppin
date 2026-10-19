@@ -11,6 +11,7 @@ import { recordEvent } from '../lib/events.js';
 import { getPrintOption, getSetPrintOption, submitPrintifyOrder } from '../lib/printify.js';
 import { GENERATED_DIGITAL_PRODUCTS } from '../lib/digital-products.generated.js';
 import { picksForMonth, monthLabel } from '../lib/printclub.js';
+import { keepsakePaid } from '../lib/keepsakes/pay.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -69,6 +70,10 @@ async function onOrderPaid(session) {
     expand: ['line_items'],
   });
 
+  if (session.metadata?.type === 'card' || session.metadata?.type === 'invitation') {
+    await keepsakePaid(full);            // e-card or party invitation: switch it on, email the links
+    return;
+  }
   if (session.metadata?.type === 'custom') {
     await handleCustomOrder(full, sku);  // made-to-order: brief to Naomi + confirmation to buyer
     return;

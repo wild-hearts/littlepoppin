@@ -9,5 +9,27 @@
       "path": "/api/review-request",
       "schedule": "0 23 * * *"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/c/:slug",
+      "destination": "/open.html"
+    },
+    {
+      "source": "/i/:slug",
+      "destination": "/invite.html"
+    },
+    {
+      "source": "/manage/:id",
+      "destination": "/manage.html"
+    },
+    {
+      "source": "/sent/:key",
+      "destination": "/sent.html"
+    },
+    {
+      "source": "/host/:key",
+      "destination": "/api/keepsakes?op=host&key=:key"
+    }
   ]
 }

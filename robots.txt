@@ -3,5 +3,15 @@ Allow: /
 Disallow: /success.html
 Disallow: /cancel.html
 Disallow: /api/
+# Cards and invitations: private links and the pages behind them
+Disallow: /c/
+Disallow: /i/
+Disallow: /manage/
+Disallow: /sent/
+Disallow: /host/
+Disallow: /open.html
+Disallow: /invite.html
+Disallow: /manage.html
+Disallow: /sent.html
 
 Sitemap: https://www.littlepoppin.com/sitemap.xml
