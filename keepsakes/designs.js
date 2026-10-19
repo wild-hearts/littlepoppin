@@ -6,6 +6,7 @@
 // invitation. Adding an occasion is adding an entry below; adding a print is re-running
 // scripts/build-keepsakes.mjs.
 import { ART } from './art.generated.js';
+import { CARD_FRONTS } from './card-fronts.js';
 
 // ---------------------------------------------------------------- prices (AUD cents)
 // TODO confirm with Naomi. Tadavite charges A$3 a card and A$19 an invitation; these match.
@@ -86,7 +87,8 @@ function designFrom(a, occasion, extra = {}) {
 export const CARDS = CARD_OCCASIONS.flatMap((o) => {
   const k = offset(o.slug);
   return o.art().map((a, i) => ({
-    slug: `${o.slug}--${a.slug}`, occasion: o.slug, greeting: o.greeting, front: o.front ? o.front(a) : o.greeting, name: a.title,
+    // Every card's own line on the front (keepsakes/card-fronts.js); the occasion's greeting is for page titles.
+    slug: `${o.slug}--${a.slug}`, occasion: o.slug, greeting: o.greeting, front: CARD_FRONTS[`${o.slug}--${a.slug}`] || (o.front ? o.front(a) : o.greeting), name: a.title,
     design: designFrom(a, o.slug, { font: FACES[(i + k) % FACES.length] }),
     // The art's own layout keeps the subject clear; a plaque in the centre only where the scene is quiet there.
     layout: a.layout === 'foot' ? 'foot' : FRONT_LAYOUTS[(i + k) % 2 === 0 ? 0 : 2],
