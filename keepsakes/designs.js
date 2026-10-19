@@ -125,39 +125,42 @@ export const withCardFont = (c, font) => (c && isLettering(font) ? { ...c, desig
 
 // ---------------------------------------------------------------- invitations
 // Each occasion: the gallery filter, the sample words on the preview, and wording ideas for the editor.
+// Bespoke card pictures that suit an invitation, by card occasion or by slug. They lead the wall; prints follow.
+const drawnFor = (...occasions) => occasions.flatMap((o) => ART.filter((a) => a.kind === 'card' && a.occasion === o));
+const drawn = (slugs) => slugs.map((s) => ART.find((a) => a.kind === 'card' && a.slug === s)).filter(Boolean);
 export const INVITE_OCCASIONS = [
   { slug: 'kids-birthday', name: 'Kids’ birthday', plural: 'Kids’ birthday invitations', blurb: 'Cake, games and a very small guest of honour.', send: 'Two to three weeks ahead, with a pick-up time for parents.',
-    sample: { label: 'You’re invited', title: 'Tilly Turns Five', lede: 'Cake, games and one very excited birthday girl.' }, art: () => pick(ADVENTURE),
+    sample: { label: 'You’re invited', title: 'Tilly Turns Five', lede: 'Cake, games and one very excited birthday girl.' }, art: () => [...drawnFor('birthday'), ...pick(ADVENTURE)],
     wording: ['Tilly is turning five and would love you to come and celebrate!', 'Party hats on. Cake at three. Pick-up at five.', 'Come in costume, leave with a party bag.'] },
   { slug: 'first-birthday', name: 'First birthday', plural: 'First birthday invitations', blurb: 'One candle, a very big deal.', send: 'Three to four weeks ahead.',
-    sample: { label: 'One whole year', title: 'Leo Is One!', lede: 'Smash cake at two o’clock. Naps optional.' }, art: () => pick(['sunshine-smile', 'star-catcher', 'rainbow-and-clouds', 'hot-air-balloon-dreams', 'cloud-dreams', 'sleepy-moon-and-stars', 'up-and-away', 'teddy-bears-picnic', 'carousel-dreams', 'little-sailboat', 'cuddly-elephant', 'sleepy-lamb-on-a-cloud']),
+    sample: { label: 'One whole year', title: 'Leo Is One!', lede: 'Smash cake at two o’clock. Naps optional.' }, art: () => [...drawnFor('first-birthday'), ...pick(['sunshine-smile', 'star-catcher', 'rainbow-and-clouds', 'hot-air-balloon-dreams', 'cloud-dreams', 'sleepy-moon-and-stars', 'up-and-away', 'teddy-bears-picnic', 'carousel-dreams', 'little-sailboat', 'cuddly-elephant', 'sleepy-lamb-on-a-cloud'])],
     wording: ['Our little one is turning one! Come and celebrate with cake and cuddles.', 'One year of wonder. Join us for a first birthday.', 'Look who’s one! Smash cake at two o’clock.'] },
   { slug: 'baby-shower', name: 'Baby shower', plural: 'Baby shower invitations', blurb: 'Soft colours for a very small arrival.', send: 'Four to six weeks ahead, with registry details if there are any.',
-    sample: { label: 'Oh baby', title: 'A Shower for Sophie', lede: 'Tea, cake and advice nobody asked for.' }, art: () => pick(SLEEPY),
+    sample: { label: 'Oh baby', title: 'A Shower for Sophie', lede: 'Tea, cake and advice nobody asked for.' }, art: () => [...drawnFor('expecting', 'new-baby'), ...pick(SLEEPY)],
     wording: ['A little one is on the way. Join us for a shower in honour of Sophie.', 'Tea, cake and advice nobody asked for.', 'Oh baby! Please join us to celebrate.'] },
   { slug: 'meet-the-baby', name: 'Meet the baby', plural: 'Meet-the-baby invitations', blurb: 'A sip and see for the newest star in the family.', send: 'Two to three weeks ahead, once everyone is sleeping a little.',
-    sample: { label: 'Come and meet', title: 'Baby Arlo', lede: 'Cuddles, cake and a very small guest of honour. Born under Leo, naturally.' }, art: () => section('zodiac').concat(pick(['cuddly-elephant', 'sleepy-bunny', 'little-fawn'])),
+    sample: { label: 'Come and meet', title: 'Baby Arlo', lede: 'Cuddles, cake and a very small guest of honour. Born under Leo, naturally.' }, art: () => [...drawnFor('new-baby', 'star-sign'), ...section('zodiac'), ...pick(['cuddly-elephant', 'sleepy-bunny', 'little-fawn'])],
     wording: ['Come and meet the newest member of the family.', 'Cuddles, cake and a very small guest of honour.', 'Drop in any time between two and five. Bring nothing but yourselves.'] },
   { slug: 'christening', name: 'Christening & naming day', plural: 'Christening and naming day invitations', blurb: 'A blessing for a little one.', send: 'Four weeks ahead.',
-    sample: { label: 'Christening', title: 'The Christening of Grace', lede: 'Please join us for the service, and lunch afterwards.' }, art: () => pick(['swan-lake-dream', 'cloud-dreams', 'star-catcher', 'sleepy-lamb-on-a-cloud', 'butterfly-garden', 'wildflower-meadow', 'sleepy-moon-and-stars', 'hummingbird-garden', 'gum-blossom-dreams', 'little-fawn']),
+    sample: { label: 'Christening', title: 'The Christening of Grace', lede: 'Please join us for the service, and lunch afterwards.' }, art: () => [...drawnFor('christening'), ...pick(['swan-lake-dream', 'cloud-dreams', 'star-catcher', 'sleepy-lamb-on-a-cloud', 'butterfly-garden', 'wildflower-meadow', 'sleepy-moon-and-stars', 'hummingbird-garden', 'gum-blossom-dreams', 'little-fawn'])],
     wording: ['Please join us for the christening of our daughter, Grace.', 'We invite you to celebrate the naming day of baby Thomas.', 'Join us as we welcome our little one into the church.'] },
   { slug: 'gender-reveal', name: 'Gender reveal', plural: 'Gender reveal invitations', blurb: 'Pink or blue? Come and find out.', send: 'Two to three weeks ahead.',
-    sample: { label: 'He or she?', title: 'Pink or Blue?', lede: 'Come and find out with us. Cake at three, the big reveal straight after.' }, art: () => pick(SKY),
+    sample: { label: 'He or she?', title: 'Pink or Blue?', lede: 'Come and find out with us. Cake at three, the big reveal straight after.' }, art: () => [...drawn(['pea-in-a-pod', 'robins-nest', 'knitted-booties']), ...pick(SKY)],
     wording: ['Pink or blue? Come and find out with us.', 'A little surprise is on the way. Help us find out who.', 'Wear your guess. Cake reveals all.'] },
   { slug: 'teddy-bears-picnic', name: 'Picnic & playdate', plural: 'Picnic and playdate invitations', blurb: 'Blankets, bears and the garden.', send: 'One to two weeks ahead, with a wet-weather plan.',
-    sample: { label: 'Picnic party', title: 'Ava’s Teddy Bears’ Picnic', lede: 'Bring a bear and a blanket. We’ll bring the cake.' }, art: () => pick(GARDEN),
+    sample: { label: 'Picnic party', title: 'Ava’s Teddy Bears’ Picnic', lede: 'Bring a bear and a blanket. We’ll bring the cake.' }, art: () => [...drawn(['sunflower-bunny', 'hedgehog-posy', 'honey-bee-jar', 'paper-planes']), ...pick(GARDEN)],
     wording: ['Bring a bear and a blanket. We’ll bring the cake.', 'A picnic in the garden, weather permitting and possibly regardless.', 'Sandwiches cut into triangles. Lemonade. Grass stains guaranteed.'] },
   { slug: 'sleepover', name: 'Sleepover', plural: 'Sleepover invitations', blurb: 'Pyjamas, popcorn and not much sleeping.', send: 'Two weeks ahead, with a pick-up time.',
-    sample: { label: 'Pyjama party', title: 'Mia’s Sleepover', lede: 'Pyjamas on, movies at seven, sleep at some point.' }, art: () => pick(['sleepy-moon-and-stars', 'cloud-dreams', 'star-catcher', 'sleepy-bunny', 'dreamy-bear-cub', 'hot-cocoa-night', 'silent-snowfall', 'sleepy-koala', 'owl-family']),
+    sample: { label: 'Pyjama party', title: 'Mia’s Sleepover', lede: 'Pyjamas on, movies at seven, sleep at some point.' }, art: () => [...drawn(['rainy-window-cat', 'bedtime-story-foxes', 'window-telescope', 'moon-swing']), ...pick(['sleepy-moon-and-stars', 'cloud-dreams', 'star-catcher', 'sleepy-bunny', 'dreamy-bear-cub', 'hot-cocoa-night', 'silent-snowfall', 'sleepy-koala', 'owl-family'])],
     wording: ['Pyjamas on, movies at seven, sleep at some point.', 'Bring a sleeping bag and your favourite teddy.', 'Popcorn, pillow forts and pancakes in the morning.'] },
   { slug: 'wizard-party', name: 'Wizard party', plural: 'Wizard party invitations', blurb: 'Wands at the ready.', send: 'Three weeks ahead; robes take time.',
-    sample: { label: 'You are summoned', title: 'Oliver’s Wizard Party', lede: 'Wands at the ready. Potions class starts at two.' }, art: () => pick(WIZARD),
+    sample: { label: 'You are summoned', title: 'Oliver’s Wizard Party', lede: 'Wands at the ready. Potions class starts at two.' }, art: () => [...drawn(['witch-hat-bunny', 'star-chart', 'constellation-cradle']), ...pick(WIZARD)],
     wording: ['Wands at the ready. Potions class starts at two.', 'Robes optional, wands compulsory.', 'Owls have been dispatched. Please reply by return owl, or text.'] },
   { slug: 'halloween', name: 'Halloween', plural: 'Halloween party invitations', blurb: 'Cute, not scary. Mostly.', send: 'Two to three weeks ahead; costumes take time.',
-    sample: { label: '31 October', title: 'The Little Witches’ Ball', lede: 'Costumes on, cauldron bubbling. Little monsters welcome.' }, art: () => pick(SPOOKY),
+    sample: { label: '31 October', title: 'The Little Witches’ Ball', lede: 'Costumes on, cauldron bubbling. Little monsters welcome.' }, art: () => [...drawnFor('halloween'), ...pick(SPOOKY)],
     wording: ['Costumes on, cauldron bubbling. Little monsters welcome.', 'Trick or treat at ours. Pumpkin punch from four.', 'Come dressed to scare. Mildly.'] },
   { slug: 'kids-christmas', name: 'Christmas party', plural: 'Christmas party invitations', blurb: 'Crafts, cookies and a visit from the man in red.', send: 'Three to four weeks ahead; December books out.',
-    sample: { label: 'Kids’ Christmas party', title: 'Santa’s Workshop', lede: 'Crafts, cookies and a visit from someone in a red suit.' }, art: () => section('festive'),
+    sample: { label: 'Kids’ Christmas party', title: 'Santa’s Workshop', lede: 'Crafts, cookies and a visit from someone in a red suit.' }, art: () => [...drawnFor('christmas', 'first-christmas'), ...section('festive')],
     wording: ['Crafts, cookies and a visit from someone in a red suit.', 'The tree is up and there is a seat with your name on it.', 'Mince pies, carols and a little too much tinsel.'] },
 ];
 
