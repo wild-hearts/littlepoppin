@@ -136,6 +136,7 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
         <li><a href="${up}index.html#products">Swaddles</a></li>
         <li><a href="${up}prints.html">Art Prints</a></li>
         <li><a href="${up}personalise.html">Personalise</a></li>
+        <li><a href="${up}cards.html">Cards &amp; Invites</a></li>
         <li><a href="${up}printclub.html">Print Club</a></li>
         <li><a href="${up}printables.html">Printables</a></li>
         <li><a href="${up}guides.html">Guides</a></li>
@@ -637,7 +638,10 @@ const urls = staticPages
   .map(([loc, pr, cf]) => ({ loc: SITE + loc, pr, cf }))
   .concat(data.prints.map((p) => ({ loc: `${SITE}/print/${slugOf(p.sku)}.html`, pr: '0.7', cf: 'monthly' })))
   .concat(data.sets.map((s) => ({ loc: `${SITE}/set/${slugOf(s.sku)}.html`, pr: '0.7', cf: 'monthly' })))
-  .concat(GUIDES.map((g) => ({ loc: `${SITE}/guides/${g.slug}.html`, pr: '0.6', cf: 'yearly' })));
+  .concat(GUIDES.map((g) => ({ loc: `${SITE}/guides/${g.slug}.html`, pr: '0.6', cf: 'yearly' })))
+  // Cards and invitations (scripts/build-keepsakes.mjs writes the list; galleries rank above the 360 editor pages).
+  .concat((fs.existsSync(path.join(REPO, 'data', 'keepsakes-urls.json')) ? JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'keepsakes-urls.json'), 'utf8')) : [])
+    .map((f) => ({ loc: `${SITE}/${f}`, pr: /^(cards|invitations)\.html$/.test(f) ? '0.9' : /^(cards|invitations)\//.test(f) ? '0.8' : '0.6', cf: 'monthly' })));
 
 fs.writeFileSync(path.join(REPO, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>

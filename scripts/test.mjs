@@ -169,16 +169,23 @@ check('newlines cannot be injected into the print',
 check('over-long input is truncated, not rejected',
   personalise.parsePersonalisation({ name: 'x'.repeat(200) }).data.name.length === personalise.LIMITS.name);
 
-const art = fs.readFileSync(path.join(process.env.HOME, 'Downloads/LittlePoppin-Designs/collection-01/05-sleepy-moon-and-stars.png'));
-const font = fs.readFileSync('assets/fonts/CormorantGaramond.ttf');
-const pdf = await personalise.renderPersonalisedPdf(art, { name: 'Willow Rose', line2: 'Born 3rd March 2026', line3: '3.2kg' }, { regular: font });
-check('renders a PDF', pdf.length > 10000 && Buffer.from(pdf.slice(0, 5)).toString() === '%PDF-');
+// The render checks need the high-res source art, which lives on Naomi's machine, not in the repo.
+// Elsewhere (a cloud session, CI) they are skipped and say so, rather than crashing the whole suite.
+const artPath = path.join(process.env.HOME || '', 'Downloads/LittlePoppin-Designs/collection-01/05-sleepy-moon-and-stars.png');
+if (fs.existsSync(artPath)) {
+  const art = fs.readFileSync(artPath);
+  const font = fs.readFileSync('assets/fonts/CormorantGaramond.ttf');
+  const pdf = await personalise.renderPersonalisedPdf(art, { name: 'Willow Rose', line2: 'Born 3rd March 2026', line3: '3.2kg' }, { regular: font });
+  check('renders a PDF', pdf.length > 10000 && Buffer.from(pdf.slice(0, 5)).toString() === '%PDF-');
 
-const { PDFDocument } = await import('pdf-lib');
-const doc = await PDFDocument.load(pdf);
-check(`PDF has ${personalise.PAGE_SIZES.length} page sizes`, doc.getPageCount() === personalise.PAGE_SIZES.length);
-const sizes = doc.getPages().map((p) => `${(p.getWidth() / 72).toFixed(2)}x${(p.getHeight() / 72).toFixed(2)}`);
-check('page sizes are 8x10, A4 and 16x20', sizes.join(' ') === '8.00x10.00 8.27x11.69 16.00x20.00', sizes.join(' '));
+  const { PDFDocument } = await import('pdf-lib');
+  const doc = await PDFDocument.load(pdf);
+  check(`PDF has ${personalise.PAGE_SIZES.length} page sizes`, doc.getPageCount() === personalise.PAGE_SIZES.length);
+  const sizes = doc.getPages().map((p) => `${(p.getWidth() / 72).toFixed(2)}x${(p.getHeight() / 72).toFixed(2)}`);
+  check('page sizes are 8x10, A4 and 16x20', sizes.join(' ') === '8.00x10.00 8.27x11.69 16.00x20.00', sizes.join(' '));
+} else {
+  console.log(`  ~ PDF render checks skipped: source art not on this machine (${artPath})`);
+}
 
 // Glyph coverage: fontkit's subsetter silently drops glyphs from this variable font,
 // which rendered "Willow Rose" as "llow o". A subset font produces a much smaller file.
@@ -375,6 +382,53 @@ check('bundles containing the song cost more than the song alone',
     }
   }
   check('api handlers import every lib symbol they use', missing.length === 0, missing.join('\n      '));
+}
+
+// ---------------------------------------------------------------------------
+group('Cards and invitations');
+{
+  const K = await import('../keepsakes/designs.js');
+  const R = await import('../keepsakes/render.js');
+  const { ART } = await import('../keepsakes/art.generated.js');
+  const dupesIn = (list) => { const seen = new Set(); return list.filter((x) => seen.has(x.slug) || !seen.add(x.slug)).map((x) => x.slug); };
+  const dupes = [...dupesIn(K.CARDS), ...dupesIn(K.INVITES)];   // cards and invitations are separate namespaces (card/ and invitation/)
+  check(`${K.CARDS.length} cards and ${K.INVITES.length} invitation designs, no two cards or two invitations with the same slug`, K.CARDS.length >= 150 && K.INVITES.length >= 100 && dupes.length === 0, dupes.join(', '));
+  const noArt = [...K.CARDS.map((c) => c.design), ...K.INVITES].filter((d) => !d.preview || !fs.existsSync(path.join(REPO, d.preview.replace(/^\//, ''))));
+  check('every design has its preview image in the repo', noArt.length === 0, noArt.map((d) => d.slug).join(', '));
+  const emptyOcc = [...K.CARD_OCCASIONS.filter((o) => !K.cardsFor(o.slug).length), ...K.INVITE_OCCASIONS.filter((o) => !K.invitesFor(o.slug).length)];
+  check('every occasion has at least one design', emptyOcc.length === 0, emptyOcc.map((o) => o.slug).join(', '));
+  const badPal = ART.filter((a) => !/^#[0-9a-f]{6}$/.test(a.card.paper) || !/^#[0-9a-f]{6}$/.test(a.card.ink) || !['gold', 'rose', 'silver'].includes(a.foil));
+  check('every print has a palette and a foil read from its picture', badPal.length === 0, badPal.map((a) => a.slug).join(', '));
+  const stale = ART.filter((a) => !getDigital(a.sku));
+  check('the keepsake art matches the shop catalogue (re-run build:keepsakes after adding prints)', stale.length === 0 && ART.length >= 90, stale.map((a) => a.slug).join(', '));
+  // The pages the build writes exist for every design, so no gallery tile links to a 404.
+  const missingPages = [...K.CARDS.map((c) => `card/${c.slug}.html`), ...K.INVITES.map((d) => `invitation/${d.slug}.html`), ...K.CARD_OCCASIONS.map((o) => `cards/${o.slug}.html`), ...K.INVITE_OCCASIONS.map((o) => `invitations/${o.slug}.html`), 'cards.html', 'invitations.html', 'sent.html', 'open.html', 'manage.html', 'invite.html'].filter((f) => !fs.existsSync(path.join(REPO, f)));
+  check('every gallery tile has its page (run `npm run build:keepsakes`)', missingPages.length === 0, missingPages.slice(0, 5).join(', '));
+  // The rendered pieces carry what the stylesheet and the page scripts look for.
+  const c = K.CARDS[0], front = R.cardFront(c), inside = R.cardInside(c, { to: 'A', from: 'B', message: 'Hi' });
+  check('a card front carries its greeting, layout and theme', front.includes('cf-greet') && front.includes(`data-layout="${c.layout}"`) && front.includes('--foil:'));
+  check('a card inside carries the sender’s words and the foil corners', inside.includes('ci-msg') && inside.includes('orn-corner') && inside.includes('Dear A'));
+  const d = K.INVITES[0], env = R.envelope(d, 'Party'), cardHtml = R.inviteCard(d, { title: 'X', date: '2027-01-02', time: '14:00', tz: 'Australia/Sydney', venue: 'Here' });
+  check('an envelope has a flap, a seal and the art as its liner', env.includes('class="flap"') && env.includes('class="wax"') && env.includes(d.preview));
+  check('an invitation card shows the date in words', cardHtml.includes('Saturday 2 January') && cardHtml.includes('2pm') && cardHtml.includes('Here'));
+  check('rendered text is escaped', !R.inviteCard(d, { title: '<b>x</b>' }).includes('<b>x</b>'));
+  // The one function behind it all, and the rewrites that give it clean URLs.
+  const vercel = JSON.parse(fs.readFileSync(path.join(REPO, 'vercel.json'), 'utf8'));
+  const rw = Object.fromEntries((vercel.rewrites || []).map((r) => [r.source, r.destination]));
+  check('vercel.json rewrites the five keepsake routes', rw['/c/:slug'] === '/open.html' && rw['/i/:slug'] === '/invite.html' && rw['/manage/:id'] === '/manage.html' && rw['/sent/:key'] === '/sent.html' && /op=host/.test(rw['/host/:key'] || ''));
+  check('api/keepsakes.js exists and the webhook hands card and invitation payments to it', fs.existsSync(path.join(REPO, 'api', 'keepsakes.js')) && fs.readFileSync(path.join(REPO, 'api', 'stripe-webhook.js'), 'utf8').includes('keepsakePaid'));
+  const fnCount = fs.readdirSync(path.join(REPO, 'api')).filter((f) => f.endsWith('.js')).length;
+  check(`the api/ folder holds ${fnCount} functions (Vercel Hobby allows 12)`, fnCount <= 12);
+  const { cleanCard, cleanEvent, cleanRsvp } = await import('../lib/keepsakes/validate.js');
+  check('a card needs a recipient, a sender, a message and a real card', !cleanCard({}).ok && cleanCard({ card: c.slug, to_name: 'A', from_name: 'B', message: 'Hi' }).ok && !cleanCard({ card: 'nope', to_name: 'A', from_name: 'B', message: 'Hi' }).ok);
+  check('an invitation needs a design, a title, a date and a time', !cleanEvent({ design: d.slug }).ok && cleanEvent({ design: d.slug, title: 'T', date: '2027-01-02', time: '14:00' }).ok);
+  const ev = { allow_plus_ones: true, max_plus_ones: 2, ask_dietary: true, question: 'Q', question_choices: ['A', 'B'] };
+  const r = cleanRsvp({ name: 'G', status: 'yes', plus_ones: 9, answer: 'C' }, ev);
+  check('a reply caps plus-ones at the host’s limit and rejects an answer that is not a choice', r.ok && r.value.plus_ones === 2 && r.value.answer === '');
+  const private_ = ['open.html', 'invite.html', 'manage.html', 'sent.html'].filter((f) => !fs.readFileSync(path.join(REPO, f), 'utf8').includes('noindex'));
+  check('the private pages are noindex', private_.length === 0, private_.join(', '));
+  const robots = fs.readFileSync(path.join(REPO, 'robots.txt'), 'utf8');
+  check('robots.txt keeps crawlers out of the private links', ['/c/', '/i/', '/manage/', '/sent/', '/host/'].every((p) => robots.includes(`Disallow: ${p}`)));
 }
 
 // ---------------------------------------------------------------------------

@@ -69,6 +69,50 @@ Then swap test keys → live keys and re-test once with a real card.
 - **Bundle price**, confirm $27 (or change `bundle.price`).
 - **Legal pages**, fill the `[CONFIRM]` markers (ABN, dispatch times, change-of-mind window, contact email).
 
+## Cards and invitations (added 19 Oct 2026)
+
+E-cards and online party invitations on the shop's own art, ported from Tadavite onto this site's
+stack. Nothing new to host: static pages, one serverless function, the private Blob store, the shared
+Stripe account and Resend.
+
+| Path | What it is |
+|------|------------|
+| `cards.html`, `cards/<occasion>.html`, `card/<slug>.html` | The e-card galleries and the editor (one page per card, 206 of them) |
+| `invitations.html`, `invitations/<occasion>.html`, `invitation/<slug>.html` | The invitation galleries and the editor (154 designs) |
+| `/sent/<key>` | The sender's private page: pay, then the link to send (`sent.html` by rewrite) |
+| `/c/<slug>` | The recipient's card: envelope, seal, card (`open.html`) |
+| `/manage/<id>` | The host's private page: share link, headcount, guest list, CSV, edit (`manage.html`) |
+| `/i/<slug>` | The guest's invitation: envelope, card, countdown, calendar, map, reply (`invite.html`) |
+| `/host/<key>` | The private host link. Checks the key, puts it in an HttpOnly cookie, redirects to `/manage/<id>` |
+| `keepsakes/designs.js` | The catalogue: occasions, cards, invitation designs, lettering, **prices** |
+| `keepsakes/art.generated.js` | One entry per print with a palette read off the picture. `npm run build:keepsakes` |
+| `keepsakes/render.js`, `keepsakes/keepsakes.css` | The envelope, wax seal, card, opening ritual and card spread |
+| `api/keepsakes.js` | The one function behind it all (`?op=…`). Keeps the api/ folder at 11 functions |
+| `lib/keepsakes/store.js` | Records as JSON files in the private Blob store; `.data/keepsakes/` locally |
+| `lib/keepsakes/pay.js` | Stripe Checkout, confirmation on return, and what happens when paid |
+
+**Two numbers to confirm** in `keepsakes/designs.js`: `CARD_PRICE` ($3) and `INVITE_PRICE` ($19). They
+match Tadavite; change them there and run `npm run build:keepsakes` so the pages agree.
+
+Money: sessions are tagged `brand=little_poppin` and `type=card|invitation`; `api/stripe-webhook.js`
+hands those to `lib/keepsakes/pay.js`, which switches the record on and emails the links. The return
+pages confirm with Stripe straight away too, so nobody waits on the webhook. Nothing is charged
+without `STRIPE_SECRET_KEY`; in development without it, cards and invitations go live unpaid so the
+whole flow can be tried. Production refuses (503).
+
+Keys: a sender's or host's key is a bearer credential. Only its SHA-256 is stored; the key is shown
+once and emailed if they gave an address. The host page is reached only through `/host/<key>`.
+
+Run it locally without Vercel: `npm run dev:keepsakes` (port 3050), then
+`node scripts/dev/keepsakes-smoke.mjs http://localhost:3050` (25 API checks) and, after
+`npm i --no-save playwright-core`, `node scripts/dev/keepsakes-ui.mjs http://localhost:3050` (44
+checks in a real Chromium at phone and desktop width, screenshots in `.data/ui-shots/`).
+`npm test` has a "Cards and invitations" group too.
+
+Known gaps, deliberately not built yet: emailing the invitation to guests from the site (hosts share
+the link themselves), host sign-in (the private link is the account), image uploads (every design is
+shop art), scheduled sending.
+
 ## Guardrails (kept)
 - Restricted Stripe key only; keys live in env vars, never committed.
 - This handles the customer's own purchase only. It never issues refunds or moves money programmatically.

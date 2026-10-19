@@ -12,9 +12,14 @@
   },
   "scripts": {
     "test": "node scripts/test.mjs",
-    "build:site": "node scripts/build-prints-shop.mjs && node scripts/build-product-pages.mjs && node scripts/inject-analytics.mjs",
+    "build:site": "node scripts/build-prints-shop.mjs && node scripts/build-keepsakes.mjs && node scripts/build-product-pages.mjs && node scripts/inject-analytics.mjs",
     "build:extras": "node scripts/build-extras.mjs",
     "publish:prints": "node scripts/publish-prints.mjs",
-    "publish:extras": "node scripts/publish-extras.mjs"
+    "publish:extras": "node scripts/publish-extras.mjs",
+    "build:keepsakes": "node scripts/build-keepsakes.mjs",
+    "dev:keepsakes": "node scripts/dev/keepsakes-server.mjs"
+  },
+  "devDependencies": {
+    "jpeg-js": "^0.4.4"
   }
 }
