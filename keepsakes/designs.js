@@ -103,11 +103,14 @@ function designFrom(a, occasion, extra = {}) {
   return { slug: a.slug, name: a.title, occasion, art: a, preview: a.preview, font: a.font, card: a.card, finish: { foil: a.foil, border: a.border }, layout: a.layout, seal: '✦', ...extra };
 }
 
+// Art drawn for one occasion (data/card-art.json) leads that occasion's wall, then the shop prints follow.
+const bespoke = (occasion) => ART.filter((a) => a.kind === 'card' && a.occasion === occasion);
 export const CARDS = CARD_OCCASIONS.flatMap((o) => {
   const k = offset(o.slug);
-  return o.art().map((a, i) => ({
-    // Every card's own line on the front (keepsakes/card-fronts.js); the occasion's greeting is for page titles.
-    slug: `${o.slug}--${a.slug}`, occasion: o.slug, greeting: o.greeting, front: CARD_FRONTS[`${o.slug}--${a.slug}`] || (o.front ? o.front(a) : o.greeting), name: a.title,
+  return [...bespoke(o.slug), ...o.art()].map((a, i) => ({
+    // Every card's own line on the front: the picture's own (bespoke art), else keepsakes/card-fronts.js
+    // for the prints; the occasion's greeting is for page titles.
+    slug: `${o.slug}--${a.slug}`, occasion: o.slug, greeting: o.greeting, front: a.front || CARD_FRONTS[`${o.slug}--${a.slug}`] || (o.front ? o.front(a) : o.greeting), name: a.title,
     design: designFrom(a, o.slug, { font: FACES[(i + k) % FACES.length] }),
     // The art's own layout keeps the subject clear; a plaque in the centre only where the scene is quiet there.
     layout: a.layout === 'foot' ? 'foot' : FRONT_LAYOUTS[(i + k) % 2 === 0 ? 0 : 2],
