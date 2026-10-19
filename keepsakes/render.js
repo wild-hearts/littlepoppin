@@ -5,6 +5,7 @@
 // the same pieces live as the sender types. The second half is browser-only behaviour: breaking the
 // seal, the opening ritual, the book-style card spread, the countdown, the gold dust.
 import { themeVars, foilStops, niceDate, niceTime } from './shared.js';
+import { patternCss } from './patterns.js';
 
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 let uid = 0;
@@ -91,11 +92,26 @@ ${ev.host_name ? `<p class="host">with love, ${esc(ev.host_name)}</p>` : ''}
 </article>`;
 }
 
-// The front of an e-card: the picture, with the card's own line in foil on a plaque, a banner or a foot.
+// The front of an e-card. Seven formats (designs.js FORMATS): the picture edge to edge with the line on a
+// band, or the picture mounted, arched, in a medallion, split with a type block, stamped small, or no
+// picture at all on a pattern in the card's colours. All keep the print's 4:5 shape.
 export function cardFront(c, { priority = false, className = '' } = {}) {
-  const d = c.design, words = c.front || c.greeting;
+  const d = c.design, words = c.front || c.greeting, fmt = c.format || 'full';
   const len = words.length > 30 ? 'long' : words.length > 16 ? 'mid' : '';
-  return `<div class="cfront ${className}" style="${themeVars(d)}" data-font="${esc(d.font)}" data-layout="${esc(c.layout || 'plaque')}" data-tone="${d.card.dark ? 'dark' : 'light'}">${backdrop(d, { priority })}<div class="cf-plaque"><p class="cf-greet" ${len ? `data-len="${len}"` : ''}>${esc(words)}</p></div></div>`;
+  const greet = `<p class="cf-greet" ${len ? `data-len="${len}"` : ''}>${esc(words)}</p>`;
+  // Dense patterns (checks, stripes) are drawn faintly so the line stays readable; sparse ones can be bolder.
+  const dense = ['checker', 'stripes', 'candy', 'gingham'].includes(c.pattern);
+  const pat = fmt === 'full' || fmt === 'mount' ? '' : patternCss(c.pattern || 'dots', d.card, { tint: dense ? 0.14 : fmt === 'type' ? 0.4 : 0.32, seed: 7 + (c.slug.length % 5) });
+  const img = (cls) => `<span class="cf-window ${cls}" aria-hidden="true"><img src="${esc(d.preview)}" width="800" height="993" alt="" loading="${priority ? 'eager' : 'lazy'}" decoding="async"></span>`;
+  const open = `<div class="cfront ${className}" style="${themeVars(d)}" data-font="${esc(d.font)}" data-format="${fmt}" data-layout="${esc(c.layout || 'plaque')}" data-tone="${d.card.dark ? 'dark' : 'light'}">`;
+  if (fmt === 'full') return `${open}${backdrop(d, { priority })}<div class="cf-plaque">${greet}</div></div>`;
+  const stock = `<div class="cf-stock" style="${pat}">`;
+  if (fmt === 'mount') return `${open}${stock}${img('cf-mount')}${greet}</div></div>`;
+  if (fmt === 'arch') return `${open}${stock}${img('cf-arch')}${greet}</div></div>`;
+  if (fmt === 'circle') return `${open}${stock}${img('cf-circle')}${greet}</div></div>`;
+  if (fmt === 'split') return `${open}${stock}${img('cf-split')}<div class="cf-block">${greet}</div></div></div>`;
+  if (fmt === 'stamp') return `${open}${stock}${img('cf-stamp')}${greet}</div></div>`;
+  return `${open}${stock}${corners(d.finish?.border || 'double', d.finish?.foil || 'gold', !d.card.dark)}${greet}</div></div>`;   // type
 }
 // The inside: the sender's words on foil-edged card.
 export function cardInside(c, { to = '', from = '', message = '' } = {}) {

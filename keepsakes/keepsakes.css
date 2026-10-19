@@ -173,7 +173,7 @@
 .kp-wrap{max-width:1160px;margin:0 auto;padding:0 24px}
 
 /* ------------------------------------------------ e-card front and inside */
-.cfront{position:relative;aspect-ratio:1856/2304;overflow:hidden;border-radius:6px;isolation:isolate;display:grid;place-items:center;container-type:inline-size;box-shadow:0 30px 50px -30px rgba(0,0,0,.55)}
+.cfront{position:relative;aspect-ratio:1856/2304;overflow:hidden;border-radius:6px;isolation:isolate;display:grid;place-items:center;container-type:size;box-shadow:0 30px 50px -30px rgba(0,0,0,.55)}
 .cfront>.backdrop{z-index:-1}
 .cf-plaque{position:relative;max-width:78%;padding:7cqw 8cqw;text-align:center;background:color-mix(in srgb,var(--c-paper) 92%,transparent);border:1px solid color-mix(in srgb,var(--c-metal) 55%,transparent);outline:1px solid color-mix(in srgb,var(--c-metal) 35%,transparent);outline-offset:-2.4cqw;box-shadow:0 12px 30px -14px rgba(0,0,0,.5)}
 .cf-greet{margin:0;font-family:var(--c-font),serif;font-weight:600;font-size:10cqw;line-height:1.05;background:var(--foil);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:foil 7s ease-in-out infinite;filter:drop-shadow(0 1px 0 rgba(0,0,0,.15));text-wrap:balance}
@@ -200,6 +200,31 @@
 .cinside[data-font="pinyon"] .ci-msg{font-size:26px}
 .cinside:not(.dk) .ci-msg{text-shadow:0 1px 0 #ffffffd0,0 -.5px 0 #2a0f1440;text-wrap:pretty}
 .cinside.dk .ci-msg{text-shadow:0 -1px 0 #000a,0 1px 0 #ffffff29;text-wrap:pretty}
+
+/* the other formats: card stock, a window for the picture, the line beneath or across */
+.cf-stock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqh;padding:7cqw;background:var(--c-paper);container-type:size}
+.cf-stock .cf-greet{position:relative;max-width:88%;font-size:9cqw}
+.cf-stock .cf-greet[data-len="mid"]{font-size:7.6cqw}.cf-stock .cf-greet[data-len="long"]{font-size:6.4cqw}
+.cfront[data-font="pinyon"] .cf-stock .cf-greet{font-size:11.5cqw}.cfront[data-font="pinyon"] .cf-stock .cf-greet[data-len="mid"]{font-size:9.6cqw}.cfront[data-font="pinyon"] .cf-stock .cf-greet[data-len="long"]{font-size:8cqw}
+.cfront[data-font="bodoni"] .cf-stock .cf-greet,.cfront[data-font="syne"] .cf-stock .cf-greet{font-size:7.4cqw}.cfront[data-font="bodoni"] .cf-stock .cf-greet[data-len="mid"],.cfront[data-font="syne"] .cf-stock .cf-greet[data-len="mid"]{font-size:6.2cqw}.cfront[data-font="bodoni"] .cf-stock .cf-greet[data-len="long"],.cfront[data-font="syne"] .cf-stock .cf-greet[data-len="long"]{font-size:5.2cqw}
+.cf-window{position:relative;display:block;overflow:hidden;flex:none;box-shadow:0 0 0 1.2cqw var(--c-paper),0 0 0 1.6cqw color-mix(in srgb,var(--c-metal) 70%,transparent),0 3cqw 6cqw -2cqw rgba(0,0,0,.45)}
+.cf-window img{width:100%;height:100%;object-fit:cover;display:block}
+.cf-mount{width:78%;max-height:62cqh;aspect-ratio:4/5;border-radius:1cqw}
+.cf-arch{width:70%;max-height:62cqh;aspect-ratio:4/5.4;border-radius:50% 50% 1.5cqw 1.5cqw / 36% 36% 1.5cqw 1.5cqw}
+.cf-circle{width:66%;max-height:56cqh;aspect-ratio:1;border-radius:50%}
+.cfront[data-format="split"] .cf-stock{padding:0;gap:0;justify-content:flex-start}
+.cf-split{width:100%;height:58%;border-radius:0;box-shadow:0 2cqw 5cqw -2cqw rgba(0,0,0,.5)}
+.cf-block{flex:1;width:100%;display:grid;place-items:center;padding:6cqw 8cqw;border-top:1cqw solid color-mix(in srgb,var(--c-metal) 55%,transparent)}
+.cfront[data-format="stamp"] .cf-stock{justify-content:center;gap:6cqh}
+.cf-stamp{width:46%;max-height:44cqh;aspect-ratio:4/5;border-radius:1cqw;transform:rotate(-5deg);box-shadow:0 0 0 1.4cqw var(--c-paper),0 0 0 1.9cqw color-mix(in srgb,var(--c-metal) 70%,transparent),0 3cqw 6cqw -2cqw rgba(0,0,0,.45)}
+.cfront[data-format="stamp"] .cf-greet{font-size:10.5cqw}.cfront[data-format="stamp"] .cf-greet[data-len="mid"]{font-size:8.6cqw}.cfront[data-format="stamp"] .cf-greet[data-len="long"]{font-size:7cqw}
+.cfront[data-format="type"] .cf-stock{padding:12cqw}
+.cfront[data-format="type"] .cf-greet{padding:5cqw 6cqw;background:color-mix(in srgb,var(--c-paper) 94%,transparent);border:1px solid color-mix(in srgb,var(--c-metal) 55%,transparent);box-shadow:0 2cqw 5cqw -2cqw rgba(0,0,0,.35)}
+.cfront[data-format="type"] .cf-greet{font-size:13cqw;line-height:1.02}.cfront[data-format="type"] .cf-greet[data-len="mid"]{font-size:11cqw}.cfront[data-format="type"] .cf-greet[data-len="long"]{font-size:9cqw}
+.cfront[data-format="type"][data-font="pinyon"] .cf-greet{font-size:15cqw;line-height:1.12}.cfront[data-format="type"][data-font="pinyon"] .cf-greet[data-len="mid"]{font-size:13cqw}.cfront[data-format="type"][data-font="pinyon"] .cf-greet[data-len="long"]{font-size:10.5cqw}
+.cfront[data-format="type"][data-font="bodoni"] .cf-greet,.cfront[data-format="type"][data-font="syne"] .cf-greet{font-size:10cqw}.cfront[data-format="type"][data-font="bodoni"] .cf-greet[data-len="mid"],.cfront[data-format="type"][data-font="syne"] .cf-greet[data-len="mid"]{font-size:8.4cqw}.cfront[data-format="type"][data-font="bodoni"] .cf-greet[data-len="long"],.cfront[data-format="type"][data-font="syne"] .cf-greet[data-len="long"]{font-size:7cqw}
+.cfront[data-format="type"] .orn-corner{position:absolute;width:22cqw;height:22cqw;opacity:.9}
+.cfront[data-format="type"] .cf-stock::after{content:"";position:absolute;inset:4cqw;border:1px solid color-mix(in srgb,var(--c-metal) 50%,transparent);pointer-events:none}
 
 /* ------------------------------------------------ the card spread (front and inside as a book) */
 .sp-scene{width:100%;padding:clamp(14px,3vw,44px);background:radial-gradient(ellipse at 50% 20%,color-mix(in srgb,var(--c-paper,#e8ddc7) 65%,#fff),color-mix(in srgb,var(--c-paper,#e8ddc7) 65%,#161410));border-radius:12px;perspective:1800px;container-type:inline-size}

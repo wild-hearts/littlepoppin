@@ -77,6 +77,25 @@ export const CARD_OCCASIONS = [
 // three front layouts, so neighbouring tiles never look alike. The sender can still choose another face.
 const FACES = ['playfair', 'fraunces', 'cormorant', 'dmserif', 'italiana', 'pinyon', 'bodoni', 'syne'];
 export const FRONT_LAYOUTS = ['banner', 'plaque', 'foot'];
+// How the front is built (19 Oct 2026, Naomi: "the collection is really boring"). A picture with a band was
+// every card; now a wall mixes seven looks, taken in turn so neighbours differ:
+//   full    the picture edge to edge, the line on a band at the top or a gradient at the foot
+//   mount   coloured card stock with the picture in a keylined window, the line beneath
+//   arch    the picture in an arched window on a patterned card
+//   circle  the picture in a round medallion on a patterned card
+//   split   the picture across the top, a big typographic block across the bottom
+//   stamp   the picture small and tilted like a stamp, the line large
+//   type    no picture at all: a pattern in the card's colours and the line, large
+export const FORMATS = ['full', 'mount', 'type', 'split', 'arch', 'full', 'stamp', 'circle'];
+// The pattern behind a card, by occasion: gentle for the quiet ones, confetti where there is cake.
+const PATTERNS = {
+  'new-baby': ['dots', 'stars', 'waves', 'scallop'], 'star-sign': ['stars', 'sparkle'], birthday: ['confetti', 'sparkle', 'stripes', 'checker', 'rainbow'],
+  'first-birthday': ['confetti', 'rainbow', 'dots', 'stars'], expecting: ['dots', 'waves', 'scallop', 'stars'], christening: ['scallop', 'arches', 'dots', 'waves'],
+  'big-sibling': ['stripes', 'confetti', 'stars', 'checker'], 'thank-you': ['gingham', 'dots', 'scallop', 'hearts'], 'get-well': ['dots', 'waves', 'gingham', 'hearts'],
+  congratulations: ['sparkle', 'confetti', 'stars', 'stripes'], 'first-day-of-school': ['gingham', 'checker', 'stripes', 'dots'], 'mothers-day': ['hearts', 'scallop', 'gingham', 'dots'],
+  'fathers-day': ['stripes', 'checker', 'arches', 'waves'], 'new-home': ['arches', 'gingham', 'checker', 'dots'], 'just-because': ['hearts', 'sparkle', 'stars', 'dots'],
+  halloween: ['checker', 'stars', 'stripes', 'sparkle'], christmas: ['snow', 'candy', 'stars', 'sparkle', 'gingham'], 'first-christmas': ['snow', 'stars', 'dots', 'scallop'],
+};
 const offset = (s) => [...s].reduce((a, ch) => a + ch.charCodeAt(0), 0);
 
 // A print dressed as a design: the shape Card, Envelope and Backdrop render.
@@ -92,6 +111,8 @@ export const CARDS = CARD_OCCASIONS.flatMap((o) => {
     design: designFrom(a, o.slug, { font: FACES[(i + k) % FACES.length] }),
     // The art's own layout keeps the subject clear; a plaque in the centre only where the scene is quiet there.
     layout: a.layout === 'foot' ? 'foot' : FRONT_LAYOUTS[(i + k) % 2 === 0 ? 0 : 2],
+    format: FORMATS[(i + Math.floor(k / 3)) % FORMATS.length],
+    pattern: (PATTERNS[o.slug] || PATTERNS.birthday)[(i + k) % (PATTERNS[o.slug] || PATTERNS.birthday).length],
   }));
 });
 export const cardOccasion = (slug) => CARD_OCCASIONS.find((o) => o.slug === slug);
