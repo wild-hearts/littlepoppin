@@ -6,9 +6,32 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { PRINT_META } from '../lib/print-meta.js';
+import { SERIES, SERIES_IDS, listSeriesMasters, pngSize } from './print-series.mjs';
 
-const REPO = '/Users/naomishiels/Downloads/skills/littlepoppin';
+// The repo is wherever this script lives. It used to be a hard-coded path to a checkout
+// that no longer exists, which made the build write into thin air.
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+// Every print in the original library is this size (see lib/personalise.js ART_ASPECT).
+// Used when the masters folder is absent and the size cannot be read from the file.
+const LEGACY_PX = [1856, 2304];
+
+// The previous build's public catalogue. When the masters folder is absent (it lives in
+// ~/Downloads and is not always on the machine), the legacy sections are carried forward
+// from here instead of silently vanishing from the shop.
+const PREVIOUS = (() => {
+  try { return JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'prints.json'), 'utf8')); } catch { return { prints: [] }; }
+})();
+
+// Preview JPGs: ImageMagick when it is installed, otherwise macOS sips. Same output.
+function hasMagick() { try { execFileSync('magick', ['-version'], { stdio: 'ignore' }); return true; } catch { return false; } }
+const MAGICK = hasMagick();
+function makePreview(src, out, width = 1000) {
+  if (MAGICK) return execFileSync('magick', [src, '-resize', `${width}x`, '-quality', '82', out]);
+  execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '82', '--resampleWidth', String(width), src, '--out', out], { stdio: 'ignore' });
+}
 
 // Carry forward the Vercel Blob pathnames from the previous build. Without this every
 // rebuild resets `file` to null, which silently blocks checkout on every print until
@@ -143,16 +166,23 @@ for (const sec of SECTIONS) {
       const base = f.replace(/\.png$/, '');
       const outName = base + '.jpg';
       const outPath = path.join(OUT_IMG, outName);
-      if (!fs.existsSync(outPath)) {
-        execFileSync('magick', [path.join(dir, f), '-resize', '1000x', '-quality', '82', outPath]);
-      }
+      if (!fs.existsSync(outPath)) makePreview(path.join(dir, f), outPath);
       const sku = 'print-' + base.replace(/^\d+-/, '');
       const meta = PRINT_META[sku] || {};
       const title = meta.title || titleCase(base);
       const description = meta.description || 'High-resolution digital art print (4:5). Instant download for personal printing.';
-      items.push({ sku, title, name: `${title} Art Print`, description, price: sec.price, preview: `/images/prints/${outName}`, section: sec.id });
+      items.push({ sku, title, name: `${title} Art Print`, description, price: sec.price, preview: `/images/prints/${outName}`, section: sec.id, px: pngSize(path.join(dir, f)) });
       process.stdout.write('.');
     }
+  }
+  if (!items.length) {
+    // Masters not on this machine: carry the section forward from the last build.
+    for (const p of PREVIOUS.prints.filter(x => x.section === sec.id)) {
+      const meta = PRINT_META[p.sku] || {};
+      items.push({ sku: p.sku, title: meta.title || p.title, name: `${meta.title || p.title} Art Print`,
+        description: meta.description || p.description, price: p.price, preview: p.preview, section: sec.id, px: p.px || LEGACY_PX });
+    }
+    if (items.length) console.log(`\n  ${sec.id}: masters folder absent, ${items.length} prints carried forward from data/prints.json`);
   }
   if (!items.length) continue;
   all.push(...items);
@@ -163,8 +193,9 @@ for (const sec of SECTIONS) {
               <h3><a href="print/${it.sku.replace(/^print-/, '')}.html">${it.title}</a></h3>
               <p class="print-card__desc">${it.description}</p>
               <p class="print-card__price">$${(it.price / 100).toFixed(0)} <span>AUD · instant download</span></p>
-              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Download Print. $${(it.price / 100).toFixed(0)}</button>
-              <a class="print-card__personalise" href="personalise.html?print=${encodeURIComponent(it.sku)}">✨ Add their name. $19</a>
+${PUBLISHED[it.sku] ? `              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Download Print. $${(it.price / 100).toFixed(0)}</button>
+              <a class="print-card__personalise" href="personalise.html?print=${encodeURIComponent(it.sku)}">✨ Add their name. $19</a>`
+            : `              <button type="button" class="btn btn--primary print-card__buy is-soldout" disabled>Coming soon</button>`}
             </div>
           </article>`).join('\n');
   const finder = sec.id === 'zodiac' ? `
@@ -185,7 +216,59 @@ ${cards}
       </div>
     </section>`);
 }
-console.log(`\n${all.length} prints across ${SECTIONS.length} sections.`);
+// --- photorealistic series: one section per series, one print per artwork ---------
+// Previews go in images/prints/<series>/<slug>.jpg so the series stays recognisable on
+// disk. Skus are print-<series>-<slug>, which keeps them clear of the original library
+// (the shop already has a "Mermaid Lagoon"; the new mermaid prints are print-mermaid-*).
+for (const ser of SERIES) {
+  const masters = listSeriesMasters(ser);
+  const items = [];
+  if (masters.length) {
+    const outDir = path.join(OUT_IMG, ser.id);
+    fs.mkdirSync(outDir, { recursive: true });
+    for (const m of masters) {
+      const outPath = path.join(outDir, `${m.slug}.jpg`);
+      if (!fs.existsSync(outPath)) makePreview(m.file, outPath);
+      const meta = PRINT_META[m.sku] || {};
+      const title = meta.title || titleCase(m.slug);
+      const description = meta.description || 'Photorealistic art print (4:5). Instant download for personal printing.';
+      items.push({ sku: m.sku, title, name: `${title} Art Print`, description, price: ser.price,
+        preview: `/images/prints/${ser.id}/${m.slug}.jpg`, section: ser.id, px: pngSize(m.file) });
+      process.stdout.write('.');
+    }
+  } else {
+    for (const p of PREVIOUS.prints.filter(x => x.section === ser.id)) {
+      const meta = PRINT_META[p.sku] || {};
+      items.push({ sku: p.sku, title: meta.title || p.title, name: `${meta.title || p.title} Art Print`,
+        description: meta.description || p.description, price: p.price, preview: p.preview, section: ser.id, px: p.px || null });
+    }
+    if (items.length) console.log(`\n  ${ser.id}: originals folder absent, ${items.length} prints carried forward`);
+  }
+  if (!items.length) continue;
+  all.push(...items);
+  navLinks.push({ id: ser.id, nav: ser.nav });
+  const cards = items.map(it => `          <article class="print-card">
+            <button type="button" class="print-card__img lightbox-open" data-full="${it.preview}" data-title="${it.title}" aria-label="View ${it.title} larger"><img src="${it.preview}" alt="${it.title}, a photorealistic art print by Little Poppin" loading="lazy" /></button>
+            <div class="print-card__body">
+              <h3><a href="print/${it.sku.replace(/^print-/, '')}.html">${it.title}</a></h3>
+              <p class="print-card__desc">${it.description}</p>
+              <p class="print-card__price">$${(it.price / 100).toFixed(0)} <span>AUD · instant download</span></p>
+${PUBLISHED[it.sku] ? `              <button type="button" data-sku="${it.sku}" class="btn btn--primary print-card__buy">Download Print. $${(it.price / 100).toFixed(0)}</button>
+              <a class="print-card__personalise" href="personalise.html?print=${encodeURIComponent(it.sku)}">✨ Add their name. $19</a>`
+            : `              <button type="button" class="btn btn--primary print-card__buy is-soldout" disabled>Coming soon</button>`}
+            </div>
+          </article>`).join('\n');
+  sectionCards.push(`    <section class="prints" id="${ser.id}">
+      <div class="container">
+        <h2 class="prints-section__title">${ser.title}</h2>
+        <p class="prints-section__blurb">${ser.blurb}</p>
+        <div class="print-grid">
+${cards}
+        </div>
+      </div>
+    </section>`);
+}
+console.log(`\n${all.length} prints across ${SECTIONS.length + SERIES.length} sections.`);
 
 // --- gallery sets: composite previews + cards ---
 const bySku = Object.fromEntries(all.map(it => [it.sku, it]));
@@ -228,7 +311,10 @@ console.log(` ${setItems.length} gallery sets.`);
 // --- collection bundles: grid preview + cards -------------------------------
 const bundleItems = [];
 for (const b of BUNDLES) {
-  const comps = b.all ? all.slice() : all.filter(it => it.section === b.fromSection);
+  // `all` is the original library. The photorealistic series are excluded on purpose:
+  // a bundle is only deliverable when every file in it is published, so one unpublished
+  // series print would silently block the whole $249 product.
+  const comps = b.all ? all.filter(it => !SERIES_IDS.has(it.section)) : all.filter(it => it.section === b.fromSection);
   if (comps.length < 3) { console.log(`! skipping ${b.sku}, not enough prints`); continue; }
   const compositePath = path.join(setsDir, `${b.sku}.jpg`);
   if (!fs.existsSync(compositePath)) {
@@ -304,14 +390,14 @@ const publicCatalogue = {
   prints: all.map(it => ({
     sku: it.sku, title: it.title, description: it.description,
     price: it.price, preview: it.preview, section: it.section,
-    available: !!PUBLISHED[it.sku],
+    available: !!PUBLISHED[it.sku], px: it.px || null,
   })),
   sets: setItems.concat(bundleItems).map(it => ({
     sku: it.sku, title: it.title, description: it.description,
     price: it.price, preview: it.preview, items: it.items,
     available: it.items.every(s => PUBLISHED[s]),
   })),
-  sections: SECTIONS.map(s => ({ id: s.id, title: s.title, nav: s.nav })),
+  sections: SECTIONS.concat(SERIES).map(s => ({ id: s.id, title: s.title, nav: s.nav })),
 };
 fs.mkdirSync(path.join(REPO, 'data'), { recursive: true });
 fs.writeFileSync(path.join(REPO, 'data', 'prints.json'), JSON.stringify(publicCatalogue));
@@ -327,7 +413,7 @@ const jsonLd = JSON.stringify({
     item: {
       '@type': 'Product', name: it.name, description: it.description,
       image: SITE + it.preview, brand: { '@type': 'Brand', name: 'Little Poppin' },
-      offers: { '@type': 'Offer', price: (it.price / 100).toFixed(2), priceCurrency: 'AUD', availability: 'https://schema.org/InStock', url: SITE + '/prints.html' },
+      offers: { '@type': 'Offer', price: (it.price / 100).toFixed(2), priceCurrency: 'AUD', availability: (it.items ? it.items.every(s => PUBLISHED[s]) : PUBLISHED[it.sku]) ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder', url: SITE + '/prints.html' },
     },
   })),
 });

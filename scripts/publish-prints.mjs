@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { findSeriesOriginal } from './print-series.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(os.homedir(), 'Downloads', 'LittlePoppin-Designs');
@@ -28,9 +29,10 @@ function token() {
   }
   return null;
 }
-function findSource(base) {
+function findSource(base, sku) {
   for (const c of COLLS) { const f = path.join(SRC, c, base + '.png'); if (fs.existsSync(f)) return f; }
-  return null;
+  // The photorealistic series live outside ~/Downloads/LittlePoppin-Designs.
+  return findSeriesOriginal(sku);
 }
 
 const tok = token();
@@ -45,10 +47,13 @@ let done = 0, missing = 0;
 for (const mm of matches) {
   const { sku, preview } = mm.groups;
   const base = path.basename(preview).replace(/\.jpg$/, '');
-  const src = findSource(base);
+  const src = findSource(base, sku);
   if (!src) { console.log(`  ✗ ${sku}, original not found (${base}.png)`); missing++; continue; }
   try {
-    const blob = await put('prints/' + base + '.png', fs.readFileSync(src), {
+    // Series skus carry their series in the pathname so two series can share a slug.
+    const blobName = sku.startsWith('print-') && !/^print-\d/.test(sku) && preview.split('/').length > 3
+      ? preview.split('/').slice(-2).join('-').replace(/\.jpg$/, '') : base;
+    const blob = await put('prints/' + blobName + '.png', fs.readFileSync(src), {
       access: 'private', token: tok, addRandomSuffix: true, contentType: 'image/png',
     });
     // Store the PATHNAME (not URL): the store is private, so /api/download mints a

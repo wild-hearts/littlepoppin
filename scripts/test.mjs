@@ -43,9 +43,20 @@ const withFile = prints.filter((p) => p.file && !p.items);
 check(`${withFile.length} prints have a Blob file path`, withFile.length >= 93,
   'A rebuild that resets `file` to null silently blocks checkout on every print.');
 
+// A product without a private file may exist in the catalogue (the photorealistic
+// series are listed before their originals are uploaded), but it must be marked
+// unavailable and must never get a buy button: not on prints.html, not on its own page.
 const undeliverable = Object.values(DIGITAL_PRODUCTS).filter((p) => !isDeliverable(p));
-check('every product is deliverable', undeliverable.length === 0,
-  undeliverable.map((p) => p.sku).join(', '));
+const catalogue = JSON.parse(fs.readFileSync('data/prints.json', 'utf8'));
+const availableBySku = Object.fromEntries(catalogue.prints.concat(catalogue.sets).map((p) => [p.sku, p.available]));
+const printsHtml = fs.readFileSync('prints.html', 'utf8');
+const leaks = undeliverable.filter((p) => {
+  const page = p.items ? `set/${p.sku.replace(/^(set|bundle)-/, p.sku.startsWith('bundle') ? 'bundle-' : '')}.html` : `print/${p.sku.replace(/^print-/, '')}.html`;
+  const own = fs.existsSync(page) ? fs.readFileSync(page, 'utf8') : '';
+  return availableBySku[p.sku] !== false || printsHtml.includes(`data-sku="${p.sku}"`) || own.includes(`data-sku="${p.sku}"`);
+});
+check(`${undeliverable.length} products without a file are hidden from checkout (coming soon)`, leaks.length === 0,
+  leaks.map((p) => p.sku).join(', '));
 
 const setsMissingParts = Object.values(DIGITAL_PRODUCTS)
   .filter((p) => p.items)
