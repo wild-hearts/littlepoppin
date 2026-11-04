@@ -50,9 +50,10 @@ for (const mm of matches) {
   const src = findSource(base, sku);
   if (!src) { console.log(`  ✗ ${sku}, original not found (${base}.png)`); missing++; continue; }
   try {
-    // Series skus carry their series in the pathname so two series can share a slug.
-    const blobName = sku.startsWith('print-') && !/^print-\d/.test(sku) && preview.split('/').length > 3
-      ? preview.split('/').slice(-2).join('-').replace(/\.jpg$/, '') : base;
+    // Series previews live in a subfolder (/images/prints/<series>/<slug>.jpg); their
+    // blob carries the series name so two series can share a slug.
+    const rel = preview.replace(/^\/images\/prints\//, '').replace(/\.jpg$/, '');
+    const blobName = rel.includes('/') ? rel.split('/').slice(-2).join('-') : base;
     const blob = await put('prints/' + blobName + '.png', fs.readFileSync(src), {
       access: 'private', token: tok, addRandomSuffix: true, contentType: 'image/png',
     });

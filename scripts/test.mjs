@@ -83,7 +83,7 @@ check('rotation excludes festive prints',
   !rot.some((s) => DIGITAL_PRODUCTS[s]?.section === 'festive'),
   'Festive is held back for December; a Christmas robin arriving in May reads as a bug.');
 
-// Structural checks over 36 months: right count, no duplicate inside a month, only real
+// Structural checks over the horizon: right count, no duplicate inside a month, only real
 // prints, and festive strictly in December.
 let rotationProblems = [];
 const festivePool = Object.values(DIGITAL_PRODUCTS).filter((p) => !p.items && p.file && p.section === 'festive');
@@ -97,8 +97,11 @@ let decembers = 0;
 // assert uniqueness only up to capacity, and separately that capacity is actually reached.
 const ordinaryCapacity = Math.floor(rot.length / PRINT_CLUB.printsPerMonth);
 const festiveCapacity = Math.floor(festivePool.length / PRINT_CLUB.printsPerMonth);
+// Enough months to send every ordinary print once (11 ordinary months a year), so the
+// exhaustion check below scales with the catalogue instead of a fixed three years.
+const HORIZON = Math.max(36, Math.ceil(ordinaryCapacity * 12 / 11) + 2);
 
-for (let i = 0; i < 36; i++) {
+for (let i = 0; i < HORIZON; i++) {
   const d = new Date(Date.UTC(2026, 7 + i, 1));
   const picks = picksForMonth(DIGITAL_PRODUCTS, d);
   const isDec = d.getUTCMonth() + 1 === 12;
@@ -119,7 +122,7 @@ for (let i = 0; i < 36; i++) {
   }
   if (isDec) decembers++; else ordinaryMonths++;
 }
-check('36 months of picks are well-formed and seasonal', rotationProblems.length === 0,
+check(`${HORIZON} months of picks are well-formed and seasonal`, rotationProblems.length === 0,
   rotationProblems.slice(0, 5).join('\n      '));
 check(`no print repeats before the catalogue is exhausted (~${ordinaryCapacity} months of unique picks)`,
   !rotationProblems.some((p) => p.includes('early repeat')));

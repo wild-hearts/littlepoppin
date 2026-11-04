@@ -13,6 +13,12 @@ import path from 'node:path';
 export const SERIES_SRC = process.env.LP_SERIES_SRC
   || '/Users/naomi/Documents/Codex/2026-11-03/www/outputs';
 
+// Upscaled masters (scripts/upscale-series.mjs) live here, mirroring the SERIES_SRC
+// folder layout. When a file exists here it is the master: the shop reads its pixel
+// size and publish-prints.mjs uploads it. The originals stay untouched in SERIES_SRC.
+export const SERIES_MASTERS = process.env.LP_SERIES_MASTERS
+  || '/Users/naomi/Downloads/littlepoppin-masters-upscaled';
+
 export const SERIES = [
   { id: 'magical-stories', nav: 'Magical Stories', title: '📖 Magical Stories',
     blurb: 'Photoreal storybook scenes: a wardrobe that opens onto snow, a lantern boat, a bakery in the woods. Every one a bedtime story waiting to be told.',
@@ -49,12 +55,22 @@ export function pngSize(file) {
   return [buf.readUInt32BE(16), buf.readUInt32BE(20)];
 }
 
-/** Every master in a series folder, in filename order. [] when the folder is absent. */
+/**
+ * Every master in a series folder, in filename order. [] when the folder is absent.
+ * `file` is the upscaled master when one exists, else the original; `original` is
+ * always the source PNG.
+ */
 export function listSeriesMasters(series) {
   const dir = path.join(SERIES_SRC, series.dir);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter((f) => /\.png$/i.test(f)).sort()
-    .map((f) => { const slug = slugFromFile(f); return { file: path.join(dir, f), slug, sku: seriesSku(series, slug) }; });
+    .map((f) => {
+      const slug = slugFromFile(f);
+      const original = path.join(dir, f);
+      const upscaled = path.join(SERIES_MASTERS, series.dir, f);
+      const file = fs.existsSync(upscaled) ? upscaled : original;
+      return { file, original, slug, sku: seriesSku(series, slug) };
+    });
 }
 
 /** The original PNG for a series sku, or null. */

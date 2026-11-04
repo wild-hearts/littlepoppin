@@ -16,28 +16,40 @@ Originals live under `/Users/naomi/Documents/Codex/2026-11-03/www/outputs/` (ove
 Skus are `print-<section>-<slug>`, so the new mermaid prints never collide with the
 original "Mermaid Lagoon".
 
-## State on merge
-Every series print has `file: null`, so it shows as **Coming soon** on prints.html and on
-its own page, `available: false` in data/prints.json, PreOrder in the structured data, and
-no buy button anywhere. `npm test` enforces exactly that. The $249 everything bundle is
-pinned to the original 93 prints so an unpublished series print can never block it.
+## State on merge (updated 4 Nov 2026, evening)
+All 60 series prints are **sellable**. Each master was upscaled 3x with Real-ESRGAN
+(`scripts/upscale-series.mjs`, Replicate) to 3366 × 4206 px, uploaded to the private
+Blob store under `prints/<series>-<slug>-<suffix>.png`, and its pathname written into
+`lib/digital-products.generated.js`. The shop shows buy buttons, `available: true`,
+InStock in the structured data, and the product pages carry the library's standard
+resolution wording (~300 DPI at 8×10, prints to 16×20). The $249 everything bundle is
+still pinned to the original 93 prints.
 
-## Making them sellable
-1. Put the Production `BLOB_READ_WRITE_TOKEN` in `.env.local` (Vercel dashboard →
-   Storage → Blob store → the `.env.local` tab). It is a sensitive variable and cannot be
-   pulled with `vercel env pull`.
-2. `node scripts/publish-prints.mjs` uploads every print with `file: null` whose original
-   it can find (the series folders are searched automatically) and writes the Blob
-   pathnames into `lib/digital-products.generated.js`.
-3. `npm run build:site` turns the Coming soon buttons into buy buttons.
-4. `npm test`, commit, push, merge.
+Verified before merge: every one of the 60 Blob files fetched through `presignGet()`
+(the same call `/api/download` makes) as a PNG of 3366 × 4206 px, and `/api/checkout`
+created a live Checkout Session for a series print (expired straight after, nothing paid).
 
-## Resolution warning
-The series originals are **1122 × 1402 px**: 140 DPI at 8×10, 70 DPI at 16×20. The
-original library is 1856 × 2304. Product pages for series prints therefore say
-"prints beautifully at 4×5" only, computed from the real file size. Before publishing,
-decide whether to upscale (a 2× to 4× AI upscale would bring them to or past library
-size) or sell them as small-format prints.
+## Masters
+- Originals (1122 × 1402 px, untouched): `/Users/naomi/Documents/Codex/2026-11-03/www/outputs/little-poppin-*`
+- Upscaled masters (what was uploaded): `/Users/naomi/Downloads/littlepoppin-masters-upscaled/<series folder>/<same filename>`
+  Override with `LP_SERIES_MASTERS`. `listSeriesMasters()` prefers an upscaled file when
+  it exists, so both the shop build (pixel size) and `publish-prints.mjs` use it.
+- Re-running `node scripts/upscale-series.mjs` only does masters that are missing or at
+  the wrong size; `--force` redoes everything (about 15 GPU-seconds per image).
+
+## Resolution note
+The originals were 1122 × 1402 px (140 DPI at 8×10). The 3x upscale was reviewed at
+full size: individual hairs and fabric texture resolve cleanly, no halos or invented
+detail. The product-page bullets are still computed from the real pixel size
+(`fileBullets()` in `scripts/build-product-pages.mjs`), so a future lower-resolution
+series would describe itself honestly rather than inherit the 16×20 promise.
+
+## Known risk, pre-existing
+The personalised keepsake (`/api/download` with `type=personalised`) embeds the full
+master PNG in a PDF and buffers it in the response. A series master is ~21 MB (the
+library's are ~6.6 MB), so a personalised PDF of a series print will be ~21 MB. Check
+that a personalised series order downloads on production before promoting the
+personalise link for these; if it fails, render the keepsake from a downscaled copy.
 
 ## Also
 - `scripts/build-mockups-pil.py` makes the framed mockups with Pillow when ImageMagick
