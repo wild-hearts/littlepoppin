@@ -44,12 +44,16 @@ detail. The product-page bullets are still computed from the real pixel size
 (`fileBullets()` in `scripts/build-product-pages.mjs`), so a future lower-resolution
 series would describe itself honestly rather than inherit the 16×20 promise.
 
-## Known risk, pre-existing
-The personalised keepsake (`/api/download` with `type=personalised`) embeds the full
-master PNG in a PDF and buffers it in the response. A series master is ~21 MB (the
-library's are ~6.6 MB), so a personalised PDF of a series print will be ~21 MB. Check
-that a personalised series order downloads on production before promoting the
-personalise link for these; if it fails, render the keepsake from a downscaled copy.
+## Personalised keepsake delivery (fixed 5 Nov 2026)
+Checking the risk above found a pre-existing bug: `/api/download` buffered the keepsake
+PDF in the response, and Vercel refuses a function response body over 4.5 MB. The
+smallest keepsake (a library print) is 9.5 MB, a series print's is 36 MB. Stripe shows
+no personalised keepsake had ever been bought, so it had never been exercised. The
+route now writes the PDF once per paid session to the private Blob store
+(`keepsakes/<session>/<Name>-little-poppin-print.pdf`) and redirects to a presigned
+link, the same way a single print is delivered; a repeat download skips the render.
+Measured locally for a series print: 12 s render plus upload, 36 MB, 405 MB RSS.
+`api/download.js` has `maxDuration: 60` in vercel.json for cold starts.
 
 ## Also
 - `scripts/build-mockups-pil.py` makes the framed mockups with Pillow when ImageMagick

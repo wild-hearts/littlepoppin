@@ -31,5 +31,10 @@
       "source": "/host/:key",
       "destination": "/api/keepsakes?op=host&key=:key"
     }
-  ]
+  ],
+  "functions": {
+    "api/download.js": {
+      "maxDuration": 60
+    }
+  }
 }
