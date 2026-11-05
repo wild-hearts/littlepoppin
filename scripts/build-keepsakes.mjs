@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 import jpeg from 'jpeg-js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SITE = 'https://www.littlepoppin.com';
+const SITE = 'https://littlepoppin.com';
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'prints.json'), 'utf8'));
 
 // ---------------------------------------------------------------- colour

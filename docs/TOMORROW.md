@@ -15,7 +15,7 @@ Tick as you go. **YOU** = only you can do it. **ME** = say the word and I'll do 
   tracking email have never actually run.
   Buy a **$19 poster** (11×14, to yourself). One purchase exercises checkout → payment →
   webhook → Printify order → confirmation email → tracking email.
-  Then check `https://www.littlepoppin.com/api/ops?key=<CRON_SECRET>` for
+  Then check `https://littlepoppin.com/api/ops?key=<CRON_SECRET>` for
   `printify-submitted`, then later `printify-order-shipment-created` and `shipping-email`.
   Refund yourself afterwards.
   > Four *silent* failures turned up on 9 Aug. This is the best half-hour available.
@@ -52,7 +52,7 @@ Tick as you go. **YOU** = only you can do it. **ME** = say the word and I'll do 
 - [ ] **GA4**, *YOU (3 min)*, then *ME*
   No analytics at all: no pageviews, no idea what sells or where buyers come from.
   analytics.google.com → Admin → Create → Property (`Little Poppin`, Australia, AUD) →
-  Web stream for `https://www.littlepoppin.com` → copy the **Measurement ID**
+  Web stream for `https://littlepoppin.com` → copy the **Measurement ID**
   (`G-XXXXXXXXXX`) and paste it in chat. It is public, not a secret.
   Everything else is built: snippet on all 135 pages, plus `view_item`, `begin_checkout`
   and `purchase`.

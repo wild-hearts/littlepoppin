@@ -22,7 +22,7 @@ const TOKEN = (() => {
   return m ? m[1].trim().replace(/^["']|["']$/g, '') : null;
 })();
 const SHOP = 28504147;
-const URL_BASE = process.env.SITE_URL || 'https://www.littlepoppin.com';
+const URL_BASE = process.env.SITE_URL || 'https://littlepoppin.com';
 // Printify does not sign webhooks, so authenticity starts with a shared key in the URL it
 // calls. Generated once and stored alongside the script's output so it can be piped into
 // Vercel without ever being printed.

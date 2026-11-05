@@ -14,4 +14,4 @@ Disallow: /invite.html
 Disallow: /manage.html
 Disallow: /sent.html
 
-Sitemap: https://www.littlepoppin.com/sitemap.xml
+Sitemap: https://littlepoppin.com/sitemap.xml

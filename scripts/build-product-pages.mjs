@@ -52,7 +52,7 @@ function fileBullets(p) {
   return `            <li>High-resolution PNG, ${w} × ${h} px (4:5 ratio, ${dpiAt8 >= 280 ? '~300' : dpiAt8} DPI at 8×10&Prime;)</li>
             <li>Prints beautifully at ${list}</li>`;
 }
-const SITE = 'https://www.littlepoppin.com';
+const SITE = 'https://littlepoppin.com';
 
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'prints.json'), 'utf8'));
 const sectionTitle = Object.fromEntries(data.sections.map((s) => [s.id, s.nav]));
