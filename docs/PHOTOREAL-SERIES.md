@@ -62,3 +62,33 @@ Measured locally for a series print: 12 s render plus upload, 36 MB, 405 MB RSS.
   when a master folder is absent the section is carried forward from `data/prints.json`.
 - A seventh folder, `little-poppin-photorealistic-series-02` (20 PNGs: trucks, space,
   ocean animals, woodland), was not in the handoff package and is not in the shop.
+
+
+## Series 02 added (6 Nov 2026)
+
+Four more collections from `little-poppin-photorealistic-series-02/` (one source folder,
+four themed subfolders): Woodland Magic (10), Ocean (4), Space (3), Vehicles (3). They go
+through the same pipeline as the first six: `scripts/upscale-series.mjs` (3x Real-ESRGAN,
+3366x4206 masters in `~/Downloads/littlepoppin-masters-upscaled/`), `npm run build:site`,
+`scripts/publish-prints.mjs` (private Blob, 20/20 verified through `presignGet`), rebuild.
+The nested `dir` is fine because every reader joins the series root with `s.dir` and keys
+previews and skus off `s.id`. Titles and descriptions live in `lib/print-meta.js`.
+
+Catalogue is now 173 prints across 14 sections. Home-page copy and the "173 designs" tag
+were updated by hand in `index.html`.
+
+## Atelier scenes as page heroes (6 Nov 2026)
+
+The 25 landscape atelier scenes (September 2026, previously only in the stale Documents
+copy) now carry the page heroes. Web copies live in `images/banners/` (1800px and 900px
+JPEGs, `--hero-art` / `--hero-art-sm`), the modifier is `.prints-hero--art` /
+`.kp-hero--art` in `styles.css`, and the image is set inline on each `<header>` with an
+absolute `/images/banners/` path so nested pages resolve it. Assignments: home = Starlight
+Circus; prints = Magical Celestial; Print Club = Clockwork Library; guides = Enchanted
+Toyshop; printables = Secret Dinosaur Museum; personalise = Teddy Moonlight Picnic;
+custom = Little Astronomer; cards landing = Woodland Masquerade; card categories =
+Moonlit Garden Railway; invitations landing = Midnight Carousel; invitation categories =
+Treasure Island. The home "Step inside" band uses Fairy Garden, Magical Swan and Balloon
+Regatta. Bright scenes (Moonbeam Patisserie, Rainbow Wishes) were tried and dropped: the
+white type did not read over them. The full set, with a contact sheet, is in
+`~/Downloads/littlepoppin-image-library/atelier-scenes/`.

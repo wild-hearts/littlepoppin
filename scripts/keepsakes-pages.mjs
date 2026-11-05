@@ -125,7 +125,7 @@ export async function buildPages({ REPO, SITE }) {
     const tiles = occ.map(({ o, cs }, i) => R.occasionTile(o.name, `${cs.length} ${cs.length === 1 ? 'card' : 'cards'}`, `cards/${o.slug}.html`, R.cardFront(cs[0], { priority: i < 3 }), { feature: big.has(o.slug), priority: i < 3 })).join('\n');
     write('cards.html', `${head({ title: 'E-cards for Every Little Occasion | Little Poppin', description: `${CARDS.length} e-cards on Little Poppin’s nursery art, opened from a wax-sealed envelope on their phone. New baby, birthdays, Christmas, thank you and more, with your words inside. ${cardPrice} a card.`, canonical: `${SITE}/cards.html`, image: img(cardsFor('new-baby')[0].design.preview), up: '', jsonLd: [faqLd(cardFaq)] })}
 ${nav('')}
-  <header class="kp-hero">
+  <header class="kp-hero kp-hero--art" style="--hero-art:url('/images/banners/woodland-masquerade.jpg');--hero-art-sm:url('/images/banners/woodland-masquerade-sm.jpg')">
     <div class="container">
       <div class="section-label">E-cards</div>
       <h1>A card for <em>every little occasion.</em></h1>
@@ -145,7 +145,7 @@ ${footer('')}
       const tiles = cs.map((c, i) => R.cardTile(c, `../card/${c.slug}.html`, { feature: cs.length > 6 && i % 11 === 0, priority: i < 4 })).join('\n');
       write(`cards/${o.slug}.html`, `${head({ title: `${o.name} E-cards | Little Poppin`, description: `${cs.length} ${o.name.toLowerCase()} e-cards on Little Poppin’s nursery art, opened like a real envelope, with your message inside. ${cardPrice} a card.`, canonical: `${SITE}/cards/${o.slug}.html`, image: img(cs[0].design.preview), up: '../', jsonLd: [crumbs([['Home', `${SITE}/`], ['E-cards', `${SITE}/cards.html`], [o.name, `${SITE}/cards/${o.slug}.html`]])] })}
 ${nav('../')}
-  <header class="kp-hero">
+  <header class="kp-hero kp-hero--art" style="--hero-art:url('/images/banners/moonlit-garden-railway.jpg');--hero-art-sm:url('/images/banners/moonlit-garden-railway-sm.jpg')">
     <div class="container">
       <p class="crumb"><a href="../cards.html">E-cards</a>, ${esc(o.name)}</p>
       <h1>${esc(o.greeting)}</h1>
@@ -193,7 +193,7 @@ ${footer('../')}
     const tiles = occ.map(({ o, ds }, i) => R.occasionTile(o.name, `${ds.length} designs`, `invitations/${o.slug}.html`, R.backdrop(ds[0], { priority: i < 3 }) + `<span class="mini" aria-hidden="true" style="--tilt:${((i * 7) % 9 - 4) * 1.1}deg">${R.envelope(ds[0], ds[0].sample.title, { still: true })}</span>`, { feature: i === 0, priority: i < 3 })).join('\n');
     write('invitations.html', `${head({ title: 'Kids’ Party Invitations Online | Little Poppin', description: `${INVITES.length} online invitations on Little Poppin’s nursery art: kids’ birthdays, first birthdays, baby showers, christenings and more. A wax-sealed envelope, replies and a guest list. ${invPrice} an event.`, canonical: `${SITE}/invitations.html`, image: img(invitesFor('kids-birthday')[0].preview), up: '', jsonLd: [faqLd(invFaq)] })}
 ${nav('')}
-  <header class="kp-hero">
+  <header class="kp-hero kp-hero--art" style="--hero-art:url('/images/banners/midnight-carousel.jpg');--hero-art-sm:url('/images/banners/midnight-carousel-sm.jpg')">
     <div class="container">
       <div class="section-label">Online invitations</div>
       <h1>The party starts when they <em>break the seal.</em></h1>
@@ -213,7 +213,7 @@ ${footer('')}
       const tiles = ds.map((d, i) => R.inviteThumb(d, `../invitation/${d.slug}.html`, o.name, { priority: i < 4 })).join('\n');
       write(`invitations/${o.slug}.html`, `${head({ title: `${o.plural} | Little Poppin`, description: `${ds.length} ${o.plural.toLowerCase()} on Little Poppin’s nursery art, opened from a wax-sealed envelope, with replies and a guest list. ${o.blurb}`, canonical: `${SITE}/invitations/${o.slug}.html`, image: img(ds[0].preview), up: '../', jsonLd: [crumbs([['Home', `${SITE}/`], ['Invitations', `${SITE}/invitations.html`], [o.name, `${SITE}/invitations/${o.slug}.html`]])] })}
 ${nav('../')}
-  <header class="kp-hero">
+  <header class="kp-hero kp-hero--art" style="--hero-art:url('/images/banners/treasure-island.jpg');--hero-art-sm:url('/images/banners/treasure-island-sm.jpg')">
     <div class="container">
       <p class="crumb"><a href="../invitations.html">Invitations</a>, ${esc(o.name)}</p>
       <h1>${esc(o.plural)}</h1>

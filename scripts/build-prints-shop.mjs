@@ -272,8 +272,8 @@ ${cards}
 // Sections are built in catalogue order above; the page shows them in this order.
 // Gallery sets stay first, the Collections (bundles) move below the single prints,
 // since they sell best to someone who has already browsed.
-const PAGE_ORDER = ['magical-stories', 'nursery', 'zodiac', 'academia', 'festive',
-  'magical-realms', 'photo-art', 'australian-wildlife', 'mermaid', 'dog'];
+const PAGE_ORDER = ['magical-stories', 'woodland-magic', 'nursery', 'zodiac', 'academia', 'festive',
+  'magical-realms', 'photo-art', 'australian-wildlife', 'ocean', 'mermaid', 'dog', 'space', 'vehicles'];
 const rank = (id) => { const i = PAGE_ORDER.indexOf(id); return i < 0 ? 99 : i; };
 const idOf = (html) => html.match(/id="([a-z-]+)"/)[1];
 sectionCards.sort((x, y) => rank(idOf(x)) - rank(idOf(y)));
@@ -507,7 +507,7 @@ const page = `<!DOCTYPE html>
     </div>
   </nav>
 
-  <header class="prints-hero">
+  <header class="prints-hero prints-hero--art" style="--hero-art:url('/images/banners/magical-celestial.jpg');--hero-art-sm:url('/images/banners/magical-celestial-sm.jpg')">
     <div class="container">
       <div class="section-label">Instant Digital Downloads</div>
       <h1>Little Poppin Art Prints</h1>

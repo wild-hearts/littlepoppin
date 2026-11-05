@@ -8,7 +8,7 @@
        brand name and attribution from every Pin that links here. -->
   <meta name="p:domain_verify" content="aaaa0d318e1401846a8670b54eeb84ba"/>
   <title>Magical Nursery Art, Personalised Prints &amp; Bamboo Swaddles | Little Poppin</title>
-  <meta name="description" content="More than 150 dreamy art prints, personalised name keepsakes, printable colouring books and premium bamboo baby swaddles. Digital downloads arrive instantly; framed prints are printed close to you and posted worldwide." />
+  <meta name="description" content="More than 170 dreamy art prints, personalised name keepsakes, printable colouring books and premium bamboo baby swaddles. Digital downloads arrive instantly; framed prints are printed close to you and posted worldwide." />
   <link rel="canonical" href="https://www.littlepoppin.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Little Poppin" />
@@ -37,19 +37,38 @@
        Art-led rather than photo-led: the shop is 121 pieces of artwork and two
        swaddles, so the front page should open on the artwork. Prints are shown at
        their true 4:5. Cropping them to a letterbox band threw away the composition. */
-    .lp-hero { background: linear-gradient(170deg, var(--pink-light) 0%, var(--cream) 55%, var(--warm-white) 100%);
+    /* Nov 2026: the hero now opens on the Starlight Circus atelier scene, full-bleed and
+       dark-glazed, with the white-ink logo and white type over it. The print strip still
+       hangs off the bottom edge in true 4:5. */
+    .lp-hero { position: relative; isolation: isolate; color: #fff;
+               background: #241d3a url('images/banners/starlight-circus.jpg') center 40% / cover no-repeat;
                padding: 130px 0 0; text-align: center; overflow: hidden; }
-    .lp-hero__logo { width: 230px; margin: 0 auto 22px; }
+    .lp-hero::before { content: ""; position: absolute; inset: 0; z-index: -1;
+               background: linear-gradient(180deg, rgba(18,14,34,.55) 0%, rgba(18,14,34,.28) 40%, rgba(18,14,34,.66) 100%); }
+    @media (max-width: 700px) { .lp-hero { background-image: url('images/banners/starlight-circus-sm.jpg'); } }
+    .lp-hero__logo { width: 230px; margin: 0 auto 22px; filter: drop-shadow(0 2px 14px rgba(0,0,0,.45)); }
     .lp-hero h1 { font-family: var(--font-serif); font-size: clamp(2.1rem, 5vw, 3.6rem); font-weight: 400;
-                  line-height: 1.12; margin: 0 0 16px; }
-    .lp-hero__sub { font-size: clamp(1rem, 2vw, 1.18rem); color: var(--mid-grey); max-width: 620px;
-                    margin: 0 auto 30px; }
+                  line-height: 1.12; margin: 0 0 16px; color: #fff; text-shadow: 0 2px 28px rgba(0,0,0,.6); }
+    .lp-hero__sub { font-size: clamp(1rem, 2vw, 1.18rem); color: rgba(255,255,255,.9); max-width: 620px;
+                    margin: 0 auto 30px; text-shadow: 0 1px 14px rgba(0,0,0,.55); }
+    .lp-hero .btn--outline-dark { color: #fff; border-color: #fff; }
+    /* The home nav is transparent until you scroll, so over the dark hero its links,
+       logo and burger go white. The mobile slide-out menu keeps its cream panel, so the
+       links inside it stay dark. */
+    .nav:not(.nav--scrolled) .nav__links a { color: #fff; text-shadow: 0 1px 10px rgba(0,0,0,.5); }
+    .nav:not(.nav--scrolled) .nav__links a:hover { color: #fff; background: rgba(255,255,255,.16); }
+    .nav:not(.nav--scrolled) .nav__logo img { filter: brightness(0) invert(1) drop-shadow(0 1px 8px rgba(0,0,0,.4)); }
+    .nav:not(.nav--scrolled) .nav__toggle span { background: #fff; }
+    @media (max-width: 768px) {
+      .nav:not(.nav--scrolled) .nav__links a { color: var(--charcoal); text-shadow: none; }
+      .nav:not(.nav--scrolled) .nav__toggle--open span { background: var(--charcoal); }
+    }
     .lp-hero__cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
     /* .btn--lg carries an unconditional width:100%, intended for the single-column buy
        areas on product pages. Side-by-side hero buttons need to size to their content. */
     .lp-hero__cta .btn { width: auto; }
     @media (max-width: 480px) { .lp-hero__cta .btn { width: 100%; } }
-    .lp-hero__note { font-size: 0.88rem; color: var(--mid-grey); margin: 0 0 46px; }
+    .lp-hero__note { font-size: 0.88rem; color: rgba(255,255,255,.85); margin: 0 0 46px; }
 
     .lp-strip { display: flex; justify-content: center; gap: 14px; padding: 0 24px 6px; }
     .lp-strip a { flex: 0 1 190px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-lg);
@@ -136,9 +155,9 @@
   <!-- ===== HERO ===== -->
   <header class="lp-hero" id="home">
     <div class="container">
-      <img src="images/logo.png" alt="Little Poppin" class="lp-hero__logo" />
+      <img src="images/logo-light.png" alt="Little Poppin" class="lp-hero__logo" />
       <h1>Magical Art for Little Rooms</h1>
-      <p class="lp-hero__sub">More than 150 dreamy prints, keepsakes with their name on them,
+      <p class="lp-hero__sub">More than 170 dreamy prints, keepsakes with their name on them,
          printables to keep small hands busy. And the softest bamboo swaddles.</p>
       <div class="lp-hero__cta">
         <a href="prints.html" class="btn btn--primary btn--lg">Shop Art Prints</a>
@@ -166,11 +185,11 @@
         <a href="prints.html" class="lp-way">
           <div class="lp-way__img">
             <img src="images/prints/sets/bundle-nursery.jpg" alt="A selection of Little Poppin nursery art prints" />
-            <span class="lp-way__tag">153 designs</span>
+            <span class="lp-way__tag">173 designs</span>
           </div>
           <div class="lp-way__body">
             <h3>Art Prints</h3>
-            <p>Dreamy nursery scenes, star signs, enchanted libraries and Christmas magic. Downloaded and ready to frame in minutes.</p>
+            <p>Dreamy nursery scenes, star signs, woodland magic, oceans, space, big machines and Christmas. Downloaded and ready to frame in minutes.</p>
             <span class="lp-way__price">From $12 <span>· instant download</span></span>
             <span class="lp-way__go">Browse the shop →</span>
           </div>
@@ -280,6 +299,26 @@
           </div>
         </a>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STEP INSIDE (atelier scenes) ===== -->
+  <section class="lp-worlds" aria-label="Step inside">
+    <div class="container">
+      <div class="lp-worlds__grid">
+        <a href="prints.html" class="lp-world">
+          <img src="images/banners/fairy-garden.jpg" alt="A fairy garden at dusk, one of the Little Poppin atelier scenes" loading="lazy" />
+          <div class="lp-world__body"><div class="section-label">Art Prints</div><h3>Worlds for the wall</h3><p>Fourteen collections, from nursery to photoreal.</p></div>
+        </a>
+        <a href="personalise.html" class="lp-world">
+          <img src="images/banners/magical-swan.jpg" alt="Swans on a lantern-lit lake, one of the Little Poppin atelier scenes" loading="lazy" />
+          <div class="lp-world__body"><div class="section-label">Keepsakes</div><h3>Their name, in the picture</h3><p>Any design, personalised while you watch.</p></div>
+        </a>
+        <a href="invitations.html" class="lp-world">
+          <img src="images/banners/balloon-regatta.jpg" alt="A balloon regatta over the hills at sunrise, one of the Little Poppin atelier scenes" loading="lazy" />
+          <div class="lp-world__body"><div class="section-label">Parties</div><h3>Invitations that open</h3><p>Wax seal, envelope, your words, their RSVP.</p></div>
+        </a>
       </div>
     </div>
   </section>
@@ -443,7 +482,7 @@
         <div>
           <p class="lp-story__lead">It began with one mother wanting something lovelier than what was on the shelf.</p>
           <p>Little Poppin started with a swaddle. A premium bamboo wrap, softer than cotton, printed with a design you'd actually want to be photographed holding. Parents kept asking where the artwork came from.</p>
-          <p>So the artwork became the point. Today there are more than 150 original prints across nursery, star signs, magical academia and Christmas, plus photoreal collections of dogs, mermaids, magical realms and Australian wildlife. Plus colouring books, milestone cards, wall calendars and keepsakes with your child's name on them.</p>
+          <p>So the artwork became the point. Today there are more than 170 original prints across nursery, star signs, magical academia and Christmas, plus photoreal collections of woodland magic, ocean, space, vehicles, dogs, mermaids, magical realms and Australian wildlife. Plus colouring books, milestone cards, wall calendars and keepsakes with your child's name on them.</p>
           <p>Nearly all of it is delivered the second you buy it, so a last-minute gift is still a beautiful one. And if you'd rather not print it yourself, we'll have it printed, framed and posted to you wherever you are.</p>
         </div>
         <div>

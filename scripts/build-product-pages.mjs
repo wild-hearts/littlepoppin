@@ -477,7 +477,7 @@ ${relatedGrid(comps, up)}`;
     image: extras[0]?.preview ? SITE + extras[0].preview : `${SITE}/images/prints/05-sleepy-moon-and-stars.jpg`,
     jsonLd, up: '',
   }) + `
-  <header class="prints-hero">
+  <header class="prints-hero prints-hero--art" style="--hero-art:url('/images/banners/secret-dinosaur-museum.jpg');--hero-art-sm:url('/images/banners/secret-dinosaur-museum-sm.jpg')">
     <div class="container">
       <div class="section-label">Printables</div>
       <h1>More Than Wall Art</h1>
@@ -621,7 +621,7 @@ ${g.faq.map(([q, a]) => `        <details><summary>${esc(q)}</summary><p>${esc(a
     head({ title: 'Guides. Styling, Sizing &amp; Printing Nursery Art | Little Poppin',
            description: 'Practical guides to nursery wall art: how to style a gallery wall, what size print to choose, and how to print a digital download anywtralia.',
            canonical: `${SITE}/guides.html`, image: SITE + GUIDES[0].image, jsonLd: [indexLd], up: '' }) + `
-  <header class="prints-hero">
+  <header class="prints-hero prints-hero--art" style="--hero-art:url('/images/banners/enchanted-toyshop.jpg');--hero-art-sm:url('/images/banners/enchanted-toyshop-sm.jpg')">
     <div class="container">
       <div class="section-label">Guides</div>
       <h1>Getting It On the Wall</h1>

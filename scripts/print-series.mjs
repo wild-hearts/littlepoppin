@@ -38,6 +38,21 @@ export const SERIES = [
   { id: 'dog', nav: 'Dogs', title: '🐶 Dogs',
     blurb: 'Ten beloved breeds, each caught mid-happiness. The print for the family whose first baby had four legs.',
     dir: 'little-poppin-dog-series-01', price: 1200 },
+  // Series 02 (November 2026): one source folder with four themed subfolders, each its
+  // own shop section. The nested dir works everywhere because every reader joins
+  // SERIES_SRC/SERIES_MASTERS with s.dir, and previews/skus key off s.id, not the path.
+  { id: 'woodland-magic', nav: 'Woodland Magic', title: '🦊 Woodland Magic',
+    blurb: 'A fox in the ferns, an owl at dusk, a fairy door in the tree roots and a bakery for mice. Photoreal woodland wonder for a room that believes in it.',
+    dir: 'little-poppin-photorealistic-series-02/Magic', price: 1200 },
+  { id: 'ocean', nav: 'Ocean', title: '🐋 Ocean',
+    blurb: 'A humpback mother and calf, a turtle over the reef, a manta ray and a seal pup. Big blue calm, photographed-looking and gentle.',
+    dir: 'little-poppin-photorealistic-series-02/Ocean', price: 1200 },
+  { id: 'space', nav: 'Space', title: '🚀 Space',
+    blurb: 'An astronaut and rover on the moon, a lunar lander and Saturn with her rings. For the kid who asks what is up there.',
+    dir: 'little-poppin-photorealistic-series-02/Space', price: 1200 },
+  { id: 'vehicles', nav: 'Vehicles', title: '🚒 Vehicles',
+    blurb: 'A fire engine at the station, a yellow dump truck and a classic camper van. Big machines, beautifully lit, for a room that goes vroom.',
+    dir: 'little-poppin-photorealistic-series-02/Vehicles', price: 1200 },
 ];
 export const SERIES_IDS = new Set(SERIES.map((s) => s.id));
 

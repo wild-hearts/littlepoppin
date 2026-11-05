@@ -2909,6 +2909,386 @@ export const ART = [
   "foil": "gold"
  },
  {
+  "slug": "woodland-magic-woodland-fox",
+  "sku": "print-woodland-magic-woodland-fox",
+  "title": "Fox in the Ferns",
+  "description": "A red fox rests its chin on a mossy log while morning light pours through the ferns. The quietest moment in the forest.",
+  "preview": "/images/prints/woodland-magic/woodland-fox.jpg",
+  "section": "woodland-magic",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2718",
+   "ink": "#f3f1e7",
+   "accent": "#caae72",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "woodland-magic-woodland-owl",
+  "sku": "print-woodland-magic-woodland-owl",
+  "title": "Owl at Dusk",
+  "description": "A barn owl watches from a mossy branch as the moon rises behind the trees. Wide-eyed, soft-feathered and wise.",
+  "preview": "/images/prints/woodland-magic/woodland-owl.jpg",
+  "section": "woodland-magic",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#182a21",
+   "ink": "#e7f3ed",
+   "accent": "#7ca5c0",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "woodland-magic-hedgehog-in-fern",
+  "sku": "print-woodland-magic-hedgehog-in-fern",
+  "title": "Hedgehog in the Ferns",
+  "description": "A little hedgehog peeks out from a hollow in the roots, dew on the ferns and a daisy at the door.",
+  "preview": "/images/prints/woodland-magic/hedgehog-in-fern.jpg",
+  "section": "woodland-magic",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2818",
+   "ink": "#f3f2e7",
+   "accent": "#d0ba6c",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "woodland-magic-white-rabbit-bluebells",
+  "sku": "print-woodland-magic-white-rabbit-bluebells",
+  "title": "White Rabbit in the Bluebells",
+  "description": "A white rabbit sits up among the bluebells, ears high, sunlight on its fur. Spring in one photograph.",
+  "preview": "/images/prints/woodland-magic/white-rabbit-bluebells.jpg",
+  "section": "woodland-magic",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2818",
+   "ink": "#f3f2e7",
+   "accent": "#c2b47b",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "woodland-magic-fairy-door-in-tree-roots",
+  "sku": "print-woodland-magic-fairy-door-in-tree-roots",
+  "title": "The Fairy Door",
+  "description": "Mossy steps climb to a tiny lamplit door set deep in the tree roots, foxgloves nodding beside it. Someone small is home.",
+  "preview": "/images/prints/woodland-magic/fairy-door-in-tree-roots.jpg",
+  "section": "woodland-magic",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2618",
+   "ink": "#f3f0e7",
+   "accent": "#cfb56d",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "woodland-magic-unicorn-by-waterfall",
+  "sku": "print-woodland-magic-unicorn-by-waterfall",
+  "title": "Unicorn by the Waterfall",
+  "description": "A white unicorn pauses at a forest waterfall, mist in the air and ferns underfoot. Seen for just a second.",
+  "preview": "/images/prints/woodland-magic/unicorn-by-waterfall.jpg",
+  "section": "woodland-magic",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#f5faf2",
+   "ink": "#29381e",
+   "accent": "#818a42",
+   "metal": "#b48a3c",
+   "dark": false
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "woodland-magic-emerald-baby-dragon",
+  "sku": "print-woodland-magic-emerald-baby-dragon",
+  "title": "Emerald Baby Dragon",
+  "description": "A small green dragon curls up inside a tree hollow, scales catching the light, wings not yet grown into.",
+  "preview": "/images/prints/woodland-magic/emerald-baby-dragon.jpg",
+  "section": "woodland-magic",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2918",
+   "ink": "#f3f3e7",
+   "accent": "#c9b773",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "woodland-magic-miniature-woodland-bakery",
+  "sku": "print-woodland-magic-miniature-woodland-bakery",
+  "title": "The Woodland Bakery",
+  "description": "A tiny bakery built into a tree trunk, windows glowing, toadstools by the step. Open early for the mice.",
+  "preview": "/images/prints/woodland-magic/miniature-woodland-bakery.jpg",
+  "section": "woodland-magic",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2318",
+   "ink": "#f3eee7",
+   "accent": "#cc9170",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "woodland-magic-rabbit-in-moonboat",
+  "sku": "print-woodland-magic-rabbit-in-moonboat",
+  "title": "Rabbit in the Moon Boat",
+  "description": "A sleepy rabbit tucked under a blanket in a little wooden boat, drifting through the clouds under a full moon.",
+  "preview": "/images/prints/woodland-magic/rabbit-in-moonboat.jpg",
+  "section": "woodland-magic",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#181e2a",
+   "ink": "#e7ebf3",
+   "accent": "#7c9bc0",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "woodland-magic-wizards-woodland-study",
+  "sku": "print-woodland-magic-wizards-woodland-study",
+  "title": "The Wizard's Woodland Study",
+  "description": "A study grown inside a tree: books on living shelves, a brass telescope, an open spellbook and a lamp left on.",
+  "preview": "/images/prints/woodland-magic/wizards-woodland-study.jpg",
+  "section": "woodland-magic",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2018",
+   "ink": "#f3ede7",
+   "accent": "#ce946e",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "ocean-humpback-mother-and-calf",
+  "sku": "print-ocean-humpback-mother-and-calf",
+  "title": "Humpback Mother and Calf",
+  "description": "A humpback whale and her calf rise through sunlit blue water, side by side. Enormous, gentle and calm.",
+  "preview": "/images/prints/ocean/humpback-mother-and-calf.jpg",
+  "section": "ocean",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18252a",
+   "ink": "#e7eff3",
+   "accent": "#64b8d8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "ocean-green-sea-turtle-over-reef",
+  "sku": "print-ocean-green-sea-turtle-over-reef",
+  "title": "Sea Turtle over the Reef",
+  "description": "A green sea turtle glides over a coral reef, sunbeams rippling across its shell and the water glowing turquoise.",
+  "preview": "/images/prints/ocean/green-sea-turtle-over-reef.jpg",
+  "section": "ocean",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18292a",
+   "ink": "#e7f2f3",
+   "accent": "#64c2d8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "ocean-manta-ray-over-coral-reef",
+  "sku": "print-ocean-manta-ray-over-coral-reef",
+  "title": "Manta Ray over the Reef",
+  "description": "A manta ray sweeps over the coral like a kite in slow motion, wings wide, light dancing on the reef below.",
+  "preview": "/images/prints/ocean/manta-ray-over-coral-reef.jpg",
+  "section": "ocean",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18252a",
+   "ink": "#e7f0f3",
+   "accent": "#64b1d8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "ocean-young-grey-seal-portrait",
+  "sku": "print-ocean-young-grey-seal-portrait",
+  "title": "Seal Pup on the Rocks",
+  "description": "A young grey seal rests on the rocks with the tide coming in, whiskers wet and eyes enormous.",
+  "preview": "/images/prints/ocean/young-grey-seal-portrait.jpg",
+  "section": "ocean",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2018",
+   "ink": "#f3ece7",
+   "accent": "#c1a67c",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "space-astronaut-and-lunar-rover",
+  "sku": "print-space-astronaut-and-lunar-rover",
+  "title": "Astronaut and Lunar Rover",
+  "description": "An astronaut stands beside the rover on the grey lunar surface, Earth rising small and blue behind.",
+  "preview": "/images/prints/space/astronaut-and-lunar-rover.jpg",
+  "section": "space",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a181c",
+   "ink": "#f3e7ea",
+   "accent": "#c2a27a",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "space-lunar-lander",
+  "sku": "print-space-lunar-lander",
+  "title": "The Lunar Lander",
+  "description": "A gold-foiled lander rests on the moon, its shadow long across the dust, Earth watching from the black sky.",
+  "preview": "/images/prints/space/lunar-lander.jpg",
+  "section": "space",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#24182a",
+   "ink": "#efe7f3",
+   "accent": "#d5ac67",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "space-saturn-and-rings",
+  "sku": "print-space-saturn-and-rings",
+  "title": "Saturn and Her Rings",
+  "description": "Saturn fills the frame, bands of cream and gold, rings sweeping out into the dark. The best planet, settled.",
+  "preview": "/images/prints/space/saturn-and-rings.jpg",
+  "section": "space",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2018",
+   "ink": "#f3ede7",
+   "accent": "#c0a07c",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "vehicles-fire-engine-at-station",
+  "sku": "print-vehicles-fire-engine-at-station",
+  "title": "Fire Engine at the Station",
+  "description": "A red fire engine gleams outside the brick station as the sun goes down. Polished, ready and very big.",
+  "preview": "/images/prints/vehicles/fire-engine-at-station.jpg",
+  "section": "vehicles",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1f18",
+   "ink": "#f3ece7",
+   "accent": "#d0876c",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "vehicles-yellow-dump-truck",
+  "sku": "print-vehicles-yellow-dump-truck",
+  "title": "Yellow Dump Truck",
+  "description": "A huge yellow dump truck rolls along a quarry road, tyres taller than a grown-up, dust in the sunshine.",
+  "preview": "/images/prints/vehicles/yellow-dump-truck.jpg",
+  "section": "vehicles",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#faf5f2",
+   "ink": "#38291e",
+   "accent": "#915e3b",
+   "metal": "#b48a3c",
+   "dark": false
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "vehicles-classic-camper-van",
+  "sku": "print-vehicles-classic-camper-van",
+  "title": "Camper Van by the Sea",
+  "description": "A mint-green classic camper van parked under a tree above the beach, roof up, the whole summer ahead of it.",
+  "preview": "/images/prints/vehicles/classic-camper-van.jpg",
+  "section": "vehicles",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#faf8f2",
+   "ink": "#38301e",
+   "accent": "#42638a",
+   "metal": "#8a949e",
+   "dark": false
+  },
+  "foil": "silver"
+ },
+ {
   "slug": "moses-basket-fawn",
   "sku": "card-moses-basket-fawn",
   "kind": "card",
