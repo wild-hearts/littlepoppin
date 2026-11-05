@@ -7,6 +7,7 @@
 import Stripe from 'stripe';
 import fs from 'node:fs';
 import path from 'node:path';
+import { head, put } from '@vercel/blob';
 import { presignGet } from '../lib/blob-link.js';
 import { getDigital, setComponents } from '../lib/products.js';
 import { recordEvent } from '../lib/events.js';
@@ -60,17 +61,28 @@ export default async function handler(req, res) {
       };
       if (!fields.name) return res.status(422).send('This order is missing its personalisation details. Please contact us.');
 
-      const artResp = await fetch(await fileUrl(product.file));
-      if (!artResp.ok) throw new Error(`art fetch failed: ${artResp.status}`);
-      const art = Buffer.from(await artResp.arrayBuffer());
+      // The rendered PDF is 10 to 40 MB (the whole master is embedded) and a Vercel
+      // function may not return a body over 4.5 MB, so it is never sent from here.
+      // It is written to the private Blob store once per paid session and the buyer
+      // is redirected to a presigned link, exactly like a single print. A repeat
+      // download finds the stored copy and skips the render.
+      const token = process.env.BLOB_READ_WRITE_TOKEN;
+      // The last path segment is the filename the buyer's browser saves.
+      const keepsakePath = `keepsakes/${sessionId}/${safeFilename(fields.name)}-little-poppin-print.pdf`;
+      const existing = await head(keepsakePath, { token }).catch(() => null);
+      if (!existing) {
+        const artResp = await fetch(await fileUrl(product.file));
+        if (!artResp.ok) throw new Error(`art fetch failed: ${artResp.status}`);
+        const art = Buffer.from(await artResp.arrayBuffer());
 
-      const fontPath = path.join(process.cwd(), 'assets', 'fonts', 'CormorantGaramond.ttf');
-      const pdf = await renderPersonalisedPdf(art, fields, { regular: fs.readFileSync(fontPath) });
-
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition',
-        `attachment; filename="${safeFilename(fields.name)}-little-poppin-print.pdf"`);
-      return res.status(200).send(Buffer.from(pdf));
+        const fontPath = path.join(process.cwd(), 'assets', 'fonts', 'CormorantGaramond.ttf');
+        const pdf = await renderPersonalisedPdf(art, fields, { regular: fs.readFileSync(fontPath) });
+        await put(keepsakePath, Buffer.from(pdf), {
+          access: 'private', token, addRandomSuffix: false, allowOverwrite: true,
+          contentType: 'application/pdf',
+        });
+      }
+      return res.redirect(302, await fileUrl(keepsakePath));
     }
 
     // Gallery set or collection bundle → a page of presigned links, one per print.
