@@ -1769,6 +1769,1146 @@ export const ART = [
   "foil": "silver"
  },
  {
+  "slug": "magical-stories-wardrobe-to-snowy-forest",
+  "sku": "print-magical-stories-wardrobe-to-snowy-forest",
+  "title": "Wardrobe to the Snowy Forest",
+  "description": "An old wardrobe door swings open onto a lamplit, snow-covered wood. The first page of every winter adventure.",
+  "preview": "/images/prints/magical-stories/wardrobe-to-snowy-forest.jpg",
+  "section": "magical-stories",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1e18",
+   "ink": "#f3ebe7",
+   "accent": "#c69377",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-stories-sleeping-red-dragon-mapmakers-desk",
+  "sku": "print-magical-stories-sleeping-red-dragon-mapmakers-desk",
+  "title": "Sleeping Dragon on the Mapmaker's Desk",
+  "description": "A small red dragon dozes among maps, a compass and a glowing lantern. Treasure hunts start here.",
+  "preview": "/images/prints/magical-stories/sleeping-red-dragon-mapmakers-desk.jpg",
+  "section": "magical-stories",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1e18",
+   "ink": "#f3ebe7",
+   "accent": "#cc8f70",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-stories-lantern-boat-on-forest-stream",
+  "sku": "print-magical-stories-lantern-boat-on-forest-stream",
+  "title": "Lantern Boat on the Forest Stream",
+  "description": "A little wooden boat drifts past lily pads under a full moon, its lantern lighting the way home.",
+  "preview": "/images/prints/magical-stories/lantern-boat-on-forest-stream.jpg",
+  "section": "magical-stories",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#232a18",
+   "ink": "#eef3e7",
+   "accent": "#7c8bc1",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "magical-stories-bridge-to-hidden-garden",
+  "sku": "print-magical-stories-bridge-to-hidden-garden",
+  "title": "Bridge to the Hidden Garden",
+  "description": "A mossy stone bridge leads through an archway into a sunlit secret garden. Somewhere worth exploring.",
+  "preview": "/images/prints/magical-stories/bridge-to-hidden-garden.jpg",
+  "section": "magical-stories",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2a18",
+   "ink": "#f3f3e7",
+   "accent": "#cbb572",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-stories-woodland-bakery",
+  "sku": "print-magical-stories-woodland-bakery",
+  "title": "The Woodland Bakery",
+  "description": "A thatched cottage bakery glows at the edge of the woods, its shelves stacked with fresh bread.",
+  "preview": "/images/prints/magical-stories/woodland-bakery.jpg",
+  "section": "magical-stories",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2418",
+   "ink": "#f3efe7",
+   "accent": "#cab272",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-stories-moonlit-village-clocktower",
+  "sku": "print-magical-stories-moonlit-village-clocktower",
+  "title": "Moonlit Village Clocktower",
+  "description": "Ivy climbs a tall clocktower above a village of glowing windows, all under a huge silver moon.",
+  "preview": "/images/prints/magical-stories/moonlit-village-clocktower.jpg",
+  "section": "magical-stories",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2818",
+   "ink": "#f3f2e7",
+   "accent": "#ccae70",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-stories-enchanted-treehouse",
+  "sku": "print-magical-stories-enchanted-treehouse",
+  "title": "The Enchanted Treehouse",
+  "description": "A lantern-lit treehouse with a rope ladder, perched high above a sunset valley. Every child’s dream hideout.",
+  "preview": "/images/prints/magical-stories/enchanted-treehouse.jpg",
+  "section": "magical-stories",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2218",
+   "ink": "#f3eee7",
+   "accent": "#ce906f",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-stories-woodland-fairy-tea-table",
+  "sku": "print-magical-stories-woodland-fairy-tea-table",
+  "title": "Woodland Fairy Tea Table",
+  "description": "A tiny tea party laid on a mushroom table beneath pink foxgloves, with the kettle still steaming.",
+  "preview": "/images/prints/magical-stories/woodland-fairy-tea-table.jpg",
+  "section": "magical-stories",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2018",
+   "ink": "#f3ede7",
+   "accent": "#cd8d6f",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-stories-wishing-well-with-golden-key",
+  "sku": "print-magical-stories-wishing-well-with-golden-key",
+  "title": "Wishing Well with a Golden Key",
+  "description": "A mossy well full of starry water, roses climbing its sides and a golden key waiting on the edge.",
+  "preview": "/images/prints/magical-stories/wishing-well-with-golden-key.jpg",
+  "section": "magical-stories",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2718",
+   "ink": "#f3f1e7",
+   "accent": "#c9b673",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-stories-staircase-to-tree-doorway",
+  "sku": "print-magical-stories-staircase-to-tree-doorway",
+  "title": "Staircase to the Tree Doorway",
+  "description": "Winding stone steps climb a giant tree to a small glowing door. Knock, and see who answers.",
+  "preview": "/images/prints/magical-stories/staircase-to-tree-doorway.jpg",
+  "section": "magical-stories",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2718",
+   "ink": "#f3f1e7",
+   "accent": "#c5b277",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-fox-and-fairy-ring",
+  "sku": "print-magical-realms-fox-and-fairy-ring",
+  "title": "Fox and the Fairy Ring",
+  "description": "A curious fox sniffs at a ring of glowing mushrooms in the bluebell woods at twilight.",
+  "preview": "/images/prints/magical-realms/fox-and-fairy-ring.jpg",
+  "section": "magical-realms",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2a18",
+   "ink": "#f3f3e7",
+   "accent": "#d8b164",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-fairy-winged-owl",
+  "sku": "print-magical-realms-fairy-winged-owl",
+  "title": "Fairy-Winged Owl",
+  "description": "A barn owl with translucent fairy wings perches under the moon, lit by the softest glow.",
+  "preview": "/images/prints/magical-realms/fairy-winged-owl.jpg",
+  "section": "magical-realms",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2418",
+   "ink": "#f3efe7",
+   "accent": "#c2a77a",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-emerald-crystal-dragon",
+  "sku": "print-magical-realms-emerald-crystal-dragon",
+  "title": "Emerald Crystal Dragon",
+  "description": "A small green dragon curls around a nest of glowing crystals, scales shining like gemstones.",
+  "preview": "/images/prints/magical-realms/emerald-crystal-dragon.jpg",
+  "section": "magical-realms",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2518",
+   "ink": "#f3f0e7",
+   "accent": "#d1ad6c",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-unicorn-in-lavender-meadow",
+  "sku": "print-magical-realms-unicorn-in-lavender-meadow",
+  "title": "Unicorn in the Lavender Meadow",
+  "description": "A white unicorn stands in a misty field of lavender as the sun rises behind a faint rainbow.",
+  "preview": "/images/prints/magical-realms/unicorn-in-lavender-meadow.jpg",
+  "section": "magical-realms",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#faf2f4",
+   "ink": "#381e26",
+   "accent": "#8c4053",
+   "metal": "#c4847a",
+   "dark": false
+  },
+  "foil": "rose"
+ },
+ {
+  "slug": "magical-realms-tree-root-miniature-village",
+  "sku": "print-magical-realms-tree-root-miniature-village",
+  "title": "Tree Root Village",
+  "description": "Tiny round doors and glowing windows tucked among the roots of an ancient tree, with a bridge over the stream.",
+  "preview": "/images/prints/magical-realms/tree-root-miniature-village.jpg",
+  "section": "magical-realms",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2418",
+   "ink": "#f3efe7",
+   "accent": "#cbb071",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-mermaid-in-hidden-lagoon",
+  "sku": "print-magical-realms-mermaid-in-hidden-lagoon",
+  "title": "Mermaid in the Hidden Lagoon",
+  "description": "A mermaid rests on a rock in a sunlit lagoon, her tail shimmering in every shade of sea green.",
+  "preview": "/images/prints/magical-realms/mermaid-in-hidden-lagoon.jpg",
+  "section": "magical-realms",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#182a21",
+   "ink": "#e7f3ed",
+   "accent": "#74c9bb",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-moonlit-lake-castle",
+  "sku": "print-magical-realms-moonlit-lake-castle",
+  "title": "Moonlit Lake Castle",
+  "description": "A castle on a tiny island, reflected in still water under a full moon and drifting mist.",
+  "preview": "/images/prints/magical-realms/moonlit-lake-castle.jpg",
+  "section": "magical-realms",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18252a",
+   "ink": "#e7f0f3",
+   "accent": "#7ca1c0",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "magical-realms-fairy-lantern-bluebell",
+  "sku": "print-magical-realms-fairy-lantern-bluebell",
+  "title": "Fairy with a Bluebell Lantern",
+  "description": "A fairy perches among bluebells, lighting her way with a lantern in the deep blue dusk.",
+  "preview": "/images/prints/magical-realms/fairy-lantern-bluebell.jpg",
+  "section": "magical-realms",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2418",
+   "ink": "#f3efe7",
+   "accent": "#cdb26f",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-hidden-tree-library",
+  "sku": "print-magical-realms-hidden-tree-library",
+  "title": "The Hidden Tree Library",
+  "description": "A library grown inside a hollow tree, with spiral stairs, candlelight and shelves to the ceiling.",
+  "preview": "/images/prints/magical-realms/hidden-tree-library.jpg",
+  "section": "magical-realms",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1f18",
+   "ink": "#f3ece7",
+   "accent": "#ca9172",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-phoenix-at-sunrise",
+  "sku": "print-magical-realms-phoenix-at-sunrise",
+  "title": "Phoenix at Sunrise",
+  "description": "A phoenix in red and gold feathers watches the sun rise over misty mountains from a bare branch.",
+  "preview": "/images/prints/magical-realms/phoenix-at-sunrise.jpg",
+  "section": "magical-realms",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1d18",
+   "ink": "#f3eae7",
+   "accent": "#d58367",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "magical-realms-moonlit-enchanted-greenhouse",
+  "sku": "print-magical-realms-moonlit-enchanted-greenhouse",
+  "title": "Moonlit Enchanted Greenhouse",
+  "description": "A glass greenhouse glows from within on a moonlit night, roses tumbling around its door.",
+  "preview": "/images/prints/magical-realms/moonlit-enchanted-greenhouse.jpg",
+  "section": "magical-realms",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2a18",
+   "ink": "#f3f3e7",
+   "accent": "#c9aa73",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "photo-art-enchanted-foxglove-fairy-house",
+  "sku": "print-photo-art-enchanted-foxglove-fairy-house",
+  "title": "Foxglove Fairy House",
+  "description": "A fairy house built inside a pink foxglove, with tiny windows glowing and a ladder to the door.",
+  "preview": "/images/prints/photo-art/enchanted-foxglove-fairy-house.jpg",
+  "section": "photo-art",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2018",
+   "ink": "#f3ece7",
+   "accent": "#c88c74",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "photo-art-moonlit-lavender-unicorn",
+  "sku": "print-photo-art-moonlit-lavender-unicorn",
+  "title": "Moonlit Lavender Unicorn",
+  "description": "A white unicorn in a field of lavender under a full moon. Quiet, silvery and dreamlike.",
+  "preview": "/images/prints/photo-art/moonlit-lavender-unicorn.jpg",
+  "section": "photo-art",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#1a182a",
+   "ink": "#e9e7f3",
+   "accent": "#8b7cc0",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "photo-art-dewdrop-fairy-cottage",
+  "sku": "print-photo-art-dewdrop-fairy-cottage",
+  "title": "Dewdrop Fairy Cottage",
+  "description": "A fairy sits on a toadstool outside a tiny cottage, the morning light catching every dewdrop.",
+  "preview": "/images/prints/photo-art/dewdrop-fairy-cottage.jpg",
+  "section": "photo-art",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2518",
+   "ink": "#f3f0e7",
+   "accent": "#c6b577",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "photo-art-crystal-cave-baby-dragon",
+  "sku": "print-photo-art-crystal-cave-baby-dragon",
+  "title": "Baby Dragon in the Crystal Cave",
+  "description": "A baby dragon sleeps beside a lantern among glowing purple and blue crystals.",
+  "preview": "/images/prints/photo-art/crystal-cave-baby-dragon.jpg",
+  "section": "photo-art",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2a18",
+   "ink": "#f3f3e7",
+   "accent": "#65c3d7",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "photo-art-rose-garden-little-witch",
+  "sku": "print-photo-art-rose-garden-little-witch",
+  "title": "Little Witch in the Rose Garden",
+  "description": "A little witch in a velvet cloak walks her black cat through a rose garden by lantern light.",
+  "preview": "/images/prints/photo-art/rose-garden-little-witch.jpg",
+  "section": "photo-art",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1b18",
+   "ink": "#f3e9e7",
+   "accent": "#c38f79",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "photo-art-moonlit-rose-castle",
+  "sku": "print-photo-art-moonlit-rose-castle",
+  "title": "Moonlit Rose Castle",
+  "description": "A castle of towers and lit windows rises above a rose garden under a bright full moon.",
+  "preview": "/images/prints/photo-art/moonlit-rose-castle.jpg",
+  "section": "photo-art",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#20182a",
+   "ink": "#ece7f3",
+   "accent": "#7b86c2",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "photo-art-blue-whale-in-sunlit-water",
+  "sku": "print-photo-art-blue-whale-in-sunlit-water",
+  "title": "Blue Whale in Sunlit Water",
+  "description": "A blue whale glides through shafts of sunlight in deep turquoise water. Calm, vast and gentle.",
+  "preview": "/images/prints/photo-art/blue-whale-in-sunlit-water.jpg",
+  "section": "photo-art",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18292a",
+   "ink": "#e7f2f3",
+   "accent": "#64cdd8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "photo-art-sea-turtle-over-coral-reef",
+  "sku": "print-photo-art-sea-turtle-over-coral-reef",
+  "title": "Sea Turtle over the Coral Reef",
+  "description": "A sea turtle swims above a bright coral reef in clear, sun-dappled water.",
+  "preview": "/images/prints/photo-art/sea-turtle-over-coral-reef.jpg",
+  "section": "photo-art",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#182a28",
+   "ink": "#e7f3f2",
+   "accent": "#65cad7",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "photo-art-astronaut-above-earth",
+  "sku": "print-photo-art-astronaut-above-earth",
+  "title": "Astronaut above Earth",
+  "description": "A young astronaut floats above the blue curve of Earth, grinning at the stars. Big dreams, small helmet.",
+  "preview": "/images/prints/photo-art/astronaut-above-earth.jpg",
+  "section": "photo-art",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#181c2a",
+   "ink": "#e7eaf3",
+   "accent": "#c2957a",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "photo-art-photoreal-solar-system",
+  "sku": "print-photo-art-photoreal-solar-system",
+  "title": "The Solar System",
+  "description": "The planets lined up from the sun to the edge of the dark, Saturn’s rings catching the light.",
+  "preview": "/images/prints/photo-art/photoreal-solar-system.jpg",
+  "section": "photo-art",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#1d182a",
+   "ink": "#eae7f3",
+   "accent": "#cf946d",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "photo-art-yellow-excavator-at-golden-hour",
+  "sku": "print-photo-art-yellow-excavator-at-golden-hour",
+  "title": "Yellow Excavator at Golden Hour",
+  "description": "A big yellow digger at work in the late sun, bucket raised and dust in the air. For the truck-obsessed.",
+  "preview": "/images/prints/photo-art/yellow-excavator-at-golden-hour.jpg",
+  "section": "photo-art",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#faf6f2",
+   "ink": "#382a1e",
+   "accent": "#965f36",
+   "metal": "#b48a3c",
+   "dark": false
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "photo-art-classic-car-by-the-coast",
+  "sku": "print-photo-art-classic-car-by-the-coast",
+  "title": "Little Red Car by the Coast",
+  "description": "A cherry-red classic car parked above a sparkling bay at sunset. A holiday in one picture.",
+  "preview": "/images/prints/photo-art/classic-car-by-the-coast.jpg",
+  "section": "photo-art",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1f18",
+   "ink": "#f3ebe7",
+   "accent": "#d08f6c",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "photo-art-sleeping-fox-in-a-tree-hollow",
+  "sku": "print-photo-art-sleeping-fox-in-a-tree-hollow",
+  "title": "Sleeping Fox in a Tree Hollow",
+  "description": "A fox curled up on a velvet cushion inside a cosy tree hollow, with books and a lantern for company.",
+  "preview": "/images/prints/photo-art/sleeping-fox-in-a-tree-hollow.jpg",
+  "section": "photo-art",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1f18",
+   "ink": "#f3ece7",
+   "accent": "#d1926b",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "australian-wildlife-koala-in-eucalyptus",
+  "sku": "print-australian-wildlife-koala-in-eucalyptus",
+  "title": "Koala in the Eucalyptus",
+  "description": "A koala peers out from the fork of a gum tree, fluffy ears lit by the afternoon sun.",
+  "preview": "/images/prints/australian-wildlife/koala-in-eucalyptus.jpg",
+  "section": "australian-wildlife",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2418",
+   "ink": "#f3efe7",
+   "accent": "#c3ae79",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "australian-wildlife-wombat-in-bushland",
+  "sku": "print-australian-wildlife-wombat-in-bushland",
+  "title": "Wombat in the Bushland",
+  "description": "A sturdy little wombat ambles along a bush track among the gums. Unhurried and utterly lovable.",
+  "preview": "/images/prints/australian-wildlife/wombat-in-bushland.jpg",
+  "section": "australian-wildlife",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2718",
+   "ink": "#f3f1e7",
+   "accent": "#c0b27c",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "australian-wildlife-quokka-by-coastal-scrub",
+  "sku": "print-australian-wildlife-quokka-by-coastal-scrub",
+  "title": "Quokka by the Coast",
+  "description": "The happiest animal on Earth, mid-grin, with a turquoise bay behind. Pure joy for a nursery wall.",
+  "preview": "/images/prints/australian-wildlife/quokka-by-coastal-scrub.jpg",
+  "section": "australian-wildlife",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#faf6f2",
+   "ink": "#382c1e",
+   "accent": "#8a6042",
+   "metal": "#b48a3c",
+   "dark": false
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "australian-wildlife-echidna-in-bushland",
+  "sku": "print-australian-wildlife-echidna-in-bushland",
+  "title": "Echidna in the Bushland",
+  "description": "An echidna picks its way across the leaf litter, every spine catching the light.",
+  "preview": "/images/prints/australian-wildlife/echidna-in-bushland.jpg",
+  "section": "australian-wildlife",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2118",
+   "ink": "#f3ede7",
+   "accent": "#c0977c",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "australian-wildlife-sulphur-crested-cockatoo",
+  "sku": "print-australian-wildlife-sulphur-crested-cockatoo",
+  "title": "Sulphur-Crested Cockatoo",
+  "description": "A white cockatoo with its yellow crest raised, perched on a branch and plainly in charge.",
+  "preview": "/images/prints/australian-wildlife/sulphur-crested-cockatoo.jpg",
+  "section": "australian-wildlife",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2818",
+   "ink": "#f3f2e7",
+   "accent": "#c7b876",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "australian-wildlife-eastern-grey-kangaroo",
+  "sku": "print-australian-wildlife-eastern-grey-kangaroo",
+  "title": "Eastern Grey Kangaroo",
+  "description": "A kangaroo stands tall and alert in the grass at the edge of the bush.",
+  "preview": "/images/prints/australian-wildlife/eastern-grey-kangaroo.jpg",
+  "section": "australian-wildlife",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2418",
+   "ink": "#f3efe7",
+   "accent": "#c2af7a",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "mermaid-mermaid-by-hidden-lagoon",
+  "sku": "print-mermaid-mermaid-by-hidden-lagoon",
+  "title": "Mermaid by the Hidden Lagoon",
+  "description": "A red-haired mermaid rests on the rocks of a turquoise lagoon, sea caves glowing behind her.",
+  "preview": "/images/prints/mermaid/mermaid-by-hidden-lagoon.jpg",
+  "section": "mermaid",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#1a2a18",
+   "ink": "#e9f3e7",
+   "accent": "#78c4b6",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "mermaid-mermaid-in-kelp-forest",
+  "sku": "print-mermaid-mermaid-in-kelp-forest",
+  "title": "Mermaid in the Kelp Forest",
+  "description": "A mermaid glides through tall kelp beside a sea turtle, sunlight falling through the water.",
+  "preview": "/images/prints/mermaid/mermaid-in-kelp-forest.jpg",
+  "section": "mermaid",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#182a1f",
+   "ink": "#e7f3ec",
+   "accent": "#79c4af",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "mermaid-mermaid-at-coral-palace",
+  "sku": "print-mermaid-mermaid-at-coral-palace",
+  "title": "Mermaid at the Coral Palace",
+  "description": "A mermaid swims towards a pink coral palace, her braid trailing through the bright water.",
+  "preview": "/images/prints/mermaid/mermaid-at-coral-palace.jpg",
+  "section": "mermaid",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18292a",
+   "ink": "#e7f2f3",
+   "accent": "#64c7d8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "mermaid-pearls-in-mermaid-grotto",
+  "sku": "print-mermaid-pearls-in-mermaid-grotto",
+  "title": "Pearls in the Mermaid Grotto",
+  "description": "A giant shell spills pearls across the floor of a sunlit grotto. Treasure, found.",
+  "preview": "/images/prints/mermaid/pearls-in-mermaid-grotto.jpg",
+  "section": "mermaid",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#182a1a",
+   "ink": "#e7f3e8",
+   "accent": "#64ccd8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "mermaid-mermaid-and-seahorse",
+  "sku": "print-mermaid-mermaid-and-seahorse",
+  "title": "Mermaid and the Seahorse",
+  "description": "A mermaid in white drifts through clear blue water, a seahorse keeping her company.",
+  "preview": "/images/prints/mermaid/mermaid-and-seahorse.jpg",
+  "section": "mermaid",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18252a",
+   "ink": "#e7f0f3",
+   "accent": "#64b9d8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "mermaid-twilight-mermaid-lagoon",
+  "sku": "print-mermaid-twilight-mermaid-lagoon",
+  "title": "Twilight Mermaid Lagoon",
+  "description": "A lagoon at dusk, half above the water and half below, with palms, a stone arch and coral gardens.",
+  "preview": "/images/prints/mermaid/twilight-mermaid-lagoon.jpg",
+  "section": "mermaid",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18252a",
+   "ink": "#e7f0f3",
+   "accent": "#64cad8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "mermaid-mermaid-coral-cottage",
+  "sku": "print-mermaid-mermaid-coral-cottage",
+  "title": "The Mermaid’s Coral Cottage",
+  "description": "A tiny cottage built from coral and shells, with a lantern over the door and fish for neighbours.",
+  "preview": "/images/prints/mermaid/mermaid-coral-cottage.jpg",
+  "section": "mermaid",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#252a18",
+   "ink": "#f0f3e7",
+   "accent": "#64c9d8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "mermaid-mermaid-and-dolphins",
+  "sku": "print-mermaid-mermaid-and-dolphins",
+  "title": "Mermaid and the Dolphins",
+  "description": "A mermaid in emerald green swims with dolphins through a sunlit sea cave.",
+  "preview": "/images/prints/mermaid/mermaid-and-dolphins.jpg",
+  "section": "mermaid",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#182a29",
+   "ink": "#e7f3f2",
+   "accent": "#65c9d7",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "mermaid-mermaid-in-luminous-cave",
+  "sku": "print-mermaid-mermaid-in-luminous-cave",
+  "title": "Mermaid in the Luminous Cave",
+  "description": "A mermaid floats beneath a glowing cave ceiling, her lilac tail lit from below.",
+  "preview": "/images/prints/mermaid/mermaid-in-luminous-cave.jpg",
+  "section": "mermaid",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#18282a",
+   "ink": "#e7f2f3",
+   "accent": "#64c5d8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "mermaid-underwater-coral-palace",
+  "sku": "print-mermaid-underwater-coral-palace",
+  "title": "Underwater Coral Palace",
+  "description": "A pearl-white palace rises from a coral garden, with a mermaid swimming towards its gates.",
+  "preview": "/images/prints/mermaid/underwater-coral-palace.jpg",
+  "section": "mermaid",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#182a2a",
+   "ink": "#e7f3f3",
+   "accent": "#64cbd8",
+   "metal": "#cfd6dd",
+   "dark": true
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "dog-golden-retriever-puppy",
+  "sku": "print-dog-golden-retriever-puppy",
+  "title": "Golden Retriever Puppy",
+  "description": "A golden retriever puppy sits in the daisies with the happiest face on four legs.",
+  "preview": "/images/prints/dog/golden-retriever-puppy.jpg",
+  "section": "dog",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#faf8f2",
+   "ink": "#38331e",
+   "accent": "#957a37",
+   "metal": "#b48a3c",
+   "dark": false
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "dog-beagle-in-autumn-leaves",
+  "sku": "print-dog-beagle-in-autumn-leaves",
+  "title": "Beagle in the Autumn Leaves",
+  "description": "A beagle nose-deep in fallen leaves, hot on the trail of something wonderful.",
+  "preview": "/images/prints/dog/beagle-in-autumn-leaves.jpg",
+  "section": "dog",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2118",
+   "ink": "#f3ede7",
+   "accent": "#d2936a",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "dog-border-collie-with-ball",
+  "sku": "print-dog-border-collie-with-ball",
+  "title": "Border Collie with a Ball",
+  "description": "A border collie races across the grass with a red ball, ears flying. Pure energy.",
+  "preview": "/images/prints/dog/border-collie-with-ball.jpg",
+  "section": "dog",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#282a18",
+   "ink": "#f1f3e7",
+   "accent": "#bac478",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "dog-red-dachshund-on-porch",
+  "sku": "print-dog-red-dachshund-on-porch",
+  "title": "Dachshund on the Porch",
+  "description": "A red dachshund sits proudly on a cottage porch among the flower pots and gumboots.",
+  "preview": "/images/prints/dog/red-dachshund-on-porch.jpg",
+  "section": "dog",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2218",
+   "ink": "#f3eee7",
+   "accent": "#cf906e",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "dog-siberian-husky-in-snow",
+  "sku": "print-dog-siberian-husky-in-snow",
+  "title": "Husky in the Snow",
+  "description": "A husky with ice-blue eyes sits in fresh snow, every hair frosted and glowing.",
+  "preview": "/images/prints/dog/siberian-husky-in-snow.jpg",
+  "section": "dog",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#f4f2fa",
+   "ink": "#261e38",
+   "accent": "#42558a",
+   "metal": "#8a949e",
+   "dark": false
+  },
+  "foil": "silver"
+ },
+ {
+  "slug": "dog-maltese-by-cottage-window",
+  "sku": "print-dog-maltese-by-cottage-window",
+  "title": "Maltese by the Cottage Window",
+  "description": "A fluffy white Maltese with a pink bow, curled on a blanket by a sunny cottage window.",
+  "preview": "/images/prints/dog/maltese-by-cottage-window.jpg",
+  "section": "dog",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#faf6f2",
+   "ink": "#382a1e",
+   "accent": "#848f3d",
+   "metal": "#b48a3c",
+   "dark": false
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "dog-chocolate-labrador-at-beach",
+  "sku": "print-dog-chocolate-labrador-at-beach",
+  "title": "Chocolate Labrador at the Beach",
+  "description": "A chocolate lab bounds through the shallows, tongue out and water flying.",
+  "preview": "/images/prints/dog/chocolate-labrador-at-beach.jpg",
+  "section": "dog",
+  "font": "cormorant",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#faf2f2",
+   "ink": "#381f1e",
+   "accent": "#8a5d42",
+   "metal": "#b48a3c",
+   "dark": false
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "dog-corgi-in-park",
+  "sku": "print-dog-corgi-in-park",
+  "title": "Corgi in the Park",
+  "description": "A corgi with ears up and tongue out, sitting pretty in the sunny park grass.",
+  "preview": "/images/prints/dog/corgi-in-park.jpg",
+  "section": "dog",
+  "font": "playfair",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#282a18",
+   "ink": "#f2f3e7",
+   "accent": "#acca72",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "dog-cocker-spaniel-in-buttercups",
+  "sku": "print-dog-cocker-spaniel-in-buttercups",
+  "title": "Cocker Spaniel in the Buttercups",
+  "description": "A golden cocker spaniel sits in a meadow of buttercups, ears glowing in the sun.",
+  "preview": "/images/prints/dog/cocker-spaniel-in-buttercups.jpg",
+  "section": "dog",
+  "font": "dmserif",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a2618",
+   "ink": "#f3f0e7",
+   "accent": "#cf946d",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
+  "slug": "dog-black-pug-in-autumn-park",
+  "sku": "print-dog-black-pug-in-autumn-park",
+  "title": "Black Pug in the Autumn Park",
+  "description": "A black pug perches on a park bench among red maple leaves, as pleased with itself as ever.",
+  "preview": "/images/prints/dog/black-pug-in-autumn-park.jpg",
+  "section": "dog",
+  "font": "fraunces",
+  "border": "stars",
+  "layout": "banner",
+  "card": {
+   "paper": "#2a1e18",
+   "ink": "#f3ebe7",
+   "accent": "#ce8b6e",
+   "metal": "#d8b25a",
+   "dark": true
+  },
+  "foil": "gold"
+ },
+ {
   "slug": "moses-basket-fawn",
   "sku": "card-moses-basket-fawn",
   "kind": "card",

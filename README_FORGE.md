@@ -5,6 +5,10 @@ Buy button → `/api/checkout` → Stripe-hosted checkout (collects shipping + p
 
 ## What's in here
 
+Photorealistic print series (60 prints, six sections, Coming soon until their originals are
+uploaded): see docs/PHOTOREAL-SERIES.md.
+
+
 ```
 lib/products.js          Catalogue: prices (AUD cents), shipping rules, stock. SINGLE SOURCE OF TRUTH.
 api/checkout.js          POST {sku,quantity} -> creates Checkout Session -> { url }

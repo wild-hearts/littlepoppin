@@ -43,9 +43,20 @@ const withFile = prints.filter((p) => p.file && !p.items);
 check(`${withFile.length} prints have a Blob file path`, withFile.length >= 93,
   'A rebuild that resets `file` to null silently blocks checkout on every print.');
 
+// A product without a private file may exist in the catalogue (the photorealistic
+// series are listed before their originals are uploaded), but it must be marked
+// unavailable and must never get a buy button: not on prints.html, not on its own page.
 const undeliverable = Object.values(DIGITAL_PRODUCTS).filter((p) => !isDeliverable(p));
-check('every product is deliverable', undeliverable.length === 0,
-  undeliverable.map((p) => p.sku).join(', '));
+const catalogue = JSON.parse(fs.readFileSync('data/prints.json', 'utf8'));
+const availableBySku = Object.fromEntries(catalogue.prints.concat(catalogue.sets).map((p) => [p.sku, p.available]));
+const printsHtml = fs.readFileSync('prints.html', 'utf8');
+const leaks = undeliverable.filter((p) => {
+  const page = p.items ? `set/${p.sku.replace(/^(set|bundle)-/, p.sku.startsWith('bundle') ? 'bundle-' : '')}.html` : `print/${p.sku.replace(/^print-/, '')}.html`;
+  const own = fs.existsSync(page) ? fs.readFileSync(page, 'utf8') : '';
+  return availableBySku[p.sku] !== false || printsHtml.includes(`data-sku="${p.sku}"`) || own.includes(`data-sku="${p.sku}"`);
+});
+check(`${undeliverable.length} products without a file are hidden from checkout (coming soon)`, leaks.length === 0,
+  leaks.map((p) => p.sku).join(', '));
 
 const setsMissingParts = Object.values(DIGITAL_PRODUCTS)
   .filter((p) => p.items)
@@ -72,7 +83,7 @@ check('rotation excludes festive prints',
   !rot.some((s) => DIGITAL_PRODUCTS[s]?.section === 'festive'),
   'Festive is held back for December; a Christmas robin arriving in May reads as a bug.');
 
-// Structural checks over 36 months: right count, no duplicate inside a month, only real
+// Structural checks over the horizon: right count, no duplicate inside a month, only real
 // prints, and festive strictly in December.
 let rotationProblems = [];
 const festivePool = Object.values(DIGITAL_PRODUCTS).filter((p) => !p.items && p.file && p.section === 'festive');
@@ -86,8 +97,11 @@ let decembers = 0;
 // assert uniqueness only up to capacity, and separately that capacity is actually reached.
 const ordinaryCapacity = Math.floor(rot.length / PRINT_CLUB.printsPerMonth);
 const festiveCapacity = Math.floor(festivePool.length / PRINT_CLUB.printsPerMonth);
+// Enough months to send every ordinary print once (11 ordinary months a year), so the
+// exhaustion check below scales with the catalogue instead of a fixed three years.
+const HORIZON = Math.max(36, Math.ceil(ordinaryCapacity * 12 / 11) + 2);
 
-for (let i = 0; i < 36; i++) {
+for (let i = 0; i < HORIZON; i++) {
   const d = new Date(Date.UTC(2026, 7 + i, 1));
   const picks = picksForMonth(DIGITAL_PRODUCTS, d);
   const isDec = d.getUTCMonth() + 1 === 12;
@@ -108,7 +122,7 @@ for (let i = 0; i < 36; i++) {
   }
   if (isDec) decembers++; else ordinaryMonths++;
 }
-check('36 months of picks are well-formed and seasonal', rotationProblems.length === 0,
+check(`${HORIZON} months of picks are well-formed and seasonal`, rotationProblems.length === 0,
   rotationProblems.slice(0, 5).join('\n      '));
 check(`no print repeats before the catalogue is exhausted (~${ordinaryCapacity} months of unique picks)`,
   !rotationProblems.some((p) => p.includes('early repeat')));

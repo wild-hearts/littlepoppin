@@ -34,6 +34,24 @@ const countryOptions = ['AU', 'US', 'GB', 'CA', 'NZ']
   .map((c) => `<option value="${c}">${countryName(c)}</option>`).join('');
 
 const REPO = path.resolve(new URL('..', import.meta.url).pathname);
+
+// The resolution lines on a product page come from the file's real pixel size.
+// The original library is ~300 DPI at 8x10 and prints to 16x20; the photorealistic
+// series are smaller files, so their pages must not make the same promise.
+function fileBullets(p) {
+  // The original library keeps the wording it has always had. Only files that are
+  // smaller than the library standard get bullets computed from their real size.
+  if (!p.px || p.px[0] >= 1800) {
+    return `            <li>High-resolution PNG (4:5 ratio, ~300 DPI)</li>
+            <li>Prints beautifully at 4×5&Prime;, 8×10&Prime; and 16×20&Prime;</li>`;
+  }
+  const [w, h] = p.px;
+  const sizes = [[4, 5], [8, 10], [11, 14], [16, 20]].filter(([iw]) => w / iw >= 150).map(([iw, ih]) => `${iw}×${ih}&Prime;`);
+  const dpiAt8 = Math.round(w / 8);
+  const list = sizes.length > 1 ? sizes.slice(0, -1).join(', ') + ' and ' + sizes[sizes.length - 1] : (sizes[0] || '4×5&Prime;');
+  return `            <li>High-resolution PNG, ${w} × ${h} px (4:5 ratio, ${dpiAt8 >= 280 ? '~300' : dpiAt8} DPI at 8×10&Prime;)</li>
+            <li>Prints beautifully at ${list}</li>`;
+}
 const SITE = 'https://www.littlepoppin.com';
 
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'prints.json'), 'utf8'));
@@ -234,18 +252,22 @@ for (const p of data.prints) {
       <div class="pd__grid">
         <div>
           <img class="pd__art" src="${up}${p.preview.replace(/^\//, '')}" alt="${esc(p.title)}, a magical art print by Little Poppin" />
-          <img class="pd__mockup" src="${up}images/mockups/${slug}.jpg" loading="lazy"
+${fs.existsSync(path.join(REPO, 'images', 'mockups', `${slug}.jpg`)) ? `          <img class="pd__mockup" src="${up}images/mockups/${slug}.jpg" loading="lazy"
                alt="${esc(p.title)} shown framed on a wall" />
-          <p class="pd__mockupNote">Shown framed. The frame is not included with the digital download.</p>
+          <p class="pd__mockupNote">Shown framed. The frame is not included with the digital download.</p>` : ''}
         </div>
         <div class="pd__body">
           <h1>${esc(p.title)}</h1>
           <p class="pd__lead">${esc(p.description)}</p>
           <p class="pd__price">$${(p.price / 100).toFixed(0)} <span>AUD · instant download</span></p>
-          <div class="pd__buy">
+${p.available ? `          <div class="pd__buy">
             <button type="button" data-sku="${p.sku}" class="btn btn--primary btn--lg">Download Print. $${(p.price / 100).toFixed(0)}</button>
           </div>
-          <a class="pd__alt" href="${up}personalise.html?print=${encodeURIComponent(p.sku)}">✨ Or add their name and personalise this print for $19</a>
+          <a class="pd__alt" href="${up}personalise.html?print=${encodeURIComponent(p.sku)}">✨ Or add their name and personalise this print for $19</a>`
+        : `          <div class="pd__buy">
+            <button type="button" class="btn btn--primary btn--lg is-soldout" disabled>Coming soon</button>
+          </div>
+          <p class="pd__alt">This design is being prepared for download. Check back soon, or <a href="${up}prints.html#${p.section}">browse the rest of the collection</a>.</p>`}
 
           <!-- Printed copies. Hidden until Printify is configured; physical.js reveals it
                only when data/print-options.json says this design is orderable. -->
@@ -269,8 +291,7 @@ for (const p of data.prints) {
           <p class="pd__guarantee"><strong>Our promise:</strong> if your file isn't right. Wrong size, won't open, anything at all. Tell us and we'll fix it or refund you.
              No argument, no forms.</p>
           <ul class="pd__list">
-            <li>High-resolution PNG (4:5 ratio, ~300 DPI)</li>
-            <li>Prints beautifully at 4×5&Prime;, 8×10&Prime; and 16×20&Prime;</li>
+${fileBullets(p)}
             <li>Instant download. Nothing is posted</li>
             <li>Personal-use licence for your home, nursery or as a gift</li>
           </ul>
