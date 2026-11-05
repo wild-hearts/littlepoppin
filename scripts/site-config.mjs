@@ -13,4 +13,4 @@
 export const GA4_ID = '';
 
 /** Canonical site origin, used for sitemap and structured data. */
-export const SITE_URL = 'https://www.littlepoppin.com';
+export const SITE_URL = 'https://littlepoppin.com';

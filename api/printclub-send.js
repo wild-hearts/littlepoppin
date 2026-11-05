@@ -11,7 +11,7 @@
 //
 // Manual/dry run:
 //   curl -H "Authorization: Bearer $CRON_SECRET" \
-//        "https://www.littlepoppin.com/api/printclub-send?dry=1"
+//        "https://littlepoppin.com/api/printclub-send?dry=1"
 import Stripe from 'stripe';
 import { presignGet, MAX_TTL_MS } from '../lib/blob-link.js';
 import { getDigital } from '../lib/products.js';
