@@ -1288,6 +1288,45 @@ a.product-card {
 .prints-hero h1 { font-family: var(--font-serif); font-size: 3rem; font-weight: 600; margin: 6px 0 14px; }
 .prints-hero p { max-width: 620px; margin: 0 auto; color: var(--mid-grey); }
 .prints-hero__note { color: var(--green); font-size: 0.9rem; margin-top: 14px; }
+
+/* Art heroes (Nov 2026). A page hero carrying one of the atelier scenes full-bleed,
+   dark-glazed so white type reads over it. The image comes in through --hero-art
+   (and --hero-art-sm for phones) set inline on the header, always as an absolute
+   /images/banners/ path so nested pages (cards/, invitations/) resolve it too. */
+.prints-hero--art, .kp-hero--art {
+  position: relative; isolation: isolate; color: #fff;
+  background: #241d3a var(--hero-art) center / cover no-repeat;
+  padding: 150px 0 60px; min-height: 420px; display: flex; align-items: center; justify-content: center;
+}
+.prints-hero--art::before, .kp-hero--art::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(18,14,34,.66) 0%, rgba(18,14,34,.46) 45%, rgba(18,14,34,.80) 100%);
+}
+.prints-hero--art .container, .kp-hero--art .container { position: relative; }
+.prints-hero--art .section-label, .kp-hero--art .section-label { color: #ffd9a8; }
+.prints-hero--art h1, .kp-hero--art h1 { color: #fff; text-shadow: 0 2px 28px rgba(0,0,0,.55); }
+.kp-hero--art h1 em { color: #ffd9a8; }
+.prints-hero--art p, .kp-hero--art p, .kp-hero--art .crumb { color: rgba(255,255,255,.9); text-shadow: 0 1px 14px rgba(0,0,0,.5); }
+.kp-hero--art .crumb a { border-bottom-color: rgba(255,255,255,.45); }
+.kp-hero--art p a, .prints-hero--art p a { color: #ffc2cf; text-decoration-color: rgba(255,194,207,.6); }
+.prints-hero--art .prints-hero__note { color: #cdeccf; }
+.prints-hero--art .btn--outline-dark, .kp-hero--art .btn--outline-dark { color: #fff; border-color: #fff; }
+@media (max-width: 700px) {
+  .prints-hero--art, .kp-hero--art { background-image: var(--hero-art-sm, var(--hero-art)); min-height: 360px; padding: 120px 0 44px; }
+}
+
+/* Home: "Step inside" band of three atelier scenes, each a door into a part of the shop. */
+.lp-worlds { padding: 0 0 90px; }
+.lp-worlds__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+.lp-world { position: relative; display: block; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 3;
+            box-shadow: var(--shadow-lg); color: #fff; isolation: isolate; }
+.lp-world img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+.lp-world:hover img { transform: scale(1.05); }
+.lp-world::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(18,14,34,.82) 100%); }
+.lp-world__body { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 24px; z-index: 1; }
+.lp-world__body .section-label { color: #ffd9a8; margin-bottom: 4px; }
+.lp-world__body h3 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; margin: 0 0 4px; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.6); }
+.lp-world__body p { margin: 0; color: rgba(255,255,255,.88); font-size: .95rem; }
 .prints { padding: 50px 0 90px; }
 .print-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px; }
 .print-card { background:#fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform var(--transition), box-shadow var(--transition); }
