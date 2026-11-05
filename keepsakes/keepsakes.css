@@ -219,7 +219,12 @@
 .cf-stamp{width:46%;max-height:44cqh;aspect-ratio:4/5;border-radius:1cqw;transform:rotate(-5deg);box-shadow:0 0 0 1.4cqw var(--c-paper),0 0 0 1.9cqw color-mix(in srgb,var(--c-metal) 70%,transparent),0 3cqw 6cqw -2cqw rgba(0,0,0,.45)}
 .cfront[data-format="stamp"] .cf-greet{font-size:10.5cqw}.cfront[data-format="stamp"] .cf-greet[data-len="mid"]{font-size:8.6cqw}.cfront[data-format="stamp"] .cf-greet[data-len="long"]{font-size:7cqw}
 .cfront[data-format="type"] .cf-stock{padding:12cqw}
-.cfront[data-format="type"] .cf-greet{padding:5cqw 6cqw;background:color-mix(in srgb,var(--c-paper) 94%,transparent);border:1px solid color-mix(in srgb,var(--c-metal) 55%,transparent);box-shadow:0 2cqw 5cqw -2cqw rgba(0,0,0,.35)}
+/* The greeting is foil lettering (the gradient is clipped to the text, colour transparent), so the plate it sits on
+   must be a pseudo-element behind it. Setting background on .cf-greet itself replaces the foil and the words vanish. */
+.cfront[data-format="type"] .cf-greet{padding:5cqw 6cqw;z-index:0;
+  /* The words are the whole design here, so the foil runs ink-dark with one gold glint: readable on paper and on navy. */
+  background-image:linear-gradient(110deg,var(--c-ink) 0%,var(--c-accent-ink) 30%,var(--c-metal) 50%,var(--c-accent-ink) 70%,var(--c-ink) 100%)}
+.cfront[data-format="type"] .cf-greet::after{content:"";position:absolute;inset:0;z-index:-1;background:color-mix(in srgb,var(--c-paper) 94%,transparent);border:1px solid color-mix(in srgb,var(--c-metal) 55%,transparent);box-shadow:0 2cqw 5cqw -2cqw rgba(0,0,0,.35)}
 .cfront[data-format="type"] .cf-greet{font-size:13cqw;line-height:1.02}.cfront[data-format="type"] .cf-greet[data-len="mid"]{font-size:11cqw}.cfront[data-format="type"] .cf-greet[data-len="long"]{font-size:9cqw}
 .cfront[data-format="type"][data-font="pinyon"] .cf-greet{font-size:15cqw;line-height:1.12}.cfront[data-format="type"][data-font="pinyon"] .cf-greet[data-len="mid"]{font-size:13cqw}.cfront[data-format="type"][data-font="pinyon"] .cf-greet[data-len="long"]{font-size:10.5cqw}
 .cfront[data-format="type"][data-font="bodoni"] .cf-greet,.cfront[data-format="type"][data-font="syne"] .cf-greet{font-size:10cqw}.cfront[data-format="type"][data-font="bodoni"] .cf-greet[data-len="mid"],.cfront[data-format="type"][data-font="syne"] .cf-greet[data-len="mid"]{font-size:8.4cqw}.cfront[data-format="type"][data-font="bodoni"] .cf-greet[data-len="long"],.cfront[data-format="type"][data-font="syne"] .cf-greet[data-len="long"]{font-size:7cqw}

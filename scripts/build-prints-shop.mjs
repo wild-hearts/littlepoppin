@@ -73,6 +73,12 @@ const SECTIONS = [
 // Prints may appear in more than one set; that is deliberate, the same way a bookshop
 // puts one title on several tables.
 const SETS = [
+  { sku: 'set-wizarding-study', title: 'Wizarding Study Set',
+    description: 'The Open Spellbook, Quill & Ink and the Study Nook. For the desk of someone who reads late.',
+    items: ['print-the-open-spellbook', 'print-quill-and-ink', 'print-the-study-nook'], price: 3000 },
+  { sku: 'set-star-gazing', title: 'Star Gazing Set',
+    description: "The Observatory, the Astronomer's Desk and the Crystal Ball. For anyone who looks up.",
+    items: ['print-the-observatory', 'print-the-astronomer-s-desk', 'print-the-crystal-ball'], price: 3000 },
   { sku: 'set-sweet-dreams', title: 'Sweet Dreams Set',
     description: 'Three sleepy friends. Sleepy Bunny, Dreamy Bear Cub and Sleepy Lamb. A ready-made gallery wall of pure bedtime calm.',
     items: ['print-sleepy-bunny', 'print-dreamy-bear-cub', 'print-sleepy-lamb-on-a-cloud'], price: 3000 },
@@ -109,15 +115,9 @@ const SETS = [
   { sku: 'set-sunshine-and-rainbows', title: 'Sunshine & Rainbows Set',
     description: 'Rainbow & Clouds, Sunshine Smile and Swan Lake Dream. The brightest, happiest corner of the nursery.',
     items: ['print-rainbow-and-clouds', 'print-sunshine-smile', 'print-swan-lake-dream'], price: 3000 },
-  { sku: 'set-wizarding-study', title: 'Wizarding Study Set',
-    description: 'The Open Spellbook, Quill & Ink and the Study Nook. For the desk of someone who reads late.',
-    items: ['print-the-open-spellbook', 'print-quill-and-ink', 'print-the-study-nook'], price: 3000 },
   { sku: 'set-potions-and-spells', title: 'Potions & Spells Set',
     description: "The Potions Shelf, the Cauldron and the Alchemist's Desk. Bottled magic, three ways.",
     items: ['print-potions-shelf', 'print-the-cauldron', 'print-the-alchemist-s-desk'], price: 3000 },
-  { sku: 'set-star-gazing', title: 'Star Gazing Set',
-    description: "The Observatory, the Astronomer's Desk and the Crystal Ball. For anyone who looks up.",
-    items: ['print-the-observatory', 'print-the-astronomer-s-desk', 'print-the-crystal-ball'], price: 3000 },
   { sku: 'set-christmas-magic', title: 'Christmas Magic Set',
     description: "The Christmas Tree, Little Reindeer and Santa's Sleigh Ride. The three that make it feel like Christmas.",
     items: ['print-the-christmas-tree', 'print-little-reindeer', 'print-santa-s-sleigh-ride'], price: 3000 },
@@ -268,6 +268,19 @@ ${cards}
       </div>
     </section>`);
 }
+// --- page order ------------------------------------------------------------------
+// Sections are built in catalogue order above; the page shows them in this order.
+// Gallery sets stay first, the Collections (bundles) move below the single prints,
+// since they sell best to someone who has already browsed.
+const PAGE_ORDER = ['magical-stories', 'nursery', 'zodiac', 'academia', 'festive',
+  'magical-realms', 'photo-art', 'australian-wildlife', 'mermaid', 'dog'];
+const rank = (id) => { const i = PAGE_ORDER.indexOf(id); return i < 0 ? 99 : i; };
+const idOf = (html) => html.match(/id="([a-z-]+)"/)[1];
+sectionCards.sort((x, y) => rank(idOf(x)) - rank(idOf(y)));
+const sectionLinks = navLinks.filter((n) => !['sets', 'bundles'].includes(n.id)).sort((x, y) => rank(x.id) - rank(y.id));
+navLinks.length = 0;
+navLinks.push({ id: 'sets', nav: 'Gallery Sets' }, ...sectionLinks, { id: 'bundles', nav: 'Collections' });
+
 console.log(`\n${all.length} prints across ${SECTIONS.length + SERIES.length} sections.`);
 
 // --- gallery sets: composite previews + cards ---
@@ -397,7 +410,7 @@ const publicCatalogue = {
     price: it.price, preview: it.preview, items: it.items,
     available: it.items.every(s => PUBLISHED[s]),
   })),
-  sections: SECTIONS.concat(SERIES).map(s => ({ id: s.id, title: s.title, nav: s.nav })),
+  sections: SECTIONS.concat(SERIES).sort((x, y) => rank(x.id) - rank(y.id)).map(s => ({ id: s.id, title: s.title, nav: s.nav })),
 };
 fs.mkdirSync(path.join(REPO, 'data'), { recursive: true });
 fs.writeFileSync(path.join(REPO, 'data', 'prints.json'), JSON.stringify(publicCatalogue));
@@ -476,7 +489,7 @@ const page = `<!DOCTYPE html>
 <body>
   <nav class="nav nav--scrolled" id="nav">
     <div class="nav__inner">
-      <a href="index.html" class="nav__logo"><img src="images/logo.jpg" alt="Little Poppin" /></a>
+      <a href="index.html" class="nav__logo"><img src="images/logo.png" alt="Little Poppin" /></a>
       <button class="nav__toggle" aria-label="Toggle menu">
         <span></span><span></span><span></span>
       </button>
@@ -511,9 +524,9 @@ const page = `<!DOCTYPE html>
 
 ${setsSection}
 
-${bundlesSection}
-
 ${sectionCards.join('\n\n')}
+
+${bundlesSection}
 
   <section class="prints-faq">
     <div class="container container--narrow">

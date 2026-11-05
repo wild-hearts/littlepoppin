@@ -146,7 +146,7 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
 <body>
   <nav class="nav nav--scrolled" id="nav">
     <div class="nav__inner">
-      <a href="${up}index.html" class="nav__logo"><img src="${up}images/logo.jpg" alt="Little Poppin" /></a>
+      <a href="${up}index.html" class="nav__logo"><img src="${up}images/logo.png" alt="Little Poppin" /></a>
       <button class="nav__toggle" aria-label="Toggle menu">
         <span></span><span></span><span></span>
       </button>
@@ -557,7 +557,7 @@ ${cards}
         headline: g.title, description: g.description,
         image: SITE + g.image, datePublished: g.updated, dateModified: g.updated,
         author: { '@type': 'Organization', name: 'Little Poppin' },
-        publisher: { '@type': 'Organization', name: 'Little Poppin', logo: { '@type': 'ImageObject', url: `${SITE}/images/logo.jpg` } },
+        publisher: { '@type': 'Organization', name: 'Little Poppin', logo: { '@type': 'ImageObject', url: `${SITE}/images/logo.png` } },
         mainEntityOfPage: url,
       },
       {

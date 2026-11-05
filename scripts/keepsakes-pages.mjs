@@ -44,10 +44,18 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
 </head>
 <body>`;
 
+
+// Cross-link to Tadavite (tadavite.com), the family-wide home of the same cards and invitations,
+// with the party planner, wish lists and advent calendars that Little Poppin does not carry.
+const TADAVITE = { cards: 'https://tadavite.com/cards', invitations: 'https://tadavite.com/invitations' };
+const tadaviteLine = (kind) => `      <p class="kp-tadavite" style="margin-top:10px;font-size:15px;color:var(--ink-soft,#6b5f55)">Also on Tadavite: ${kind === 'cards'
+  ? 'cards for everyone else in the family, plus wish lists and advent calendars'
+  : 'invitations for the whole family, with a party planner, wish lists and advent calendars'}. <a href="${TADAVITE[kind]}" rel="noopener" style="color:var(--red);border-bottom:1px solid currentColor">Visit Tadavite →</a></p>`;
+
 const nav = (up) => `
   <nav class="nav nav--scrolled" id="nav">
     <div class="nav__inner">
-      <a href="${up}index.html" class="nav__logo"><img src="${up}images/logo.jpg" alt="Little Poppin" /></a>
+      <a href="${up}index.html" class="nav__logo"><img src="${up}images/logo.png" alt="Little Poppin" /></a>
       <button class="nav__toggle" aria-label="Toggle menu">
         <span></span><span></span><span></span>
       </button>
@@ -123,6 +131,7 @@ ${nav('')}
       <h1>A card for <em>every little occasion.</em></h1>
       <p>${CARDS.length} cards on our own nursery art. Your words inside, a wax-sealed envelope outside, opened on their phone. ${cardPrice} a card.</p>
       <p style="margin-top:14px"><a href="invitations.html" style="color:var(--red);border-bottom:1px solid currentColor">Throwing a party? See the invitations →</a></p>
+${tadaviteLine('cards')}
     </div>
   </header>
   <main class="kp-wrap kp"><div class="wall"><div class="wall-grid" data-sheen-root>${tiles}</div></div></main>
@@ -141,6 +150,7 @@ ${nav('../')}
       <p class="crumb"><a href="../cards.html">E-cards</a>, ${esc(o.name)}</p>
       <h1>${esc(o.greeting)}</h1>
       <p>${cs.length} cards. Pick one, write your message, and we deliver it in a sealed envelope. ${cardPrice} a card.</p>
+${tadaviteLine('cards')}
     </div>
   </header>
   <main class="kp-wrap kp"><div class="wall"><div class="wall-grid" data-sheen-root>${tiles}</div></div></main>
@@ -159,6 +169,7 @@ ${nav('../')}
     <div class="container">
       <p class="crumb"><a href="../cards.html">E-cards</a> · <a href="../cards/${o.slug}.html">${esc(o.name)}</a> · ${esc(c.name)}</p>
       <h1>Write it <em>inside.</em></h1>
+${tadaviteLine('cards')}
     </div>
   </header>
   <main class="kp-wrap kp" id="editor" data-card="${esc(c.slug)}"><p class="hint" style="padding:30px 0">Loading the card…</p></main>
@@ -188,6 +199,7 @@ ${nav('')}
       <h1>The party starts when they <em>break the seal.</em></h1>
       <p>${INVITES.length} designs on our own art. A wax-sealed envelope, your details, a countdown, and replies that land on your private host page. ${invPrice} an event, as many guests as you like.</p>
       <p style="margin-top:14px"><a href="cards.html" style="color:var(--red);border-bottom:1px solid currentColor">Just sending a card? See the e-cards →</a></p>
+${tadaviteLine('invitations')}
     </div>
   </header>
   <main class="kp-wrap kp"><div class="wall"><div class="wall-grid" data-sheen-root>${tiles}</div></div></main>
@@ -206,6 +218,7 @@ ${nav('../')}
       <p class="crumb"><a href="../invitations.html">Invitations</a>, ${esc(o.name)}</p>
       <h1>${esc(o.plural)}</h1>
       <p>${esc(o.blurb)} When to send: ${esc(o.send)}</p>
+${tadaviteLine('invitations')}
     </div>
   </header>
   <main class="kp-wrap kp"><div class="thumb-grid">${tiles}</div></main>
@@ -222,6 +235,7 @@ ${nav('../')}
     <div class="container">
       <p class="crumb"><a href="../invitations.html">Invitations</a> · <a href="../invitations/${o.slug}.html">${esc(o.name)}</a> · ${esc(d.name)}</p>
       <h1>Make it <em>yours.</em></h1>
+${tadaviteLine('invitations')}
     </div>
   </header>
   <main class="kp-wrap kp" id="editor" data-design="${esc(d.slug)}"><p class="hint" style="padding:30px 0">Loading the design…</p></main>
