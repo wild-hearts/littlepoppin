@@ -312,6 +312,72 @@ if (!printifyConfigured()) {
 }
 
 // ---------------------------------------------------------------------------
+group('Pick any 3 and the welcome code');
+
+const picks = await import('../lib/picks.js');
+const promo = await import('../lib/promo.js');
+const storeSrc = fs.readFileSync('store.js', 'utf8');
+const storeNums = Object.fromEntries(['PICK_MIN', 'PICK_MAX', 'PICK_DEAL', 'PICK_FULL'].map((k) =>
+  [k, parseInt((storeSrc.match(new RegExp(`${k}\\s*=\\s*(\\d+)`)) || [])[1], 10)]));
+check('store.js basket labels agree with lib/picks.js pricing',
+  storeNums.PICK_MIN === picks.PICKS.minForDeal && storeNums.PICK_MAX === picks.PICKS.max
+  && storeNums.PICK_DEAL === picks.PICKS.dealPrice && storeNums.PICK_FULL === picks.PICKS.fullPrice,
+  `store.js ${JSON.stringify(storeNums)} vs lib ${JSON.stringify(picks.PICKS)}. The bar would promise one price and Stripe charge another.`);
+const curatedSet = Object.values(DIGITAL_PRODUCTS).find((p) => p.items && p.items.length === 3);
+check('three picks cost the same as a curated set of three', curatedSet && picks.pickPrice(3) === curatedSet.price,
+  `picks ${picks.pickPrice(3)} vs set ${curatedSet?.price}. Cheaper picks would make every set page look like a worse deal.`);
+check('fewer than three picks pay full price', picks.pickPrice(2) === 2 * picks.PICKS.fullPrice);
+const threeOk = Object.values(DIGITAL_PRODUCTS).filter((p) => !p.items && p.file && p.sku.startsWith('print-')).slice(0, 3).map((p) => p.sku);
+check('three deliverable prints are accepted and de-duplicated', picks.parsePicks(threeOk.concat(threeOk[0])).items?.length === 3);
+check('a set cannot be picked', picks.parsePicks([curatedSet.sku]).ok === false);
+check('an unknown sku cannot be picked', picks.parsePicks(['print-not-a-thing']).ok === false);
+check(`more than ${picks.PICKS.max} picks are refused`, picks.parsePicks(Array.from({ length: picks.PICKS.max + 1 }, (_, i) => `print-x${i}`)).ok === false);
+const metaRound = picks.productFromMetadata({ sku: 'pick-3', p_items: threeOk.join(',') });
+check('a paid pick order resolves back to its prints for delivery', metaRound?.items?.length === 3 && metaRound.price === picks.pickPrice(3));
+check('download and webhook resolve products through productFromMetadata',
+  fs.readFileSync('api/download.js', 'utf8').includes('productFromMetadata(') && fs.readFileSync('api/stripe-webhook.js', 'utf8').includes('productFromMetadata('),
+  'Otherwise a paid "pick any 3" order has no catalogue entry and the buyer gets nothing.');
+check('the welcome code is case-insensitive and trims', promo.isWelcomePromo(` ${promo.WELCOME_PROMO.code.toLowerCase()} `));
+check('the welcome code takes its percentage off', promo.applyWelcomePromo(10000) === 10000 * (100 - promo.WELCOME_PROMO.percentOff) / 100);
+check('the welcome email quotes the live code', fs.readFileSync('api/subscribe.js', 'utf8').includes('WELCOME_PROMO.code'),
+  'The code must come from lib/promo.js, not be typed into the email by hand.');
+check('the popup promises the same percentage as the code', storeSrc.includes(`${promo.WELCOME_PROMO.percentOff}% off your first printed order`));
+check('checkout refuses a code that is not ours', /isWelcomePromo\(promo\)\)\s*return res\.status\(400\)/.test(fs.readFileSync('api/checkout.js', 'utf8')));
+
+// ---------------------------------------------------------------------------
+group('Product page information');
+
+const pagePick = fs.readFileSync('print/sleepy-moon-and-stars.html', 'utf8');
+check('a print page has the size table', pagePick.includes('<table class="pd__table">') && pagePick.includes('8 × 10 in'));
+check('a print page has the frames, delivery and questions sections',
+  ['Where to buy frames', 'Delivery, paper and our promise', 'Common questions'].every((t) => pagePick.includes(`<summary>${t}</summary>`)));
+check('a print page carries FAQPage structured data', pagePick.includes('"@type":"FAQPage"'));
+check('a print page has the add-to-set button with the deal wording',
+  pagePick.includes('data-pick-sku="print-sleepy-moon-and-stars"') && pagePick.includes(`$${picks.PICKS.dealPrice / 100} each instead of $${picks.PICKS.fullPrice / 100}`));
+const setPage = fs.readFileSync(`set/${curatedSet.sku.replace(/^set-/, '')}.html`, 'utf8');
+check('a set page shows the saving arithmetic', /pd__maths">3 prints bought one at a time would be \$36\. This set is \$30, so you save \$6/.test(setPage));
+const unprintable = catalogue.prints.find((p) => !opts.availableFor.includes(p.sku));
+if (unprintable) {
+  const up = fs.readFileSync(`print/${unprintable.sku.replace(/^print-/, '')}.html`, 'utf8');
+  check('a print with no Printify product shows no printed-price table', !up.includes('Or have it printed and posted. Prices below'));
+}
+const bigBundle = catalogue.sets.find((s) => s.items.length > 5);
+if (bigBundle) {
+  const bp = fs.readFileSync(`set/${bigBundle.sku.replace(/^set-/, '')}.html`, 'utf8');
+  check('a large bundle shows no printed-price table', !bp.includes('Prices below are per print'));
+  check('a large bundle is not offered to the physical picker', !opts.availableFor.includes(bigBundle.sku));
+}
+check('printable 3-print sets are offered to the physical picker',
+  !opts.configured || opts.availableFor.includes(curatedSet.sku),
+  'checkout handles a set sku, but physical.js hides the picker unless the sku is in print-options.json');
+check('Kind Words needs three reviews on the homepage and the product pages',
+  /items\.length < 3\) return;/.test(home) && /KIND_MIN = 3/.test(storeSrc));
+check('the popup never shows on the homepage or checkout result pages',
+  storeSrc.includes("path === '/' || /index\\.html$|success\\.html$|cancel\\.html$"));
+check('the review email offers the photo reward and asks before quoting',
+  fs.readFileSync('api/review-request.js', 'utf8').includes('any single print from the shop') && fs.readFileSync('api/review-request.js', 'utf8').includes('happy for us to quote'));
+
+// ---------------------------------------------------------------------------
 group('Custom (made-to-order) products');
 
 const badFields = Object.values(CUSTOM_PRODUCTS).flatMap((p) =>

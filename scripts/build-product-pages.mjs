@@ -16,7 +16,8 @@ import { GENERATED_EXTRAS } from '../lib/extras-products.generated.js';
 import { PRINTIFY_CONFIG } from '../lib/printify-config.generated.js';
 import { GUIDES } from './guides-content.mjs';
 
-import { PRINT_COUNTRIES } from '../lib/products.js';
+import { PRINT_COUNTRIES, PRINT_SHIPPING } from '../lib/products.js';
+import { PICKS, pickPrice } from '../lib/picks.js';
 
 // Destination is chosen BEFORE checkout because Stripe fixes shipping rates when the
 // session is created. It cannot re-price after the buyer types an address. The list is
@@ -53,6 +54,120 @@ function fileBullets(p) {
             <li>Prints beautifully at ${list}</li>`;
 }
 const SITE = 'https://littlepoppin.com';
+
+// --- Size guide, frames, delivery and FAQ -----------------------------------
+// Every comparable shop puts the size guide and the frame advice beside the buy
+// button; Little Poppin had them on prints.html and in the guides, two clicks from the
+// decision. These blocks put the same facts on the product page itself, and the figures
+// are read from the code that charges them (PRINTIFY_CONFIG, PRINT_SHIPPING, PICKS) so
+// the copy cannot drift from the price.
+const PRINT_SIZES = [
+  { inch: '8 × 10 in', cm: '20 × 25 cm', frame: 'an 8 × 10 in frame, or A4 with a small mat', best: 'above a cot or change table, on a shelf', minW: 1200 },
+  { inch: '11 × 14 in', cm: '28 × 36 cm', frame: 'an 11 × 14 in frame, or A3 with a mat', best: 'a feature wall, a reading corner', minW: 1650 },
+  { inch: '16 × 20 in', cm: '40 × 50 cm', frame: 'a 16 × 20 in (40 × 50 cm) frame', best: 'a statement wall; a print shop will print this size from the file', minW: 2400 },
+];
+// Which sizes a file supports, by the same rule as fileBullets: the original library
+// goes to 16 × 20; a smaller file is limited to what still prints at 150 DPI or better.
+const sizesFor = (p) => (!p.px || p.px[0] >= 1800) ? PRINT_SIZES : PRINT_SIZES.filter((z) => p.px[0] / parseInt(z.inch, 10) >= 150);
+
+const dollars = (cents) => (cents % 100 === 0) ? `$${cents / 100}` : `$${(cents / 100).toFixed(2)}`;
+const PRINTED_FORMATS = Object.values(PRINTIFY_CONFIG.formats || {}).map((f) => ({
+  label: f.label, sizes: (f.sizes || []).filter((z) => z.variantId),
+})).filter((f) => f.sizes.length);
+const canBePrinted = (sku) => !!PRINTIFY_CONFIG.shopId && !!(PRINTIFY_CONFIG.products || {})[sku];
+const postageLine = () => {
+  const parts = [`Australia and New Zealand ${dollars(PRINT_SHIPPING.AU.amount)}`,
+    `United States ${dollars(PRINT_SHIPPING.US.amount)}`, `Canada ${dollars(PRINT_SHIPPING.CA.amount)}`,
+    `everywhere else ${dollars(PRINT_SHIPPING.ROW.amount)}`];
+  return parts.join(', ');
+};
+
+const sizeTable = (p) => `            <table class="pd__table">
+              <thead><tr><th>Print at</th><th>Frame to look for</th><th>Best for</th></tr></thead>
+              <tbody>
+${sizesFor(p).map((z) => `                <tr><td>${z.inch}<br/><small>${z.cm}</small></td><td>${z.frame}</td><td>${z.best}</td></tr>`).join('\n')}
+              </tbody>
+            </table>`;
+
+// A set can be printed when it is small enough to post as one order and every print in
+// it has a Printify product. The same rule puts the set's sku into print-options.json
+// (below), which is what lets physical.js show the picker on a set page at all.
+const setCanBePrinted = (s) => !!PRINTIFY_CONFIG.shopId && s.items.length <= MAX_PHYSICAL_SET && s.items.every(canBePrinted);
+const printedTable = (sku, setCount = 0, set = null) => {
+  const printed = set ? setCanBePrinted(set) : canBePrinted(sku);
+  if (!printed) return '';
+  const sizeKeys = PRINTED_FORMATS[0].sizes.map((z) => z.label);
+  return `            <p class="pd__infoLead">Or have it printed and posted. Prices below are per print, in AUD, chosen in the "printed and posted" box above.${setCount ? ` A set of ${setCount} is 10% off the combined price.` : ''}</p>
+            <table class="pd__table">
+              <thead><tr><th>Format</th>${sizeKeys.map((k) => `<th>${k}</th>`).join('')}</tr></thead>
+              <tbody>
+${PRINTED_FORMATS.map((f) => `                <tr><td>${esc(f.label)}</td>${f.sizes.map((z) => `<td>${dollars(z.price)}</td>`).join('')}</tr>`).join('\n')}
+              </tbody>
+            </table>`;
+};
+
+// Q and A used both for the on-page accordion and the FAQPage structured data.
+const productFaq = (p, isSet) => {
+  const n = isSet ? p.items.length : 1;
+  const qa = [
+    ['What exactly do I get?',
+      isSet ? `${n} high-resolution PNG files (4:5 ratio, around 300 DPI), one per print, delivered the moment you pay. A download page appears after checkout and the link is emailed to you as well. Nothing is posted and there is no shipping cost.`
+            : 'A high-resolution PNG file (4:5 ratio, around 300 DPI) delivered the moment you pay. A download button appears after checkout and the link is emailed to you as well. Nothing is posted and there is no shipping cost.'],
+    ['How do I print it?',
+      'Print at home on good matte photo paper, upload the file to any online print service, or take it to a local print shop. Matte paper suits the soft style best. The 4:5 ratio prints at 8 × 10 in and 16 × 20 in without cropping, and sits in an A4 or A3 frame with a small mat.'],
+    ['Can I print it more than once?',
+      'Yes. Print it as often as you like for your own home or as a gift. The licence is personal use only, so the file cannot be resold, shared or used commercially.'],
+    isSet
+      ? ['Can I swap one of the prints in the set?',
+         `Yes, in a way. Any single print page has an "add to my set" button: pick any ${PICKS.minForDeal} or more prints from the whole shop and they are ${dollars(PICKS.dealPrice)} each instead of ${dollars(PICKS.fullPrice)}, the same price per print as this set.`]
+      : ['Is there a discount for more than one?',
+         `Yes. Pick any ${PICKS.minForDeal} or more single prints and they are ${dollars(PICKS.dealPrice)} each instead of ${dollars(PICKS.fullPrice)}: three for ${dollars(pickPrice(3))}, which is what our curated sets cost too. Use the "add to my set" button under the price.`],
+    ...(isSet ? [] : [['Can I add my child\'s name?',
+      'Yes. Choose "add their name and personalise" under the price. You type the name and up to two more lines, see it rendered on the print as you type, and pay $19 for a print-ready PDF at 8 × 10 in, A4 and 16 × 20 in.']]),
+    ['What if something is wrong with my file or my print?',
+      'Tell us and we fix it or refund you, no forms and no argument. Digital files cannot be returned once downloaded, so change-of-mind refunds are not available on them, but Australian Consumer Law guarantees always apply. Printed orders that arrive damaged or misprinted are replaced.'],
+  ];
+  return qa;
+};
+
+const infoBlocks = (p, { isSet = false } = {}) => {
+  const qa = productFaq(p, isSet);
+  const sku = p.sku;
+  const printed = isSet ? printedTable(sku, p.items.length, p) : printedTable(sku);
+  return `
+          <div class="pd__info faq">
+            <details open>
+              <summary>Sizes and printing</summary>
+              <p class="pd__infoLead">Every file is 4:5, the shape of a classic 8 × 10 in frame. For a nursery, 8 × 10 in or A4 above a cot is the size most people choose.</p>
+${sizeTable(isSet ? { px: null } : p)}
+${printed}
+            </details>
+            <details>
+              <summary>Where to buy frames</summary>
+              <p>Look for an 8 × 10 in (20 × 25 cm) or 16 × 20 in (40 × 50 cm) frame: the print fits without cropping. In Australia those sizes are usually stocked at Kmart, Target, Big W, IKEA and Officeworks; in the United States at Target, Michaels and IKEA; in the United Kingdom at IKEA, Dunelm and The Range.</p>
+              <p>An A4 or A3 frame works too. Ask the framer for a mat (mount) cut to 8 × 10 in or 11 × 14 in, or trim a few millimetres from the top and bottom of the print.</p>
+${printed ? `              <p>Rather not frame it yourself? Choose "Framed Print" in the printed and posted box and it arrives in a black frame, ready to hang. Stretched canvas needs no frame at all.</p>` : ''}
+            </details>
+            <details>
+              <summary>Delivery, paper and our promise</summary>
+              <p><strong>Digital:</strong> the download appears the moment you pay and the link is emailed to you. Save the file to your device; the emailed link is tied to your order.</p>
+${printed ? `              <p><strong>Printed:</strong> made to order by the production partner nearest you, not posted from Australia. Posters are printed on matte paper, canvas is stretched on a wooden frame, framed prints come in a black frame. Allow 2 to 5 business days for printing plus postage: 5 to 12 business days in total is typical, and tracking is emailed where available.</p>
+              <p><strong>Postage</strong> is charged at cost and shown before you pay: ${postageLine()}.</p>` : ''}
+              <p><strong>Our promise:</strong> anything wrong with the file or the print, tell us and we fix it or refund you. Australian Consumer Law guarantees apply. See <a href="${'../'}refunds.html">Refunds &amp; Returns</a>.</p>
+            </details>
+            <details>
+              <summary>Common questions</summary>
+${qa.map(([q, a]) => `              <h3 class="pd__q">${esc(q)}</h3>
+              <p>${esc(a)}</p>`).join('\n')}
+            </details>
+          </div>`;
+};
+
+const faqJsonLd = (qa) => ({
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: qa.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+});
+
 
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'prints.json'), 'utf8'));
 const sectionTitle = Object.fromEntries(data.sections.map((s) => [s.id, s.nav]));
@@ -115,6 +230,22 @@ ${jsonLd.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
     .pd__list li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
     .pd__sets { list-style: none; padding: 0; margin: 18px 0 0; }
     .pd__sets li { padding: 6px 0; border-bottom: 1px solid var(--light-grey); font-size: 0.95rem; }
+    .pd__pick { width: 100%; margin-top: 10px; }
+    .pd__pickNote { font-size: 0.82rem; color: var(--mid-grey); text-align: center; margin: 8px 0 0; }
+    .pd__maths { background: var(--pink-light); border-radius: var(--radius); padding: 12px 16px; font-size: 0.92rem; margin: 14px 0 0; }
+    .pd__info { margin-top: 30px; }
+    .pd__info details { padding: 14px 18px; }
+    .pd__info summary { font-size: 1.05rem; }
+    .pd__infoLead { margin: 10px 0 6px; color: var(--mid-grey); font-size: 0.92rem; }
+    .pd__table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 10px 0 6px; }
+    .pd__table th, .pd__table td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--light-grey); vertical-align: top; }
+    .pd__table th { font-weight: 700; color: var(--charcoal); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .pd__table small { color: var(--mid-grey); }
+    .pd__q { font-family: var(--font-sans); font-size: 0.95rem; font-weight: 700; margin: 16px 0 4px; }
+    .pd__kind { margin: 18px 0 0; }
+    .pd__promo { display: block; margin: 10px 0 0; font-size: 0.85rem; color: var(--mid-grey); }
+    .pd__promo input { display: block; width: 100%; margin-top: 4px; padding: 10px 12px; border: 1px solid var(--light-grey); border-radius: 10px; font-family: var(--font-sans); font-size: 0.95rem; text-transform: uppercase; }
+    .pd__promo input:focus { outline: none; border-color: var(--red); }
     .breadcrumb { font-size: 0.85rem; color: var(--mid-grey); margin-bottom: 18px; }
     .breadcrumb a { color: var(--mid-grey); }
     .breadcrumb a:hover { color: var(--red); }
@@ -224,6 +355,7 @@ for (const p of data.prints) {
     : [];
 
   const jsonLd = [
+    faqJsonLd(productFaq(p, false)),
     {
       '@context': 'https://schema.org', '@type': 'Product',
       name: `${p.title} Art Print`, description: p.description, image: img, sku: p.sku,
@@ -263,7 +395,9 @@ ${fs.existsSync(path.join(REPO, 'images', 'mockups', `${slug}.jpg`)) ? `        
 ${p.available ? `          <div class="pd__buy">
             <button type="button" data-sku="${p.sku}" class="btn btn--primary btn--lg">Download Print. $${(p.price / 100).toFixed(0)}</button>
           </div>
-          <a class="pd__alt" href="${up}personalise.html?print=${encodeURIComponent(p.sku)}">✨ Or add their name and personalise this print for $19</a>`
+          <a class="pd__alt" href="${up}personalise.html?print=${encodeURIComponent(p.sku)}">✨ Or add their name and personalise this print for $19</a>
+          <button type="button" class="btn btn--outline-dark pd__pick" data-pick-sku="${p.sku}" data-pick-title="${esc(p.title)}" data-pick-preview="${p.preview}">+ Add to my set</button>
+          <p class="pd__pickNote">Pick any ${PICKS.minForDeal} or more prints from the shop and they are ${dollars(PICKS.dealPrice)} each instead of ${dollars(PICKS.fullPrice)}.</p>`
         : `          <div class="pd__buy">
             <button type="button" class="btn btn--primary btn--lg is-soldout" disabled>Coming soon</button>
           </div>
@@ -284,6 +418,7 @@ ${p.available ? `          <div class="pd__buy">
                 <select data-physical-country aria-label="Delivery country">${countryOptions}</select>
               </label>
             </div>
+            <label class="pd__promo">Have a code? <input type="text" data-physical-promo placeholder="Promo code" autocomplete="off" maxlength="20" /></label>
             <button type="button" class="btn btn--outline-dark pd__physicalBuy" data-physical-buy>Order a printed copy</button>
             <p class="pd__physicalNote">Printed close to you and posted &mdash; postage shown at checkout</p>
             <p class="pd__err" data-physical-err role="alert"></p>
@@ -295,6 +430,8 @@ ${fileBullets(p)}
             <li>Instant download. Nothing is posted</li>
             <li>Personal-use licence for your home, nursery or as a gift</li>
           </ul>
+          <div class="pd__kind" data-kind-words hidden></div>
+${infoBlocks(p)}
         </div>
       </div>
     </div>
@@ -317,6 +454,7 @@ for (const s of data.sets) {
   const comps = s.items.map((sku) => bySku[sku]).filter(Boolean);
 
   const jsonLd = [
+    faqJsonLd(productFaq(s, true)),
     {
       '@context': 'https://schema.org', '@type': 'Product',
       name: `${s.title}, 3 Digital Prints`, description: s.description, image: img, sku: s.sku,
@@ -361,6 +499,7 @@ for (const s of data.sets) {
           <ul class="pd__sets">
 ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">${esc(c.title)}</a></li>`).join('\n')}
           </ul>
+${saving > 0 ? `          <p class="pd__maths">${comps.length} prints bought one at a time would be $${(comps.length * 12).toFixed(0)}. This set is $${(s.price / 100).toFixed(0)}, so you save $${(saving / 100).toFixed(0)} (${Math.round(saving / (comps.length * 12))}%).</p>` : ''}
 
           <!-- All three prints, printed and posted as one order. Only SETS get this: they were
                designed to hang together, whereas a 41- or 93-print collection is not a physical
@@ -378,6 +517,7 @@ ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">$
                 <select data-physical-country aria-label="Delivery country">${countryOptions}</select>
               </label>
             </div>
+            <label class="pd__promo">Have a code? <input type="text" data-physical-promo placeholder="Promo code" autocomplete="off" maxlength="20" /></label>
             <button type="button" class="btn btn--outline-dark pd__physicalBuy" data-physical-buy>Order the printed set</button>
             <p class="pd__physicalNote">All ${comps.length} prints, printed close to you and posted together &mdash; postage shown at checkout</p>
             <p class="pd__err" data-physical-err role="alert"></p>
@@ -389,6 +529,8 @@ ${comps.map((c) => `            <li><a href="${up}print/${slugOf(c.sku)}.html">$
             <li>A ready-made gallery wall, designed to hang together</li>
             <li>Instant download. Nothing is posted</li>
           </ul>
+          <div class="pd__kind" data-kind-words hidden></div>
+${infoBlocks(s, { isSet: true })}
         </div>
       </div>
     </div>
@@ -412,8 +554,12 @@ ${relatedGrid(comps, up)}`;
   })).filter((f) => f.sizes.length);
 
   const configured = !!PRINTIFY_CONFIG.shopId && formats.length > 0;
-  // Which art has a Printify product built for it. The picker only offers those.
-  const availableFor = Object.keys(PRINTIFY_CONFIG.products || {});
+  // Which art has a Printify product built for it. The picker only offers those. A
+  // gallery set qualifies when it is small enough to post and every print in it does:
+  // checkout and the webhook already handle a set sku (getSetPrintOption), but the
+  // picker never showed on a set page because set skus were missing from this list.
+  const availableFor = Object.keys(PRINTIFY_CONFIG.products || {})
+    .concat(configured ? data.sets.filter(setCanBePrinted).map((s) => s.sku) : []);
 
   fs.mkdirSync(path.join(REPO, 'data'), { recursive: true });
   fs.writeFileSync(path.join(REPO, 'data', 'print-options.json'),

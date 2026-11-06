@@ -9,7 +9,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { head, put } from '@vercel/blob';
 import { presignGet } from '../lib/blob-link.js';
-import { getDigital, setComponents } from '../lib/products.js';
+import { setComponents } from '../lib/products.js';
+import { productFromMetadata } from '../lib/picks.js';
 import { recordEvent } from '../lib/events.js';
 import { renderPersonalisedPdf, cleanField, LIMITS } from '../lib/personalise.js';
 
@@ -44,7 +45,9 @@ export default async function handler(req, res) {
     if ((kind !== 'digital' && kind !== 'personalised') || s.metadata?.sku !== sku) {
       return res.status(403).send('This download is not authorised for that order');
     }
-    const product = getDigital(sku);
+    // A "pick any 3" order has no catalogue entry: its prints live in the session
+    // metadata, and productFromMetadata rebuilds a virtual set from them.
+    const product = productFromMetadata(s.metadata);
     if (!product) return res.status(404).send('Not found');
 
     res.setHeader('Cache-Control', 'no-store');

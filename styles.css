@@ -1441,3 +1441,39 @@ button.print-card__img { border: 0; padding: 0; width: 100%; display: block; bac
 .pd__physicalBuy { width: 100%; }
 .pd__physicalNote { font-size: 0.82rem; color: var(--mid-grey); text-align: center; margin-top: 10px; }
 .pd__err { color: var(--red); font-size: 0.9rem; min-height: 1.2em; text-align: center; margin-top: 8px; }
+
+/* ===== "Pick any 3" basket bar (store.js initPicks) ===== */
+.picks { position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; background: #fff; border-top: 1px solid var(--light-grey);
+         box-shadow: 0 -8px 30px rgba(0,0,0,0.08); padding: 12px 0; }
+.picks__inner { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.picks__thumbs { display: flex; gap: 4px; }
+.picks__thumbs img { width: 40px; height: 50px; object-fit: cover; border-radius: 6px; box-shadow: var(--shadow); }
+.picks__text { flex: 1 1 220px; font-size: 0.92rem; color: var(--mid-grey); }
+.picks__text strong { color: var(--charcoal); }
+.picks__actions { display: flex; align-items: center; gap: 12px; }
+.picks__clear { background: none; border: none; color: var(--mid-grey); font-family: var(--font-sans); font-size: 0.85rem; cursor: pointer; text-decoration: underline; }
+.picks__err { flex-basis: 100%; margin: 0; }
+body.has-picks { padding-bottom: 96px; }
+.pd__pick.is-picked { background: var(--teal-light); border-color: var(--green-mid); color: var(--green-mid); }
+@media (max-width: 600px) { .picks__thumbs { display: none; } .picks__actions { width: 100%; } .picks__go { flex: 1; } }
+
+/* ===== Kind Words on product pages (store.js initKindWords) ===== */
+.pd__kindTitle { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 0 0 10px; }
+.pd__say { margin: 0 0 12px; padding: 12px 16px; background: var(--pink-light); border-radius: var(--radius); }
+.pd__say blockquote { margin: 0 0 6px; font-family: var(--font-serif); font-size: 1.05rem; font-style: italic; }
+.pd__say figcaption { font-size: 0.82rem; color: var(--mid-grey); }
+
+/* ===== Email popup (store.js initPopup) ===== */
+.popup { position: fixed; inset: 0; z-index: 1000; background: rgba(44,44,44,0.55); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.popup__card { position: relative; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lg); max-width: 720px; width: 100%;
+               display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); overflow: hidden; }
+.popup__art { width: 100%; height: 100%; object-fit: cover; display: block; }
+.popup__body { padding: 32px 28px 24px; }
+.popup__body h2 { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 600; margin: 4px 0 10px; }
+.popup__body p { color: var(--mid-grey); font-size: 0.95rem; margin: 0 0 16px; }
+.popup__body .subscribe { max-width: none; margin: 0; }
+.popup__body .subscribe__row { flex-direction: column; }
+.popup__fine { font-size: 0.78rem; margin: 12px 0 0; }
+.popup__close { position: absolute; top: 8px; right: 12px; background: none; border: none; font-size: 1.8rem; line-height: 1; color: var(--mid-grey); cursor: pointer; z-index: 1; }
+.popup__close:hover { color: var(--red); }
+@media (max-width: 600px) { .popup__card { grid-template-columns: 1fr; } .popup__art { max-height: 160px; } }
