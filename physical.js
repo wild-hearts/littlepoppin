@@ -23,6 +23,7 @@ function lpTrack(event, params) {
   var sizeSel = block.querySelector('[data-physical-size]');
   var countrySel = block.querySelector('[data-physical-country]');
   var buyBtn = block.querySelector('[data-physical-buy]');
+  var promoEl = block.querySelector('[data-physical-promo]');
   var errEl = block.querySelector('[data-physical-err]');
   var formats = [];
 
@@ -65,7 +66,10 @@ function lpTrack(event, params) {
       body: JSON.stringify({ sku: sku, format: formatSel.value, size: sizeSel.value,
         // Destination decides the postage rate, and Stripe fixes rates when the session
         // is created. So it has to be sent now, not collected on the Stripe page.
-        country: countrySel ? countrySel.value : '' }),
+        country: countrySel ? countrySel.value : '',
+        // The welcome code from the signup email. Checked server-side; a wrong code is
+        // refused with a message rather than silently ignored.
+        promo: promoEl ? promoEl.value.trim() : '' }),
     })
       .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (res) {

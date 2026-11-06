@@ -12,6 +12,7 @@ import { getPrintOption, getSetPrintOption, submitPrintifyOrder } from '../lib/p
 import { GENERATED_DIGITAL_PRODUCTS } from '../lib/digital-products.generated.js';
 import { picksForMonth, monthLabel } from '../lib/printclub.js';
 import { keepsakePaid } from '../lib/keepsakes/pay.js';
+import { productFromMetadata } from '../lib/picks.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -293,7 +294,7 @@ async function handleClubSignup(session) {
 async function emailDownloadLink(session, sku, meta = {}) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = session.customer_details?.email;
-  const product = getDigital(sku);
+  const product = productFromMetadata({ ...meta, sku });   // catalogue item, or a virtual "pick any 3" set
   if (!to || !product) return;
   const origin = (process.env.SITE_URL || 'https://littlepoppin.com').replace(/\/$/, '');
   const link = `${origin}/api/download?session_id=${session.id}&sku=${encodeURIComponent(sku)}`;

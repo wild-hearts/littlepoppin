@@ -460,8 +460,9 @@
   </section>
 
   <!-- ===== WHAT PEOPLE SAY =====
-       Renders only when data/testimonials.json has entries, so it is never an empty
-       shell on the page. To add one, append to that file. No rebuild needed:
+       Renders only when data/testimonials.json has at least THREE entries (the same
+       threshold as the product pages), so it is never a thin shell. To add one, append
+       to that file. No rebuild needed:
          { "quote": "...", "name": "Sarah", "detail": "Melbourne", "product": "Sleepy Moon & Stars" }
        Only publish words a real customer actually wrote. Inventing them is misleading
        conduct under Australian Consumer Law, and Etsy closes shops for it. -->
@@ -586,7 +587,8 @@
       fetch('data/testimonials.json')
         .then(function (r) { return r.ok ? r.json() : []; })
         .then(function (items) {
-          if (!Array.isArray(items) || !items.length) return;
+          // Three or more only: one or two reviews read thinner than none.
+          if (!Array.isArray(items) || items.length < 3) return;
           var grid = document.getElementById('saysGrid');
           items.slice(0, 6).forEach(function (t) {
             var el = document.createElement('figure');

@@ -7,6 +7,8 @@ import { getProduct, getDigital, getCustom, isDeliverable, shippingFor, CURRENCY
 import { getPrintOption, getSetPrintOption } from '../lib/printify.js';
 import { parsePersonalisation, PERSONALISE_PRICE } from '../lib/personalise.js';
 import { PRINT_CLUB } from '../lib/printclub.js';
+import { parsePicks, pickPrice, pickMetadata, PICKS } from '../lib/picks.js';
+import { isWelcomePromo, applyWelcomePromo, WELCOME_PROMO } from '../lib/promo.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -140,6 +142,39 @@ export default async function handler(req, res) {
       return res.status(200).json({ url: session.url });
     }
 
+    // --- Pick any 3: body { picks: [print skus] }. One line item, one gated download ---
+    // Priced by lib/picks.js so it agrees with the curated sets. The chosen SKUs travel
+    // in session metadata (p_items); delivery rebuilds a virtual set from them.
+    if (Array.isArray(body.picks)) {
+      const parsed = parsePicks(body.picks);
+      if (!parsed.ok) return res.status(400).json({ error: parsed.error });
+      const items = parsed.items;
+      const origin = baseUrl(req);
+      const n = items.length;
+      const titles = items.map((p) => p.title || p.name).join(', ');
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: CURRENCY,
+            unit_amount: pickPrice(n),
+            product_data: {
+              name: n >= PICKS.minForDeal ? `Pick any ${n}, ${n} digital prints` : `${n} digital print${n === 1 ? '' : 's'}`,
+              description: titles.slice(0, 500),
+              ...(items[0].preview ? { images: [items[0].preview.startsWith('http') ? items[0].preview : `${origin}${items[0].preview}`] } : {}),
+              metadata: { sku: `${PICKS.sku}-${n}`, brand: 'little_poppin', type: 'digital' },
+            },
+          },
+        }],
+        custom_text: INSTANT_DELIVERY_NOTICE,
+        success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/cancel.html`,
+        metadata: { brand: 'little_poppin', type: 'digital', instantDeliveryConsent: 'shown', ...pickMetadata(items) },
+      });
+      return res.status(200).json({ url: session.url });
+    }
+
     // --- Physical print via Printify: body { sku, format, size, country } ---
     // `sku` may be a single print OR a gallery set, in which case all three of its prints
     // are ordered in the chosen format and size as one Printify order.
@@ -159,15 +194,20 @@ export default async function handler(req, res) {
       const band = printShippingFor(body.country);
       const shipTo = PRINT_COUNTRIES.includes(String(body.country || '').toUpperCase())
         ? [String(body.country).toUpperCase()] : PRINT_COUNTRIES;
+      // The welcome code (quoted in the signup popup and welcome email) takes 10% off the
+      // print itself, never the postage: postage is passed through at cost.
+      const promo = body.promo ? String(body.promo) : '';
+      if (promo && !isWelcomePromo(promo)) return res.status(400).json({ error: 'That code isn’t one of ours. Check the spelling, or leave it blank.' });
+      const printAmount = promo ? applyWelcomePromo(opt.price) : opt.price;
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: [{
           quantity: 1,
           price_data: {
             currency: CURRENCY,
-            unit_amount: opt.price,
+            unit_amount: printAmount,
             product_data: {
-              name: `${art?.title || sku}, ${opt.label}`,
+              name: `${art?.title || sku}, ${opt.label}${promo ? ` (${WELCOME_PROMO.code}, ${WELCOME_PROMO.percentOff}% off)` : ''}`,
               ...(art?.preview ? { images: [`${origin}${art.preview}`] } : {}),
               metadata: { sku, brand: 'little_poppin', type: 'print', format: String(body.format), size: String(body.size) },
             },
@@ -185,7 +225,7 @@ export default async function handler(req, res) {
         }],
         success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cancel.html`,
-        metadata: { brand: 'little_poppin', type: 'print', fulfil: 'printify', sku, format: String(body.format), size: String(body.size), country: String(body.country || '').toUpperCase(), isSet: art?.items ? '1' : '' },
+        metadata: { brand: 'little_poppin', type: 'print', fulfil: 'printify', sku, format: String(body.format), size: String(body.size), country: String(body.country || '').toUpperCase(), isSet: art?.items ? '1' : '', ...(promo ? { promo: WELCOME_PROMO.code } : {}) },
       });
       return res.status(200).json({ url: session.url });
     }

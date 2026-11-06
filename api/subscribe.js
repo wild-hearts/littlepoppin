@@ -8,6 +8,7 @@
 import { presignGet } from '../lib/blob-link.js';
 import { getDigital } from '../lib/products.js';
 import { FREE_PRINT } from '../lib/freeprint.js';
+import { WELCOME_PROMO } from '../lib/promo.js';
 
 const AUDIENCE_NAME = 'Little Poppin';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -85,6 +86,9 @@ async function sendWelcomePrint(email) {
     '',
     'It\'s a high-resolution file (4:5), so it prints beautifully at 8×10 inch or in an A4',
     'frame with a small mat. Matte paper suits the soft watercolour style best.',
+    '',
+    `And if you would rather have one printed, framed or on canvas and posted to you, the code ${WELCOME_PROMO.code}`,
+    `takes ${WELCOME_PROMO.percentOff}% off your first printed order. Type it in the "Have a code?" box under any print.`,
     '',
     'We\'ll be in touch now and then with new collections. Never too often, and you can',
     'unsubscribe from any email in one click.',

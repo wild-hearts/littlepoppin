@@ -16,6 +16,7 @@
   <meta name="twitter:title" content="The Complete Festive Collection Set of 3 Art Prints | Little Poppin" />
   <meta name="twitter:description" content="All twenty enchanted Christmas prints. A whole season of decorating, and a new wall every December." />
   <meta name="twitter:image" content="https://littlepoppin.com/images/prints/sets/bundle-festive.jpg" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What exactly do I get?","acceptedAnswer":{"@type":"Answer","text":"20 high-resolution PNG files (4:5 ratio, around 300 DPI), one per print, delivered the moment you pay. A download page appears after checkout and the link is emailed to you as well. Nothing is posted and there is no shipping cost."}},{"@type":"Question","name":"How do I print it?","acceptedAnswer":{"@type":"Answer","text":"Print at home on good matte photo paper, upload the file to any online print service, or take it to a local print shop. Matte paper suits the soft style best. The 4:5 ratio prints at 8 × 10 in and 16 × 20 in without cropping, and sits in an A4 or A3 frame with a small mat."}},{"@type":"Question","name":"Can I print it more than once?","acceptedAnswer":{"@type":"Answer","text":"Yes. Print it as often as you like for your own home or as a gift. The licence is personal use only, so the file cannot be resold, shared or used commercially."}},{"@type":"Question","name":"Can I swap one of the prints in the set?","acceptedAnswer":{"@type":"Answer","text":"Yes, in a way. Any single print page has an \"add to my set\" button: pick any 3 or more prints from the whole shop and they are $10 each instead of $12, the same price per print as this set."}},{"@type":"Question","name":"What if something is wrong with my file or my print?","acceptedAnswer":{"@type":"Answer","text":"Tell us and we fix it or refund you, no forms and no argument. Digital files cannot be returned once downloaded, so change-of-mind refunds are not available on them, but Australian Consumer Law guarantees always apply. Printed orders that arrive damaged or misprinted are replaced."}}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"The Complete Festive Collection, 3 Digital Prints","description":"All twenty enchanted Christmas prints. A whole season of decorating, and a new wall every December.","image":"https://littlepoppin.com/images/prints/sets/bundle-festive.jpg","sku":"bundle-festive","brand":{"@type":"Brand","name":"Little Poppin"},"offers":{"@type":"Offer","price":"89.00","priceCurrency":"AUD","url":"https://littlepoppin.com/set/bundle-festive.html","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition"}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://littlepoppin.com/"},{"@type":"ListItem","position":2,"name":"Art Prints","item":"https://littlepoppin.com/prints.html"},{"@type":"ListItem","position":3,"name":"Gallery Sets","item":"https://littlepoppin.com/prints.html#sets"},{"@type":"ListItem","position":4,"name":"The Complete Festive Collection","item":"https://littlepoppin.com/set/bundle-festive.html"}]}</script>
   <link rel="stylesheet" href="../styles.css" />
@@ -50,6 +51,22 @@
     .pd__list li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
     .pd__sets { list-style: none; padding: 0; margin: 18px 0 0; }
     .pd__sets li { padding: 6px 0; border-bottom: 1px solid var(--light-grey); font-size: 0.95rem; }
+    .pd__pick { width: 100%; margin-top: 10px; }
+    .pd__pickNote { font-size: 0.82rem; color: var(--mid-grey); text-align: center; margin: 8px 0 0; }
+    .pd__maths { background: var(--pink-light); border-radius: var(--radius); padding: 12px 16px; font-size: 0.92rem; margin: 14px 0 0; }
+    .pd__info { margin-top: 30px; }
+    .pd__info details { padding: 14px 18px; }
+    .pd__info summary { font-size: 1.05rem; }
+    .pd__infoLead { margin: 10px 0 6px; color: var(--mid-grey); font-size: 0.92rem; }
+    .pd__table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 10px 0 6px; }
+    .pd__table th, .pd__table td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--light-grey); vertical-align: top; }
+    .pd__table th { font-weight: 700; color: var(--charcoal); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .pd__table small { color: var(--mid-grey); }
+    .pd__q { font-family: var(--font-sans); font-size: 0.95rem; font-weight: 700; margin: 16px 0 4px; }
+    .pd__kind { margin: 18px 0 0; }
+    .pd__promo { display: block; margin: 10px 0 0; font-size: 0.85rem; color: var(--mid-grey); }
+    .pd__promo input { display: block; width: 100%; margin-top: 4px; padding: 10px 12px; border: 1px solid var(--light-grey); border-radius: 10px; font-family: var(--font-sans); font-size: 0.95rem; text-transform: uppercase; }
+    .pd__promo input:focus { outline: none; border-color: var(--red); }
     .breadcrumb { font-size: 0.85rem; color: var(--mid-grey); margin-bottom: 18px; }
     .breadcrumb a { color: var(--mid-grey); }
     .breadcrumb a:hover { color: var(--red); }
@@ -139,6 +156,7 @@
             <li><a href="../print/the-advent-wreath.html">The Advent Wreath</a></li>
             <li><a href="../print/star-of-wonder.html">Star of Wonder</a></li>
           </ul>
+          <p class="pd__maths">20 prints bought one at a time would be $240. This set is $89, so you save $151 (63%).</p>
 
           <!-- All three prints, printed and posted as one order. Only SETS get this: they were
                designed to hang together, whereas a 41- or 93-print collection is not a physical
@@ -151,6 +169,48 @@
             <li>A ready-made gallery wall, designed to hang together</li>
             <li>Instant download. Nothing is posted</li>
           </ul>
+          <div class="pd__kind" data-kind-words hidden></div>
+
+          <div class="pd__info faq">
+            <details open>
+              <summary>Sizes and printing</summary>
+              <p class="pd__infoLead">Every file is 4:5, the shape of a classic 8 × 10 in frame. For a nursery, 8 × 10 in or A4 above a cot is the size most people choose.</p>
+            <table class="pd__table">
+              <thead><tr><th>Print at</th><th>Frame to look for</th><th>Best for</th></tr></thead>
+              <tbody>
+                <tr><td>8 × 10 in<br/><small>20 × 25 cm</small></td><td>an 8 × 10 in frame, or A4 with a small mat</td><td>above a cot or change table, on a shelf</td></tr>
+                <tr><td>11 × 14 in<br/><small>28 × 36 cm</small></td><td>an 11 × 14 in frame, or A3 with a mat</td><td>a feature wall, a reading corner</td></tr>
+                <tr><td>16 × 20 in<br/><small>40 × 50 cm</small></td><td>a 16 × 20 in (40 × 50 cm) frame</td><td>a statement wall; a print shop will print this size from the file</td></tr>
+              </tbody>
+            </table>
+
+            </details>
+            <details>
+              <summary>Where to buy frames</summary>
+              <p>Look for an 8 × 10 in (20 × 25 cm) or 16 × 20 in (40 × 50 cm) frame: the print fits without cropping. In Australia those sizes are usually stocked at Kmart, Target, Big W, IKEA and Officeworks; in the United States at Target, Michaels and IKEA; in the United Kingdom at IKEA, Dunelm and The Range.</p>
+              <p>An A4 or A3 frame works too. Ask the framer for a mat (mount) cut to 8 × 10 in or 11 × 14 in, or trim a few millimetres from the top and bottom of the print.</p>
+
+            </details>
+            <details>
+              <summary>Delivery, paper and our promise</summary>
+              <p><strong>Digital:</strong> the download appears the moment you pay and the link is emailed to you. Save the file to your device; the emailed link is tied to your order.</p>
+
+              <p><strong>Our promise:</strong> anything wrong with the file or the print, tell us and we fix it or refund you. Australian Consumer Law guarantees apply. See <a href="../refunds.html">Refunds &amp; Returns</a>.</p>
+            </details>
+            <details>
+              <summary>Common questions</summary>
+              <h3 class="pd__q">What exactly do I get?</h3>
+              <p>20 high-resolution PNG files (4:5 ratio, around 300 DPI), one per print, delivered the moment you pay. A download page appears after checkout and the link is emailed to you as well. Nothing is posted and there is no shipping cost.</p>
+              <h3 class="pd__q">How do I print it?</h3>
+              <p>Print at home on good matte photo paper, upload the file to any online print service, or take it to a local print shop. Matte paper suits the soft style best. The 4:5 ratio prints at 8 × 10 in and 16 × 20 in without cropping, and sits in an A4 or A3 frame with a small mat.</p>
+              <h3 class="pd__q">Can I print it more than once?</h3>
+              <p>Yes. Print it as often as you like for your own home or as a gift. The licence is personal use only, so the file cannot be resold, shared or used commercially.</p>
+              <h3 class="pd__q">Can I swap one of the prints in the set?</h3>
+              <p>Yes, in a way. Any single print page has an &quot;add to my set&quot; button: pick any 3 or more prints from the whole shop and they are $10 each instead of $12, the same price per print as this set.</p>
+              <h3 class="pd__q">What if something is wrong with my file or my print?</h3>
+              <p>Tell us and we fix it or refund you, no forms and no argument. Digital files cannot be returned once downloaded, so change-of-mind refunds are not available on them, but Australian Consumer Law guarantees always apply. Printed orders that arrive damaged or misprinted are replaced.</p>
+            </details>
+          </div>
         </div>
       </div>
     </div>
