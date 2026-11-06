@@ -3,3 +3,14 @@
 dist/
 node_modules/
 .git/
+
+# Internal notes and build tooling. Both were being served publicly as plain text
+# (https://littlepoppin.com/docs/TOMORROW.md and /README_FORGE.md returned 200 on
+# 6 Nov 2026). Nothing in api/ imports docs/ or scripts/ at runtime (every api/
+# import resolves to ../lib/ or ../keepsakes/), so excluding them is safe.
+# lib/ and keepsakes/ CANNOT go here: the serverless functions import them. They are
+# covered by the redirect rules in vercel.json instead.
+docs/
+scripts/
+etsy-stage/
+README_FORGE.md
