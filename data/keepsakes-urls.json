@@ -1,7 +1,8 @@
 [
  "cards.html",
- "cards/birthday.html",
  "cards/christmas.html",
+ "cards/first-christmas.html",
+ "cards/birthday.html",
  "cards/new-baby.html",
  "cards/star-sign.html",
  "cards/first-birthday.html",
@@ -17,7 +18,6 @@
  "cards/new-home.html",
  "cards/just-because.html",
  "cards/halloween.html",
- "cards/first-christmas.html",
  "card/new-baby--moses-basket-fawn.html",
  "card/new-baby--stork-at-dawn.html",
  "card/new-baby--bubble-bath-elephant.html",

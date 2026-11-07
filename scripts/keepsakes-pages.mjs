@@ -52,6 +52,39 @@ const tadaviteLine = (kind) => `      <p class="kp-tadavite" style="margin-top:1
   ? 'cards for everyone else in the family, plus wish lists and advent calendars'
   : 'invitations for the whole family, with a party planner, wish lists and advent calendars'}. <a href="${TADAVITE[kind]}" rel="noopener" style="color:var(--red);border-bottom:1px solid currentColor">Visit Tadavite →</a></p>`;
 
+// Tadavite's Christmas advent calendars for children, advertised on the galleries (and, by hand, on index.html:
+// keep the two copies the same). Prices as on tadavite.com/advent/for-kids, 8 Nov 2026.
+const UTM = 'utm_source=littlepoppin&utm_medium=site&utm_campaign=advent';
+export const adventBand = (up) => `  <section class="xmas-band" aria-labelledby="xmas-h">
+    <div class="container">
+      <div class="section-label">Christmas, from our big sister Tadavite</div>
+      <h2 id="xmas-h">A door a day until Christmas</h2>
+      <p class="xmas-band__intro">Digital advent calendars for children and the whole family. A new door opens every morning in December on a phone or tablet. Nothing to hide on a shelf, nothing the dog can eat at six in the morning.</p>
+      <div class="xmas-band__grid">
+        <a class="xmas-card xmas-card--elf" href="https://tadavite.com/advent/unhinged-elf?${UTM}" rel="noopener">
+          <span class="xmas-card__img"><img src="${up}images/tadavite/elf-door-01.webp" alt="Door 1 of The Unhinged Elf: a small elf in a red velvet coat, mid-mischief" loading="lazy" width="960" height="536"></span>
+          <span class="xmas-card__body">
+            <span class="xmas-card__tag">Ages 4 to 10 · door 1 is free to try</span>
+            <span class="xmas-card__title">The Unhinged Elf</span>
+            <span class="xmas-card__text">An elf has moved in, and he is trouble. Every morning he tells you what he has been up to, on video, then there is a little game, a hidden surprise and the day's badge. By Christmas Eve he has been sued by Rudolph and fired by Santa, and he needs your help.</span>
+            <span class="xmas-card__price">$19 for the whole household</span>
+            <span class="xmas-card__go">Meet the elf →</span>
+          </span>
+        </a>
+        <a class="xmas-card" href="https://tadavite.com/advent/for-kids?${UTM}" rel="noopener">
+          <span class="xmas-card__img"><img src="${up}images/tadavite/family-door-01.webp" alt="A family at a Christmas table opening the first door of a Tadavite advent calendar" loading="lazy" width="640" height="366"></span>
+          <span class="xmas-card__body">
+            <span class="xmas-card__tag">For children and families</span>
+            <span class="xmas-card__title">More calendars for kids</span>
+            <span class="xmas-card__text"><b>Winter Wonderland</b>, a five-minute bedtime chapter each morning with their own name in it. <b>The Great Christmas Family Challenge</b>, quizzes, puzzles and a scavenger dash for the whole table. <b>Christmas Around the World</b>, a country, a carol and a recipe a day.</span>
+            <span class="xmas-card__price">From $15</span>
+            <span class="xmas-card__go">See the calendars →</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>`;
+
 const nav = (up) => `
   <nav class="nav nav--scrolled" id="nav">
     <div class="nav__inner">
@@ -120,9 +153,19 @@ export async function buildPages({ REPO, SITE }) {
     const occ = CARD_OCCASIONS.map((o) => ({ o, cs: cardsFor(o.slug) })).filter((x) => x.cs.length);
     const ranked = [...occ].sort((a, b) => b.cs.length - a.cs.length).slice(0, Math.max(1, Math.round(occ.length / 8)));
     const big = new Set(ranked.map((x) => x.o.slug));
-    // The big tiles lead, so the wall opens with its best sellers instead of ending on an orphan.
-    occ.sort((a, b) => Number(big.has(b.o.slug)) - Number(big.has(a.o.slug)));
-    const tiles = occ.map(({ o, cs }, i) => R.occasionTile(o.name, `${cs.length} ${cs.length === 1 ? 'card' : 'cards'}`, `cards/${o.slug}.html`, R.cardFront(cs[0], { priority: i < 3 }), { feature: big.has(o.slug), priority: i < 3 })).join('\n');
+    // The season leads (the site is rebuilt on every deploy, so this follows the calendar), then the big tiles,
+    // so the wall opens with what people are sending now instead of ending on an orphan.
+    const month = new Date().getMonth() + 1;
+    const SEASON = { christmas: [10, 11, 12], 'first-christmas': [10, 11, 12], halloween: [9, 10], 'mothers-day': [4, 5], 'fathers-day': [8, 9], 'first-day-of-school': [1, 2] };
+    const inSeason = (slug) => (SEASON[slug] || []).includes(month);
+    occ.sort((a, b) => Number(inSeason(b.o.slug)) - Number(inSeason(a.o.slug)) || Number(big.has(b.o.slug)) - Number(big.has(a.o.slug)));
+    // Each occasion tile is a small stack of its cards: the first on top, two more peeking out behind it. On hover
+    // the stack fans; left alone, the cards shuffle to the front one by one (keepsakes/render.js shuffle()).
+    const stackOf = (cs, i) => `<span class="wall-stack" data-n="${Math.min(3, cs.length)}">${cs.slice(0, 3).reverse().map((c, k) => R.cardFront(c, { priority: i < 3 && k === 2 })).join('')}</span>`;
+    const tiles = occ.map(({ o, cs }, i) => R.occasionTile(o.name, `${cs.length} ${cs.length === 1 ? 'card' : 'cards'}`, `cards/${o.slug}.html`, stackOf(cs, i), { feature: big.has(o.slug), priority: i < 3 }).replace('class="wall-cover"', 'class="wall-cover wall-cover--stack"')).join('\n');
+    // A hand of five cards under the hero, one from each of the first five occasions, and a rail of every occasion.
+    const fan = occ.slice(0, 5).map(({ cs }, i) => `<span class="kp-fan__card" style="--i:${i}">${R.cardFront(cs[Math.min(1, cs.length - 1)], { priority: true })}</span>`).join('');
+    const chips = occ.map(({ o, cs }) => `<a href="cards/${o.slug}.html">${esc(o.name)} <small>${cs.length}</small></a>`).join('');
     write('cards.html', `${head({ title: 'E-cards for Every Little Occasion | Little Poppin', description: `${CARDS.length} e-cards on Little Poppin’s nursery art, opened from a wax-sealed envelope on their phone. New baby, birthdays, Christmas, thank you and more, with your words inside. ${cardPrice} a card.`, canonical: `${SITE}/cards.html`, image: img(cardsFor('new-baby')[0].design.preview), up: '', jsonLd: [faqLd(cardFaq)] })}
 ${nav('')}
   <header class="kp-hero kp-hero--art" style="--hero-art:url('/images/banners/woodland-masquerade.jpg');--hero-art-sm:url('/images/banners/woodland-masquerade-sm.jpg')">
@@ -132,12 +175,17 @@ ${nav('')}
       <p>${CARDS.length} cards on our own nursery art. Your words inside, a wax-sealed envelope outside, opened on their phone. ${cardPrice} a card.</p>
       <p style="margin-top:14px"><a href="invitations.html" style="color:var(--red);border-bottom:1px solid currentColor">Throwing a party? See the invitations →</a></p>
 ${tadaviteLine('cards')}
+      <div class="kp-fan" aria-hidden="true">${fan}</div>
     </div>
   </header>
-  <main class="kp-wrap kp"><div class="wall"><div class="wall-grid" data-sheen-root>${tiles}</div></div></main>
+  <main class="kp-wrap kp">
+    <nav class="kp-chips" aria-label="Card occasions">${chips}</nav>
+    <div class="wall"><div class="wall-grid" data-sheen-root data-reveal data-shuffle>${tiles}</div></div>
+  </main>
+${adventBand('')}
 ${faq(cardFaq)}
 ${footer('')}
-  <script type="module">import{sheen}from"./keepsakes/render.js";sheen(document.querySelector("[data-sheen-root]"));</script>
+  <script type="module">import{sheen,reveal,shuffle}from"./keepsakes/render.js";const g=document.querySelector("[data-sheen-root]");sheen(g);reveal(g);shuffle(g);</script>
 </body>
 </html>`);
     written.push('cards.html');
@@ -203,6 +251,7 @@ ${tadaviteLine('invitations')}
     </div>
   </header>
   <main class="kp-wrap kp"><div class="wall"><div class="wall-grid" data-sheen-root>${tiles}</div></div></main>
+${adventBand('')}
 ${faq(invFaq)}
 ${footer('')}
   <script type="module">import{sheen}from"./keepsakes/render.js";sheen(document.querySelector("[data-sheen-root]"));</script>
