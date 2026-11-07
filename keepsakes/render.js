@@ -111,7 +111,9 @@ export function cardFront(c, { priority = false, className = '' } = {}) {
   if (fmt === 'circle') return `${open}${stock}${img('cf-circle')}${greet}</div></div>`;
   if (fmt === 'split') return `${open}${stock}${img('cf-split')}<div class="cf-block">${greet}</div></div></div>`;
   if (fmt === 'stamp') return `${open}${stock}${img('cf-stamp')}${greet}</div></div>`;
-  return `${open}${stock}${corners(d.finish?.border || 'double', d.finish?.foil || 'gold', !d.card.dark)}${greet}</div></div>`;   // type
+  // type: the words are the whole design. The plate they sit on is a real wrapper, not a pseudo-element on the
+  // foil text: Chrome paints a negative-z-index child of a background-clip:text element over the lettering.
+  return `${open}${stock}${corners(d.finish?.border || 'double', d.finish?.foil || 'gold', !d.card.dark)}<div class="cf-plate">${greet}</div></div></div>`;
 }
 // The inside: the sender's words on foil-edged card.
 export function cardInside(c, { to = '', from = '', message = '' } = {}) {
@@ -185,6 +187,38 @@ export function sheen(root) {
     t.style.setProperty('--mx', `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`); t.style.setProperty('--my', `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`); last = t;
   }, { passive: true });
   root.addEventListener('pointerleave', () => { if (last) { last.style.removeProperty('--mx'); last.style.removeProperty('--my'); last = null; } }, { passive: true });
+}
+
+// Gallery tiles rise into place as they scroll into view. Without JS (or with reduced motion) they are simply there.
+export function reveal(root) {
+  if (!root || reduced() || !('IntersectionObserver' in window)) return;
+  const tiles = [...root.querySelectorAll('.wall-tile')];
+  root.setAttribute('data-reveal', 'on');
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+  tiles.forEach((t, i) => { t.style.setProperty('--i', String(i % 10)); io.observe(t); });
+  // Belt and braces: whatever the observer does, nothing on screen stays hidden for long.
+  const show = () => tiles.forEach((t) => { const r = t.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight + 40) t.classList.add('in'); });
+  setTimeout(show, 1200);
+  addEventListener('scroll', () => setTimeout(show, 900), { passive: true });
+}
+
+// Each occasion tile on the cards wall is a stack of up to three card fronts. While a tile is on screen and not
+// hovered, the back card comes to the front every few seconds, each tile on its own beat, so the wall is never still.
+export function shuffle(root) {
+  if (!root || reduced() || !('IntersectionObserver' in window)) return;
+  const stacks = [...root.querySelectorAll('.wall-stack')].filter((s) => s.children.length > 1);
+  const seen = new Set();
+  const io = new IntersectionObserver((entries) => { for (const e of entries) e.isIntersecting ? seen.add(e.target) : seen.delete(e.target); }, { threshold: 0.3 });
+  stacks.forEach((s) => io.observe(s));
+  stacks.forEach((s, i) => {
+    const beat = 3800 + (i % 5) * 700;
+    setTimeout(() => setInterval(() => {
+      if (!seen.has(s) || s.closest('.wall-tile')?.matches(':hover') || document.hidden) return;
+      s.prepend(s.lastElementChild);   // the top card goes to the back, the next one is on top
+    }, beat), (i % 7) * 530);
+  });
 }
 
 // A soft light that follows the pointer, or the tilt of the phone, written as CSS variables on `el`.

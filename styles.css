@@ -1477,3 +1477,34 @@ body.has-picks { padding-bottom: 96px; }
 .popup__close { position: absolute; top: 8px; right: 12px; background: none; border: none; font-size: 1.8rem; line-height: 1; color: var(--mid-grey); cursor: pointer; z-index: 1; }
 .popup__close:hover { color: var(--red); }
 @media (max-width: 600px) { .popup__card { grid-template-columns: 1fr; } .popup__art { max-height: 160px; } }
+
+/* Christmas band: Tadavite's advent calendars for children, on the home page and the card and invitation
+   galleries (scripts/keepsakes-pages.mjs adventBand writes the gallery copies; index.html holds its own). */
+.xmas-band { position: relative; isolation: isolate; padding: 84px 0 92px; color: #fff4e6; background-color: #142232;
+  background-image: radial-gradient(ellipse at 18% 0%, rgba(201,164,92,.28), transparent 55%),
+                    radial-gradient(ellipse at 90% 100%, rgba(181,34,62,.35), transparent 50%); }
+.xmas-band::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .55; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255,236,190,.9) 0 1px, transparent 1.6px), radial-gradient(circle, rgba(255,236,190,.7) 0 .8px, transparent 1.4px);
+  background-size: 140px 140px, 90px 90px; background-position: 0 0, 45px 30px; animation: xmas-twinkle 6s ease-in-out infinite alternate; }
+@keyframes xmas-twinkle { from { opacity: .35; } to { opacity: .7; } }
+.xmas-band .section-label { color: #e8cf93; }
+.xmas-band h2 { font-family: var(--font-serif); font-size: clamp(2.1rem, 4.6vw, 3.3rem); font-weight: 600; line-height: 1.05; letter-spacing: -.01em; margin: 0 0 12px; color: #fff; }
+.xmas-band__intro { max-width: 640px; color: rgba(255,244,230,.82); font-size: 1.05rem; margin: 0 0 36px; }
+.xmas-band__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.xmas-card { display: grid; grid-template-rows: auto 1fr; color: inherit; border-radius: var(--radius); overflow: hidden; background: rgba(255,255,255,.06);
+  border: 1px solid rgba(232,207,147,.28); box-shadow: 0 30px 60px -36px rgba(0,0,0,.8); transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s, border-color .5s; }
+.xmas-card:hover, .xmas-card:focus-visible { transform: translateY(-6px); border-color: rgba(232,207,147,.7); box-shadow: 0 40px 70px -36px rgba(0,0,0,.9); }
+.xmas-card:focus-visible { outline: 2px solid #e8cf93; outline-offset: 4px; }
+.xmas-card__img { display: block; aspect-ratio: 16 / 9; overflow: hidden; }
+.xmas-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s ease; }
+.xmas-card:hover .xmas-card__img img { transform: scale(1.05); }
+.xmas-card__body { display: flex; flex-direction: column; gap: 8px; padding: 22px 24px 26px; }
+.xmas-card__tag { font: 700 .72rem/1 var(--font-sans); letter-spacing: .14em; text-transform: uppercase; color: #e8cf93; }
+.xmas-card__title { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 600; line-height: 1.1; color: #fff; }
+.xmas-card__text { color: rgba(255,244,230,.84); font-size: .96rem; line-height: 1.6; }
+.xmas-card__text b { color: #fff; font-weight: 700; }
+.xmas-card__price { margin-top: auto; padding-top: 8px; font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; color: #ffd9a8; }
+.xmas-card__go { font-weight: 700; color: #fff; border-bottom: 1px solid rgba(255,255,255,.4); align-self: flex-start; padding-bottom: 2px; }
+.xmas-card:hover .xmas-card__go { border-bottom-color: #fff; }
+@media (max-width: 700px) { .xmas-band { padding: 60px 0 64px; } }
+@media (prefers-reduced-motion: reduce) { .xmas-band::before, .xmas-card, .xmas-card__img img { animation: none; transition: none; } }

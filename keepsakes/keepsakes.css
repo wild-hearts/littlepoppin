@@ -220,11 +220,12 @@
 .cfront[data-format="stamp"] .cf-greet{font-size:10.5cqw}.cfront[data-format="stamp"] .cf-greet[data-len="mid"]{font-size:8.6cqw}.cfront[data-format="stamp"] .cf-greet[data-len="long"]{font-size:7cqw}
 .cfront[data-format="type"] .cf-stock{padding:12cqw}
 /* The greeting is foil lettering (the gradient is clipped to the text, colour transparent), so the plate it sits on
-   must be a pseudo-element behind it. Setting background on .cf-greet itself replaces the foil and the words vanish. */
-.cfront[data-format="type"] .cf-greet{padding:5cqw 6cqw;z-index:0;
-  /* The words are the whole design here, so the foil runs ink-dark with one gold glint: readable on paper and on navy. */
-  background-image:linear-gradient(110deg,var(--c-ink) 0%,var(--c-accent-ink) 30%,var(--c-metal) 50%,var(--c-accent-ink) 70%,var(--c-ink) 100%)}
-.cfront[data-format="type"] .cf-greet::after{content:"";position:absolute;inset:0;z-index:-1;background:color-mix(in srgb,var(--c-paper) 94%,transparent);border:1px solid color-mix(in srgb,var(--c-metal) 55%,transparent);box-shadow:0 2cqw 5cqw -2cqw rgba(0,0,0,.35)}
+   is a separate wrapper (.cf-plate). A background on .cf-greet itself replaces the foil, and a pseudo-element
+   behind it paints over the clipped text in Chrome: either way the words vanish. */
+.cf-plate{position:relative;max-width:88%;padding:5cqw 6cqw;background:color-mix(in srgb,var(--c-paper) 94%,transparent);border:1px solid color-mix(in srgb,var(--c-metal) 55%,transparent);box-shadow:0 2cqw 5cqw -2cqw rgba(0,0,0,.35)}
+.cf-plate .cf-greet{max-width:none}
+/* The words are the whole design here, so the foil runs ink-dark with one gold glint: readable on paper and on navy. */
+.cfront[data-format="type"] .cf-greet{background-image:linear-gradient(110deg,var(--c-ink) 0%,var(--c-accent-ink) 30%,var(--c-metal) 50%,var(--c-accent-ink) 70%,var(--c-ink) 100%)}
 .cfront[data-format="type"] .cf-greet{font-size:13cqw;line-height:1.02}.cfront[data-format="type"] .cf-greet[data-len="mid"]{font-size:11cqw}.cfront[data-format="type"] .cf-greet[data-len="long"]{font-size:9cqw}
 .cfront[data-format="type"][data-font="pinyon"] .cf-greet{font-size:15cqw;line-height:1.12}.cfront[data-format="type"][data-font="pinyon"] .cf-greet[data-len="mid"]{font-size:13cqw}.cfront[data-format="type"][data-font="pinyon"] .cf-greet[data-len="long"]{font-size:10.5cqw}
 .cfront[data-format="type"][data-font="bodoni"] .cf-greet,.cfront[data-format="type"][data-font="syne"] .cf-greet{font-size:10cqw}.cfront[data-format="type"][data-font="bodoni"] .cf-greet[data-len="mid"],.cfront[data-format="type"][data-font="syne"] .cf-greet[data-len="mid"]{font-size:8.4cqw}.cfront[data-format="type"][data-font="bodoni"] .cf-greet[data-len="long"],.cfront[data-format="type"][data-font="syne"] .cf-greet[data-len="long"]{font-size:7cqw}
@@ -288,6 +289,47 @@
 .wall-info small{font:italic 500 16px/1.25 var(--display);color:var(--k-muted)}
 .wall-feature .wall-info b{font-size:clamp(26px,2.4vw,34px)}
 @media (hover:hover){.wall-tile:hover .wall-cover,.wall-tile:focus-visible .wall-cover{transform:translateY(-9px) rotate(-.4deg);box-shadow:0 0 0 1px #b8924a88,0 2px 3px #1c142244,0 28px 40px -14px #1c1422aa}.wall-tile:hover .wall-foil,.wall-tile:focus-visible .wall-foil{opacity:1}}
+
+/* cards wall: each occasion is a small stack of its cards. The top card sits square; two more peek out behind it,
+   fanning further on hover. shuffle() in render.js moves the back card to the front every few seconds. */
+.wall-cover--stack{overflow:visible;background:none;box-shadow:none;border-radius:0}
+.wall-cover--stack .wall-foil{border-radius:3px;z-index:4}
+.wall-stack{position:absolute;inset:0}
+.wall-stack>.cfront{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:3px;box-shadow:0 0 0 1px #b8924a33,0 1px 2px #1c142233,0 14px 24px -12px #1c142266,0 30px 40px -28px #1c142255;transform-origin:50% 92%;transition:transform .9s var(--spring),opacity .6s;will-change:transform}
+.wall-stack>.cfront:nth-last-child(2){transform:rotate(-4deg) translate(-5%,-2%) scale(.96);filter:brightness(.96)}
+.wall-stack>.cfront:nth-last-child(3){transform:rotate(4deg) translate(5%,-1.5%) scale(.93);filter:brightness(.93)}
+.wall-stack>.cfront:nth-last-child(n+4){opacity:0}
+.wall-stack>.cfront:last-child{z-index:2}
+.wall-stack>.cfront:nth-last-child(2){z-index:1}
+@media (hover:hover){
+  .wall-tile:hover .wall-cover--stack,.wall-tile:focus-visible .wall-cover--stack{transform:none;box-shadow:none}
+  .wall-tile:hover .wall-stack>.cfront:last-child{transform:translateY(-4%) scale(1.02)}
+  .wall-tile:hover{z-index:5}
+  .wall-tile:hover .wall-stack>.cfront:nth-last-child(2){transform:rotate(-9deg) translate(-15%,-5%) scale(.95)}
+  .wall-tile:hover .wall-stack>.cfront:nth-last-child(3){transform:rotate(9deg) translate(15%,-4%) scale(.93)}
+}
+.wall-stack .cf-greet{animation:none}
+.wall-tile:hover .wall-stack>.cfront:last-child .cf-greet{animation:foil 7s ease-in-out infinite}
+
+/* the hand of cards under the cards hero */
+.kp-fan{display:flex;justify-content:center;align-items:flex-end;height:190px;margin:34px auto -78px;position:relative;z-index:2;pointer-events:none}
+.kp-fan__card{position:absolute;bottom:0;width:150px;transform-origin:50% 130%;transform:rotate(calc((var(--i) - 2)*9deg)) translateX(calc((var(--i) - 2)*24px));animation:fan-in 1.1s var(--spring) both;animation-delay:calc(var(--i)*90ms + 120ms);filter:drop-shadow(0 18px 24px rgba(0,0,0,.45))}
+.kp-fan__card>.cfront{box-shadow:0 0 0 1px #fff3;border-radius:5px}
+@keyframes fan-in{from{transform:rotate(0) translateY(60px);opacity:0}}
+@media (max-width:700px){.kp-fan{height:150px;margin-bottom:-62px}.kp-fan__card{width:108px}}
+.kp-hero .kp-fan~*,.kp-hero:has(.kp-fan)+.kp-wrap .kp-chips{margin-top:104px}
+@media (max-width:700px){.kp-hero:has(.kp-fan)+.kp-wrap .kp-chips{margin-top:84px}}
+
+/* the rail of occasions above the wall */
+.kp-chips{display:flex;gap:8px;overflow-x:auto;padding:10px 2px 14px;margin:0 -2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.kp-chips::-webkit-scrollbar{display:none}
+.kp-chips a{flex:none;scroll-snap-align:start;font:600 15px/1 var(--display);color:var(--k-ink);padding:11px 15px;border:1px solid var(--k-line,#e5dccf);border-radius:999px;background:#fff;text-decoration:none;transition:background .3s,border-color .3s,transform .3s var(--spring)}
+.kp-chips a small{font:italic 500 13px/1 var(--display);color:var(--k-muted);margin-left:4px}
+.kp-chips a:hover,.kp-chips a:focus-visible{background:#fbf3e4;border-color:#c9a45c;transform:translateY(-2px)}
+
+/* tiles rise into place as they scroll in (reveal() in render.js sets data-reveal="on") */
+.wall-grid[data-reveal="on"] .wall-tile{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .9s var(--spring);transition-delay:calc(var(--i,0)*55ms)}
+.wall-grid[data-reveal="on"] .wall-tile.in{opacity:1;transform:none}
 
 /* invitation gallery: the art, with the sealed envelope a guest first sees, set down at a small tilt */
 .thumb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px;margin-top:clamp(30px,4vw,54px)}
