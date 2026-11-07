@@ -95,6 +95,13 @@ Stripe account and Resend.
 | `lib/keepsakes/store.js` | Records as JSON files in the private Blob store; `.data/keepsakes/` locally |
 | `lib/keepsakes/pay.js` | Stripe Checkout, confirmation on return, and what happens when paid |
 
+Watercolour invitation backdrops (added 8 Nov 2026): the 98 kids', first-birthday and baby designs painted for
+Tadavite live here too, as `data/watercolour-invites.json` + `images/invites/<slug>.jpg` (4:5, cut from Tadavite's
+`public/art/wc-<slug>.webp`). `build-keepsakes.mjs` adds them to the catalogue as `kind: 'invite'` and
+`keepsakes/designs.js` puts them at the front of each invitation wall (`painted()` / `paintedNamed()`). The Canva
+originals are listed in Tadavite's `docs/watercolour-invites/batch1-links.md`. To add one: add the entry and the
+picture, run `npm run build:keepsakes`, commit the output.
+
 **Two numbers to confirm** in `keepsakes/designs.js`: `CARD_PRICE` ($3) and `INVITE_PRICE` ($19). They
 match Tadavite; change them there and run `npm run build:keepsakes` so the pages agree.
 
