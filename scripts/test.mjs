@@ -486,8 +486,12 @@ group('Cards and invitations');
   check('every occasion has at least one design', emptyOcc.length === 0, emptyOcc.map((o) => o.slug).join(', '));
   const badPal = ART.filter((a) => !/^#[0-9a-f]{6}$/.test(a.card.paper) || !/^#[0-9a-f]{6}$/.test(a.card.ink) || !['gold', 'rose', 'silver'].includes(a.foil));
   check('every print has a palette and a foil read from its picture', badPal.length === 0, badPal.map((a) => a.slug).join(', '));
-  const stale = ART.filter((a) => a.kind !== 'card' && !getDigital(a.sku));
+  const stale = ART.filter((a) => a.kind !== 'card' && a.kind !== 'invite' && !getDigital(a.sku));
   check('the keepsake art matches the shop catalogue (re-run build:keepsakes after adding prints)', stale.length === 0 && ART.length >= 90, stale.map((a) => a.slug).join(', '));
+  // Every watercolour invitation backdrop in the brief is in the repo, in the catalogue, and on an invitation wall.
+  const wcBrief = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'watercolour-invites.json'), 'utf8')).art;
+  const noWc = wcBrief.filter((b) => !fs.existsSync(path.join(REPO, 'images', 'invites', `${b.slug}.jpg`)) || !ART.find((a) => a.kind === 'invite' && a.slug === b.slug) || !K.INVITES.some((d) => d.art.slug === b.slug));
+  check(`every watercolour invitation backdrop (${wcBrief.length}) is in images/invites, the catalogue and a wall`, noWc.length === 0, noWc.map((b) => b.slug).join(', '));
   // Every picture in the card-art brief is in the repo and in the catalogue, and leads its occasion's wall.
   const brief = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'card-art.json'), 'utf8')).art;
   const noPic = brief.filter((b) => !fs.existsSync(path.join(REPO, 'images', 'cards', `${b.slug}.jpg`)) || !ART.find((a) => a.kind === 'card' && a.slug === b.slug));
