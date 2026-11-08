@@ -6,7 +6,8 @@
 // landing page to send ads or Etsy traffic to.
 //
 // Input:  data/prints.json (written by build-prints-shop.mjs)
-// Output: print/<slug>.html, set/<slug>.html, and a regenerated sitemap.xml
+// Output: print/<slug>.html, set/<slug>.html, printables.html + printables/<slug>.html (the
+// free library, from data/free-printables.json), guides, and a regenerated sitemap.xml
 //
 // Re-runnable and safe: it only writes into print/ and set/, plus sitemap.xml.
 
@@ -576,46 +577,159 @@ ${relatedGrid(comps, up)}`;
   console.log(`wrote data/print-options.json (${configured ? `${formats.length} formats, ${availableFor.length} prints` : 'not configured yet. Picker stays hidden'})`);
 }
 
-// --- printables shop page ---------------------------------------------------
-// The printable ranges (colouring books, milestone cards, calendar) are a distinct
-// product family from the wall art, so they get their own page rather than another
-// section bolted onto an already-long prints.html.
+// --- printables: the free library, then the paid books ---------------------
+// The free library (scripts/build-printables.mjs → data/free-printables.json) is what
+// brings families to the site and gives Pinterest something to pin, so it leads the
+// page. The seven paid printables (lib/extras.js) sit underneath as "The bigger books".
+// Every free printable also gets its own landing page at printables/<slug>.html: a PDF
+// has no Open Graph tags, so the pin needs an HTML page to point at.
+const FREE = JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'free-printables.json'), 'utf8'));
+const freeItems = FREE.items;
+const freeCategories = FREE.categories.filter((c) => freeItems.some((i) => i.category === c.key));
+const catLabel = (key) => (FREE.categories.find((c) => c.key === key) || {}).label || key;
+const fmtBytes = (b) => b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${Math.round(b / 1024)} KB`;
+
+const printTips = (up) => `
+  <aside class="pf-tips" aria-label="Print tips">
+    <h3>Print tips</h3>
+    <ul>
+      <li><strong>A4, 100%.</strong> Every file is A4. In the print dialog choose “Actual size”, not “Fit to page”, so cut lines and cards come out true.</li>
+      <li><strong>Paper.</strong> Plain 80 gsm is fine for colouring. Cards, pennants, tags and toppers want 200–250 gsm card so they hold their shape.</li>
+      <li><strong>Ink.</strong> Colouring pages are pure black line art and print well in draft mode. Save the good ink for the party sets.</li>
+      <li><strong>Trim.</strong> Cut just outside the dotted lines. A ruler and craft knife beats scissors on the straight ones.</li>
+      <li><strong>Sharing.</strong> Free for your own family, school bag and party. Please send friends to <a href="${up}printables.html">this page</a> rather than the file; it keeps the library free.</li>
+    </ul>
+  </aside>`;
+
+const freeCard = (i, up) => `          <article class="pf-card" data-category="${i.category}">
+            <a class="pf-card__img" href="${up}printables/${i.slug}.html"><img src="${up}${i.preview.replace(/^\//, '')}" alt="${esc(i.title)}, free printable from Little Poppin" loading="lazy" width="900" height="1273" /></a>
+            <div class="pf-card__body">
+              <span class="pf-card__cat">${esc(catLabel(i.category))} · ${esc(i.age)}</span>
+              <h3><a href="${up}printables/${i.slug}.html">${esc(i.title)}</a></h3>
+              <p class="pf-card__desc">${esc(i.description)}</p>
+              <a class="btn btn--primary pf-card__dl" href="${up}${i.pdf.replace(/^\//, '')}" download data-pf-download="${i.slug}">Download PDF <span>· ${i.pages} ${i.pages === 1 ? 'page' : 'pages'} · ${fmtBytes(i.bytes)}</span></a>
+            </div>
+          </article>`;
+
+const pfStyles = `
+    .pf { padding: 36px 0 60px; }
+    .pf__intro { max-width: 680px; margin: 0 auto 22px; text-align: center; color: var(--mid-grey); font-size: 1.05rem; }
+    .pf__chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 0 0 30px; }
+    .pf__chip { border: 1px solid var(--light-grey); background: #fff; color: var(--charcoal); border-radius: 999px; padding: 7px 14px; font-family: var(--font-sans); font-size: 0.85rem; cursor: pointer; transition: all var(--transition); }
+    .pf__chip:hover { border-color: var(--red); color: var(--red); }
+    .pf__chip[aria-pressed="true"] { background: var(--red); border-color: var(--red); color: #fff; }
+    .pf__chip small { opacity: 0.7; margin-left: 4px; }
+    .pf__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 24px; }
+    .pf-card { background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform var(--transition), box-shadow var(--transition); }
+    .pf-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .pf-card[hidden] { display: none; }
+    .pf-card__img { display: block; background: var(--light-grey); border-bottom: 1px solid var(--light-grey); }
+    .pf-card__img img { width: 100%; aspect-ratio: 1 / 1.414; object-fit: cover; object-position: top; display: block; }
+    .pf-card__body { padding: 14px 16px 18px; display: flex; flex-direction: column; flex: 1; }
+    .pf-card__cat { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--red); font-weight: 700; margin-bottom: 6px; }
+    .pf-card__body h3 { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; margin: 0 0 6px; line-height: 1.2; }
+    .pf-card__body h3 a { color: var(--charcoal); text-decoration: none; }
+    .pf-card__body h3 a:hover { color: var(--red); }
+    .pf-card__desc { color: var(--mid-grey); font-size: 0.85rem; line-height: 1.5; margin: 0 0 14px; flex: 1; }
+    .pf-card__dl { width: 100%; text-decoration: none; justify-content: center; }
+    .pf-card__dl span { font-weight: 400; font-size: 0.72rem; opacity: 0.85; }
+    .pf__empty { text-align: center; color: var(--mid-grey); padding: 30px 0; }
+    .pf-tips { background: var(--teal-light); border-radius: var(--radius); padding: 24px 28px; margin: 40px auto 0; max-width: 820px; }
+    .pf-tips h3 { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; margin: 0 0 10px; }
+    .pf-tips ul { margin: 0; padding-left: 18px; color: var(--charcoal); font-size: 0.92rem; line-height: 1.6; }
+    .pf-tips li { margin-bottom: 6px; }
+    .pf-paid { background: var(--cream); padding: 60px 0 70px; }
+    .pf-paid__head { text-align: center; max-width: 640px; margin: 0 auto 30px; }
+    .pf-paid__head h2 { font-family: var(--font-serif); font-size: 2rem; font-weight: 600; margin: 6px 0 10px; }
+    .pf-paid__head p { color: var(--mid-grey); }
+    .pf-one { padding: 34px 0 70px; }
+    .pf-one__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 46px; align-items: start; }
+    @media (max-width: 860px) { .pf-one__grid { grid-template-columns: 1fr; gap: 26px; } }
+    .pf-one__art { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-lg); display: block; background: #fff; }
+    .pf-one__body h1 { font-family: var(--font-serif); font-size: 2.3rem; font-weight: 600; margin: 0 0 10px; line-height: 1.15; }
+    .pf-one__free { font-family: var(--font-serif); font-size: 1.6rem; color: var(--red); margin: 0 0 6px; }
+    .pf-one__free span { font-family: var(--font-sans); font-size: 0.85rem; color: var(--mid-grey); }
+    .pf-one__lead { font-size: 1.05rem; color: var(--mid-grey); margin: 0 0 20px; }
+    .pf-one__dl { width: 100%; justify-content: center; text-decoration: none; margin: 10px 0 8px; }
+    .pf-one__list { list-style: none; padding: 0; margin: 22px 0 0; font-size: 0.92rem; color: var(--mid-grey); }
+    .pf-one__list li { padding-left: 22px; position: relative; margin-bottom: 7px; }
+    .pf-one__list li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+    .pf-one .pf-tips { margin-top: 26px; padding: 18px 22px; }
+    .pf-one .pf-tips h3 { font-size: 1.15rem; }
+    .pf-one .pf-tips ul { font-size: 0.86rem; }
+    .breadcrumb { font-size: 0.85rem; color: var(--mid-grey); margin-bottom: 18px; }
+    .breadcrumb a { color: var(--mid-grey); }
+    .breadcrumb a:hover { color: var(--red); }
+    .related { background: var(--light-grey); padding: 56px 0; }
+    .related h2 { font-family: var(--font-serif); font-size: 1.7rem; text-align: center; margin: 0 0 26px; font-weight: 600; }
+    .related__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+    .related__card { background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: block; }
+    .related__card img { width: 100%; aspect-ratio: 1 / 1.3; object-fit: cover; object-position: top; display: block; }
+    .related__card span { display: block; padding: 11px 12px; font-size: 0.9rem; text-align: center; color: var(--charcoal); }`;
+
+// GA4 event on download. No-ops without analytics configured.
+const pfDownloadScript = `
+  <script>
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('[data-pf-download]');
+      if (!a) return;
+      try { if (typeof window.gtag === 'function') window.gtag('event', 'file_download', { file_name: a.getAttribute('data-pf-download') + '.pdf', link_url: a.href, content_type: 'free_printable' }); } catch (err) {}
+    });
+  </script>`;
+
 {
   const extras = Object.values(GENERATED_EXTRAS).filter((e) => e.file);
   const url = `${SITE}/printables.html`;
   const jsonLd = [
     {
       '@context': 'https://schema.org', '@type': 'ItemList',
-      name: 'Little Poppin Printables',
+      name: 'Little Poppin Free Printables',
+      numberOfItems: freeItems.length,
+      itemListElement: freeItems.map((i, n) => ({
+        '@type': 'ListItem', position: n + 1,
+        item: {
+          '@type': 'DigitalDocument', name: i.title, description: i.description, url: `${SITE}/printables/${i.slug}.html`,
+          image: SITE + i.og, encodingFormat: 'application/pdf', isAccessibleForFree: true,
+          author: { '@type': 'Organization', name: 'Little Poppin' },
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'AUD', availability: 'https://schema.org/InStock', url: SITE + i.pdf },
+        },
+      })),
+    },
+    {
+      '@context': 'https://schema.org', '@type': 'ItemList',
+      name: 'Little Poppin Printables. The bigger books',
       itemListElement: extras.map((e, i) => ({
         '@type': 'ListItem', position: i + 1,
         item: {
           '@type': 'Product', name: e.name, description: e.description, sku: e.sku,
           ...(e.preview ? { image: SITE + e.preview } : {}),
           brand: { '@type': 'Brand', name: 'Little Poppin' },
-          offers: {
-            '@type': 'Offer', price: money(e.price), priceCurrency: 'AUD', url,
-            availability: 'https://schema.org/InStock',
-          },
+          offers: { '@type': 'Offer', price: money(e.price), priceCurrency: 'AUD', url, availability: 'https://schema.org/InStock' },
         },
       })),
     },
     {
       '@context': 'https://schema.org', '@type': 'FAQPage',
       mainEntity: [
+        { '@type': 'Question', name: 'Are the Little Poppin printables really free?',
+          acceptedAnswer: { '@type': 'Answer', text: `Yes. Every printable in the free library (${freeItems.length} at the moment) downloads instantly as an A4 PDF with no sign-up and no payment. They are free for personal use: your own family, classroom treat or party.` } },
         { '@type': 'Question', name: 'What format are Little Poppin printables?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Every printable is a print-ready PDF sized for A4, so it prints correctly at home, at a print shop, or at any print shop. Nothing is posted. The file downloads instantly after payment.' } },
-        { '@type': 'Question', name: 'Can I print a colouring book more than once?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Print as many copies as you like for your own family. That is the point of a printable. The licence is personal use only, so they cannot be resold or shared.' } },
-        { '@type': 'Question', name: 'What paper should I use for the milestone cards?',
-          acceptedAnswer: { '@type': 'Answer', text: 'White card of 200–300 gsm gives the nicest result. Cut along the outside of each square; a paper trimmer makes short work of it.' } },
-        { '@type': 'Question', name: 'Is the wall calendar dated to a particular year?',
-          acceptedAnswer: { '@type': 'Answer', text: 'No. The day grids are undated on purpose, so the same file works whichever year you print it.' } },
+          acceptedAnswer: { '@type': 'Answer', text: 'Every printable is a print-ready PDF sized for A4, so it prints correctly at home or at any print shop. Choose “Actual size” rather than “Fit to page”.' } },
+        { '@type': 'Question', name: 'Can I print a printable more than once?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Print as many copies as you like for your own family. The licence is personal use only, so they cannot be resold or shared as files.' } },
+        { '@type': 'Question', name: 'What paper should I use for the cards and pennants?',
+          acceptedAnswer: { '@type': 'Answer', text: 'White card of 200–250 gsm gives the nicest result. Cut just outside the dotted lines; a paper trimmer makes short work of it.' } },
+        { '@type': 'Question', name: 'What is the difference between the free library and the bigger books?',
+          acceptedAnswer: { '@type': 'Answer', text: 'The free library is single sheets and small sets. The bigger books are the full twenty-page colouring books, the illustrated milestone cards, the A to Z name banner on artwork, the bookmarks and the twelve-month wall calendar.' } },
       ],
     },
   ];
 
-  const cards = extras.map((e) => `          <article class="print-card">
+  const chips = [`<button type="button" class="pf__chip" data-filter="all" aria-pressed="true">All <small>${freeItems.length}</small></button>`]
+    .concat(freeCategories.map((c) => `<button type="button" class="pf__chip" data-filter="${c.key}" aria-pressed="false">${esc(c.label)} <small>${freeItems.filter((i) => i.category === c.key).length}</small></button>`))
+    .join('\n          ');
+
+  const paidCards = extras.map((e) => `          <article class="print-card">
             ${e.preview ? `<button type="button" class="print-card__img lightbox-open" data-full="${e.preview}" data-title="${esc(e.title)}" aria-label="View ${esc(e.title)} larger"><img src="${e.preview.replace(/^\//, '')}" alt="${esc(e.title)}, printable from Little Poppin" loading="lazy" /></button>` : ''}
             <div class="print-card__body">
               <h3>${esc(e.title)}</h3>
@@ -626,35 +740,58 @@ ${relatedGrid(comps, up)}`;
           </article>`).join('\n');
 
   const page = head({
-    title: 'Printables. Colouring Books, Milestone Cards & Calendar | Little Poppin',
-    description: 'Printable colouring books, baby milestone cards and a magical wall calendar. All drawn from the Little Poppin art collection. Instant PDF download, print at home as often as you like.',
+    title: `${freeItems.length} Free Printables. Colouring Pages, Milestone Cards, Charts & Party Sets | Little Poppin`,
+    description: `${freeItems.length} free A4 printables for babies and little ones: colouring pages from the Little Poppin art collection, milestone cards, routine charts, lunchbox notes, party bunting, Christmas and baby shower sets. No sign-up, instant PDF download.`,
     canonical: url,
-    image: extras[0]?.preview ? SITE + extras[0].preview : `${SITE}/images/prints/05-sleepy-moon-and-stars.jpg`,
+    image: SITE + freeItems[0].og,
     jsonLd, up: '',
-  }) + `
+  }).replace('  <style>\n', `  <style>${pfStyles}\n`) + `
   <header class="prints-hero prints-hero--art" style="--hero-art:url('/images/banners/secret-dinosaur-museum.jpg');--hero-art-sm:url('/images/banners/secret-dinosaur-museum-sm.jpg')">
     <div class="container">
-      <div class="section-label">Printables</div>
-      <h1>More Than Wall Art</h1>
-      <p>Colouring books, milestone cards and a wall calendar. All drawn from the same
-         magical collection. Print them at home, as many times as you like.</p>
+      <div class="section-label">Free printables</div>
+      <h1>${freeItems.length} Free Printables</h1>
+      <p>Colouring pages drawn from our own paintings, milestone cards, routine charts, lunchbox notes,
+         party bunting, Christmas and baby shower sets. Every one an A4 PDF. No sign-up, just download and print.</p>
     </div>
   </header>
 
-    <section class="prints" id="printables">
-      <div class="container">
-        <div class="print-grid">
-${cards}
-        </div>
+  <section class="pf" id="free">
+    <div class="container">
+      <p class="pf__intro">Pick a category, or scroll the lot. Each printable opens on its own page with a bigger preview, or download it straight away.</p>
+      <div class="pf__chips" role="group" aria-label="Filter by category">
+          ${chips}
       </div>
-    </section>
+      <div class="pf__grid" id="pf-grid">
+${freeItems.map((i) => freeCard(i, '')).join('\n')}
+      </div>
+      <p class="pf__empty" id="pf-empty" hidden>Nothing in that category yet.</p>
+${printTips('')}
+    </div>
+  </section>
+
+  <section class="pf-paid" id="books">
+    <div class="container">
+      <div class="pf-paid__head">
+        <div class="section-label">The bigger books</div>
+        <h2>When one page isn’t enough</h2>
+        <p>Full twenty-page colouring books, illustrated milestone cards, the A to Z name banner on artwork, bookmarks and a twelve-month wall calendar. Instant PDF download, yours to print forever.</p>
+      </div>
+      <div class="print-grid">
+${paidCards}
+      </div>
+    </div>
+  </section>
 
   <section class="prints-faq">
     <div class="container container--narrow">
       <h2 class="prints-section__title">How it works</h2>
       <div class="faq">
         <details>
-          <summary>What exactly do I get?</summary>
+          <summary>Are the printables really free?</summary>
+          <p>Yes. Everything in the free library downloads instantly as an A4 PDF, no sign-up, no payment. They are free for personal use: your own family, a classroom treat, a party. Please send friends here rather than forwarding the file.</p>
+        </details>
+        <details>
+          <summary>What exactly do I get with the bigger books?</summary>
           <p>A print-ready PDF sized for A4, downloaded instantly after payment. Nothing is posted, so there's no shipping cost or wait.</p>
         </details>
         <details>
@@ -663,7 +800,7 @@ ${cards}
         </details>
         <details>
           <summary>What paper works best?</summary>
-          <p>Ordinary printer paper is fine for colouring pages. For the milestone cards, white card of 200–300&nbsp;gsm gives a much nicer result. Then just cut along the outside of each square.</p>
+          <p>Ordinary printer paper is fine for colouring pages. For cards, pennants, toppers and tags, white card of 200–250&nbsp;gsm gives a much nicer result. Then cut just outside the dotted lines.</p>
         </details>
         <details>
           <summary>Is the calendar for a specific year?</summary>
@@ -690,11 +827,100 @@ ${cards}
       });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
     })();
-  </script>
+    // Category chips. The hash (#christmas) deep-links a category, so a pin can land on it.
+    (function () {
+      var chips = document.querySelectorAll('.pf__chip');
+      var cards = document.querySelectorAll('.pf-card');
+      var empty = document.getElementById('pf-empty');
+      function apply(key) {
+        var shown = 0;
+        cards.forEach(function (c) { var on = key === 'all' || c.getAttribute('data-category') === key; c.hidden = !on; if (on) shown++; });
+        chips.forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-filter') === key ? 'true' : 'false'); });
+        empty.hidden = shown > 0;
+      }
+      chips.forEach(function (c) { c.addEventListener('click', function () { apply(c.getAttribute('data-filter')); if (history.replaceState) history.replaceState(null, '', c.getAttribute('data-filter') === 'all' ? '#free' : '#' + c.getAttribute('data-filter')); }); });
+      var h = location.hash.replace('#', '');
+      if (h && document.querySelector('.pf__chip[data-filter="' + h + '"]')) apply(h);
+    })();
+  </script>${pfDownloadScript}
 ` + foot('');
 
   fs.writeFileSync(path.join(REPO, 'printables.html'), page);
-  console.log(`wrote printables.html (${extras.length} printable products)`);
+  console.log(`wrote printables.html (${freeItems.length} free printables + ${extras.length} paid)`);
+
+  // --- one page per free printable ----------------------------------------
+  fs.mkdirSync(path.join(REPO, 'printables'), { recursive: true });
+  const pUp = '../';
+  for (const i of freeItems) {
+    const pageUrl = `${SITE}/printables/${i.slug}.html`;
+    const related = freeItems.filter((r) => r.category === i.category && r.slug !== i.slug).slice(0, 6);
+    const more = related.length < 6 ? freeItems.filter((r) => r.category !== i.category).slice(0, 6 - related.length) : [];
+    const ld = [
+      {
+        '@context': 'https://schema.org', '@type': 'DigitalDocument',
+        name: i.title, description: i.description, url: pageUrl, image: SITE + i.og,
+        encodingFormat: 'application/pdf', isAccessibleForFree: true, inLanguage: 'en',
+        genre: catLabel(i.category), typicalAgeRange: i.age,
+        author: { '@type': 'Organization', name: 'Little Poppin', url: `${SITE}/` },
+        publisher: { '@type': 'Organization', name: 'Little Poppin', url: `${SITE}/` },
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'AUD', availability: 'https://schema.org/InStock', url: SITE + i.pdf },
+        associatedMedia: { '@type': 'MediaObject', contentUrl: SITE + i.pdf, encodingFormat: 'application/pdf', contentSize: fmtBytes(i.bytes) },
+      },
+      {
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Free printables', item: url },
+          { '@type': 'ListItem', position: 3, name: i.title, item: pageUrl },
+        ],
+      },
+    ];
+    const html = head({
+      title: `${i.title}. Free Printable PDF | Little Poppin`,
+      description: `${i.description} Free A4 PDF, ${i.pages} ${i.pages === 1 ? 'page' : 'pages'}, no sign-up. ${catLabel(i.category)} for ${i.age.toLowerCase()}.`,
+      canonical: pageUrl, image: SITE + i.og, jsonLd: ld, up: pUp,
+    }).replace('  <style>\n', `  <style>${pfStyles}\n`) + `
+  <main class="pf-one">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="${pUp}index.html">Home</a> › <a href="${pUp}printables.html">Free printables</a> › <a href="${pUp}printables.html#${i.category}">${esc(catLabel(i.category))}</a> › ${esc(i.title)}</nav>
+      <div class="pf-one__grid">
+        <div>
+          <a href="${pUp}${i.pdf.replace(/^\//, '')}" download data-pf-download="${i.slug}"><img class="pf-one__art" src="${pUp}${i.preview.replace(/^\//, '')}" alt="${esc(i.title)}, free printable PDF preview" width="900" height="1273" /></a>
+        </div>
+        <div class="pf-one__body">
+          <span class="pf-card__cat">${esc(catLabel(i.category))} · ${esc(i.age)}</span>
+          <h1>${esc(i.title)}</h1>
+          <p class="pf-one__free">Free <span>· A4 PDF · ${i.pages} ${i.pages === 1 ? 'page' : 'pages'} · ${fmtBytes(i.bytes)}</span></p>
+          <p class="pf-one__lead">${esc(i.description)}</p>
+          <a class="btn btn--primary pf-one__dl" href="${pUp}${i.pdf.replace(/^\//, '')}" download data-pf-download="${i.slug}">Download the PDF</a>
+          <a class="pd__alt" href="${pUp}${i.pdf.replace(/^\//, '')}" target="_blank" rel="noopener">Open in a new tab instead</a>
+          <ul class="pf-one__list">
+            <li>Original Little Poppin design. Nothing borrowed, nothing stock.</li>
+            <li>Sized for A4. Print at “Actual size” for true cut lines.</li>
+            <li>Free for personal use. Print as many as your family needs.</li>
+            <li>No email, no account. The link above is the file.</li>
+          </ul>
+${printTips(pUp)}
+        </div>
+      </div>
+    </div>
+  </main>
+  <section class="related">
+    <div class="container">
+      <h2>More to print</h2>
+      <div class="related__grid">
+${[...related, ...more].map((r) => `        <a class="related__card" href="${pUp}printables/${r.slug}.html">
+          <img src="${pUp}${r.preview.replace(/^\//, '')}" alt="${esc(r.title)}, free printable" loading="lazy" />
+          <span>${esc(r.title)}</span>
+        </a>`).join('\n')}
+      </div>
+      <p style="text-align:center;margin-top:26px"><a class="btn btn--outline-dark" href="${pUp}printables.html">All ${freeItems.length} free printables</a></p>
+    </div>
+  </section>${pfDownloadScript}
+` + foot(pUp);
+    fs.writeFileSync(path.join(REPO, 'printables', `${i.slug}.html`), html);
+  }
+  console.log(`wrote ${freeItems.length} free printable pages`);
 }
 
 // --- guides -----------------------------------------------------------------
@@ -815,6 +1041,8 @@ const urls = staticPages
   .concat(data.prints.map((p) => ({ loc: `${SITE}/print/${slugOf(p.sku)}.html`, pr: '0.7', cf: 'monthly' })))
   .concat(data.sets.map((s) => ({ loc: `${SITE}/set/${slugOf(s.sku)}.html`, pr: '0.7', cf: 'monthly' })))
   .concat(GUIDES.map((g) => ({ loc: `${SITE}/guides/${g.slug}.html`, pr: '0.6', cf: 'yearly' })))
+  // Free printables library (scripts/build-printables.mjs writes the manifest). Pinterest pins land on these pages.
+  .concat(freeItems.map((i) => ({ loc: `${SITE}/printables/${i.slug}.html`, pr: '0.7', cf: 'monthly' })))
   // Cards and invitations (scripts/build-keepsakes.mjs writes the list; galleries rank above the 360 editor pages).
   .concat((fs.existsSync(path.join(REPO, 'data', 'keepsakes-urls.json')) ? JSON.parse(fs.readFileSync(path.join(REPO, 'data', 'keepsakes-urls.json'), 'utf8')) : [])
     .map((f) => ({ loc: `${SITE}/${f}`, pr: /^(cards|invitations)\.html$/.test(f) ? '0.9' : /^(cards|invitations)\//.test(f) ? '0.8' : '0.6', cf: 'monthly' })));

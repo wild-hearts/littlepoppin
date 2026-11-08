@@ -599,6 +599,47 @@ group('Pinterest');
 }
 
 // ---------------------------------------------------------------------------
+group('Free printables library');
+// scripts/build-printables.mjs writes the PDFs, previews and manifest; build-product-pages.mjs
+// turns the manifest into printables.html and one landing page each. A manifest entry whose
+// file is missing is a dead download link on the page that brings families to the site.
+{
+  const FREE_MIN = 40;
+  const free = JSON.parse(fs.readFileSync('data/free-printables.json', 'utf8'));
+  const items = free.items || [];
+  check(`manifest lists at least ${FREE_MIN} free printables (${items.length})`, items.length >= FREE_MIN);
+  const dupSlugs = items.map((i) => i.slug).filter((s, i, a) => a.indexOf(s) !== i);
+  check('every free printable has a unique slug', dupSlugs.length === 0, dupSlugs.join(', '));
+  const catKeys = new Set((free.categories || []).map((c) => c.key));
+  const badCat = items.filter((i) => !catKeys.has(i.category));
+  check('every free printable belongs to a listed category', badCat.length === 0, badCat.map((i) => i.slug).join(', '));
+  const incomplete = items.filter((i) => !i.title || !i.description || !i.age || !i.pdf || !i.preview || !i.og || !i.pages);
+  check('every manifest entry has title, description, age, pages, pdf, preview and og image', incomplete.length === 0, incomplete.map((i) => i.slug).join(', '));
+  const local = (u) => u.replace(/^\//, '');
+  const missing = items.filter((i) => !fs.existsSync(local(i.pdf)) || !fs.existsSync(local(i.preview)) || !fs.existsSync(local(i.og)));
+  check('every free printable has its PDF, preview jpg and og image on disk', missing.length === 0, missing.map((i) => i.slug).join(', '));
+  const notPdf = items.filter((i) => fs.existsSync(local(i.pdf)) && !fs.readFileSync(local(i.pdf)).subarray(0, 5).equals(Buffer.from('%PDF-')));
+  check('every PDF starts with a %PDF header (opens as a PDF)', notPdf.length === 0, notPdf.map((i) => i.slug).join(', '));
+  const noPage = items.filter((i) => !fs.existsSync(`printables/${i.slug}.html`));
+  check('every free printable has a landing page in printables/', noPage.length === 0, noPage.map((i) => i.slug).join(', '));
+  const pageHtml = fs.readFileSync('printables.html', 'utf8');
+  const unlisted = items.filter((i) => !pageHtml.includes(`href="${local(i.pdf)}"`) || !pageHtml.includes(`href="printables/${i.slug}.html"`));
+  check('printables.html links every free PDF and landing page', unlisted.length === 0, unlisted.map((i) => i.slug).join(', '));
+  check('printables.html still sells the paid books below the library',
+    pageHtml.indexOf('id="free"') > 0 && pageHtml.indexOf('id="books"') > pageHtml.indexOf('id="free"') && (pageHtml.match(/data-sku="extra-/g) || []).length >= 7);
+  const badOg = items.filter((i) => { const h = fs.existsSync(`printables/${i.slug}.html`) ? fs.readFileSync(`printables/${i.slug}.html`, 'utf8') : ''; return !h.includes(`<meta property="og:image" content="https://littlepoppin.com${i.og}" />`); });
+  check('every landing page uses its own og image', badOg.length === 0, badOg.map((i) => i.slug).join(', '));
+  const sitemap = fs.readFileSync('sitemap.xml', 'utf8');
+  const notInSitemap = items.filter((i) => !sitemap.includes(`<loc>https://littlepoppin.com/printables/${i.slug}.html</loc>`));
+  check('sitemap lists every free printable page', notInSitemap.length === 0, notInSitemap.map((i) => i.slug).join(', '));
+  const home = fs.readFileSync('index.html', 'utf8');
+  check(`homepage tile says "${items.length} free printables"`, home.includes(`${items.length} free printables`),
+    'Rebuild changed the count. Update the tag on the Printables tile in index.html.');
+  const stray = fs.existsSync('printables/free') ? fs.readdirSync('printables/free').filter((f) => f.endsWith('.pdf') && !items.some((i) => i.pdf.endsWith(`/${f}`))) : [];
+  check('no orphan PDFs in printables/free (every file is in the manifest)', stray.length === 0, stray.join(', '));
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${'─'.repeat(60)}`);
 if (failures.length) {
   console.log(`${passed} passed, ${failures.length} FAILED\n`);
