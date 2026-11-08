@@ -588,7 +588,7 @@ group('Pinterest');
   const notRich = samples.filter((pg) => {
     const html = fs.readFileSync(pg, 'utf8');
     const img = html.match(/<meta property="og:image" content="([^"]+)"/)?.[1] || '';
-    return !html.includes('<meta property="og:type" content="product" />') || !/og:price:amount" content="\d+\.\d{2}"/.test(html) || !html.includes('og:price:currency" content="AUD"') || !img.includes('/images/pins/') || !fs.existsSync(local(img));
+    return !html.includes('<meta property="og:type" content="product" />') || !/product:price:amount" content="\d+\.\d{2}"/.test(html) || !html.includes('product:price:currency" content="AUD"') || !img.includes('/images/pins/') || !fs.existsSync(local(img));
   });
   check('product pages are Rich Pin ready: og:type product, AUD price, 2:3 pin as og:image', notRich.length === 0, notRich.join(', '));
   if (PINTEREST_DOMAIN_VERIFY) {

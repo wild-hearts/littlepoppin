@@ -28,6 +28,8 @@ const head = ({ title, description, canonical, image, jsonLd = [], up, noindex =
   <meta property="og:description" content="${esc(description)}" />
   ${canonical ? `<meta property="og:url" content="${canonical}" />` : ''}
   <meta property="og:image" content="${image}" />${price ? `
+  <meta property="product:price:amount" content="${(price / 100).toFixed(2)}" />
+  <meta property="product:price:currency" content="AUD" />
   <meta property="og:price:amount" content="${(price / 100).toFixed(2)}" />
   <meta property="og:price:currency" content="AUD" />
   <meta property="og:availability" content="instock" />` : ''}

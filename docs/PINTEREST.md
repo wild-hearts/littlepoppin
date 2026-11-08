@@ -56,16 +56,17 @@ The claim tag is already on every page of littlepoppin.com, so this is a check, 
 4. Once the deploy is live, go back to https://www.pinterest.com/settings/claim/ and click **Continue** /
    **Verify**. You will see "Claimed" with a tick. Pinterest can take up to 24 hours to confirm.
 
-### 3. Turn on Rich Pins
+### 3. Rich Pins: nothing to click
 
-Rich Pins read the page's Open Graph tags (title, description, price, picture) so every pin shows the
-current price and the brand name. The pages already carry the tags; Pinterest just needs to see one.
+Rich Pins read the page's Open Graph tags (title, description, `product:price:amount`, picture) so every pin shows the
+current price and the brand name. Pinterest's old "validate and apply" tool at developers.pinterest.com has been
+retired (the address now opens the Rich Pins documentation, checked 8 Nov 2026); for a claimed domain the tags are
+enough. Every card, invitation, print and set page already carries them.
 
-1. Go to https://developers.pinterest.com/tools/url-debugger/ .
-2. Paste `https://littlepoppin.com/print/butterfly-garden.html` and click **Validate**.
-   You will see the print's title, description and price read from the page, with no errors.
-3. Click **Apply** (it may say "Apply now" or "Enable Rich Pins"). You will see a message that Rich Pins are
-   being enabled for littlepoppin.com. This covers the whole domain; it can take 24 hours to show on pins.
+1. A day after the first pins publish, open one of them on https://www.pinterest.com/littlepoppin/ . You will see the
+   price and "Little Poppin" under the picture, read from the page rather than typed into the pin.
+2. If a pin shows no price after a week, tell Winston; the fallback is Pinterest's business help form at
+   https://help.pinterest.com/en/business/contact .
 
 ### 4. Create the boards
 
