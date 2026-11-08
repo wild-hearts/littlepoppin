@@ -14,6 +14,7 @@ bunny entirely; the dodge kept every subject. The median filter and the two-poin
 threshold after it are what turn the grey sketch into clean lines. Change by eye only.
 
   python3 scripts/printables-art.py lineart <src.jpg> <out.jpg>
+  python3 scripts/printables-art.py clean <src.png> <out.png> [alpha 0|1] [width]
   python3 scripts/printables-art.py square <src.jpg> <out.jpg> [size]
   python3 scripts/printables-art.py og <preview.jpg> <out.jpg> <title> <kicker>
   python3 scripts/printables-art.py contact <out.jpg> <label=preview.jpg> ...
@@ -55,6 +56,33 @@ def square(src, out, size=600):
     im = Image.open(src).convert('RGB')
     im = ImageOps.fit(im, (int(size), int(size)), Image.LANCZOS, centering=(0.5, 0.45))
     im.save(out, quality=86, optimize=True)
+
+
+def clean(src, out, alpha='0', width='1600'):
+    """Turn a generated line-art PNG into pure black-on-white (no grey, no JPEG haze),
+    trimmed to its drawing. alpha=1 makes the white transparent, for spot illustrations
+    that sit on cream pages."""
+    im = Image.open(src).convert('L')
+    w = int(width)
+    if im.width != w:
+        im = im.resize((w, round(im.height * w / im.width)), Image.LANCZOS)
+    im = im.filter(ImageFilter.MedianFilter(3))
+    lut = [0 if v < 128 else 255 for v in range(256)]
+    bw = im.point(lut)
+    # trim to content with a small margin
+    inv = ImageOps.invert(bw)
+    box = inv.getbbox()
+    if box:
+        m = 24
+        box = (max(0, box[0] - m), max(0, box[1] - m), min(bw.width, box[2] + m), min(bw.height, box[3] + m))
+        bw = bw.crop(box)
+    if alpha == '1':
+        rgba = Image.new('RGBA', bw.size, (0, 0, 0, 0))
+        a = ImageOps.invert(bw)  # ink -> opaque
+        rgba.putalpha(a)
+        rgba.save(out, optimize=True)
+    else:
+        bw.save(out, optimize=True)
 
 
 def font(path, size):
@@ -128,6 +156,8 @@ if __name__ == '__main__':
     cmd, *args = sys.argv[1:]
     if cmd == 'lineart':
         lineart(*args)
+    elif cmd == 'clean':
+        clean(*args)
     elif cmd == 'square':
         square(*args)
     elif cmd == 'og':

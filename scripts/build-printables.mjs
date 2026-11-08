@@ -4,9 +4,13 @@
 //
 // WHY FREE: the seven paid printables (lib/extras.js) sell to people already on the site.
 // This library is what brings families TO the site, and gives Pinterest something to pin.
-// Every sheet is original Little Poppin work: colouring pages are the shop's own paintings
-// turned into line art, everything else is drawn here with pdf-lib vectors. No borrowed
-// characters, no copied layouts.
+// Every sheet is original Little Poppin work. The colouring pages and the small spot
+// illustrations are line art generated for Little Poppin (Canva generate-image, 8 Nov 2026;
+// ids in assets/printables-art/sources.json), cleaned to pure black and white; everything
+// else is drawn here with pdf-lib vectors. No borrowed characters, no copied layouts.
+//
+// The first version converted the shop's paintings to line art with an edge filter. Naomi
+// called the result terrible, and it was: grey, noisy, photocopy-like. Do not go back to it.
 //
 // Reproducible: run it again and you get the same files. Layout is all in this file;
 // the raster steps (line art, square crops, OG images) are in scripts/printables-art.py
@@ -57,8 +61,28 @@ function cached(name, make) {
   if (!fs.existsSync(out)) make(out);
   return out;
 }
-const lineArt = (file) => cached(`${file}-line.jpg`, (out) => execFileSync('python3', [ART, 'lineart', artPath(file), out]));
 const squareArt = (file) => cached(`${file}-sq.jpg`, (out) => execFileSync('python3', [ART, 'square', artPath(file), out, '600']));
+
+// Generated line art, committed in the repo so the build is reproducible offline.
+const ART_DIR = path.join(REPO, 'assets', 'printables-art');
+const colouringArt = (file) => path.join(ART_DIR, 'colouring', `${file.replace(/^\d+-/, '')}.png`);
+const spotArt = (name) => path.join(ART_DIR, 'spots', `${name}.png`);
+
+// One embedded copy per spot per document.
+const spotCache = new WeakMap();
+async function spot(doc, name) {
+  let m = spotCache.get(doc);
+  if (!m) { m = new Map(); spotCache.set(doc, m); }
+  if (!m.has(name)) m.set(name, await doc.embedPng(fs.readFileSync(spotArt(name))));
+  return m.get(name);
+}
+/** Draw a spot illustration fitted into a box, centred. */
+function drawSpot(page, img, { x, y, w, h = w }) {
+  const box = fit(img.width, img.height, w, h);
+  page.drawImage(img, { x: x + (w - box.w) / 2, y: y + (h - box.h) / 2, width: box.w, height: box.h });
+}
+// The spot a heading() should carry, set per item by the build loop.
+let currentSpot = null;
 
 // --- PDF helpers ------------------------------------------------------------
 async function newDoc(item) {
@@ -75,6 +99,7 @@ async function newDoc(item) {
   // advance ("Certifi cate"), so standard ligatures are switched off for both faces.
   const serif = await doc.embedFont(serifBytes, { subset: false, features: { liga: false, dlig: false, clig: false, calt: false } });
   const sans = await doc.embedFont(sansBytes, { subset: true, features: { liga: false } });
+  currentSpot = item.headingSpot ? await spot(doc, item.headingSpot) : null;
   return { doc, serif, sans };
 }
 
@@ -128,6 +153,11 @@ function footer(page, fonts, note = 'free printable · for personal use') {
 
 /** Title block for a sheet: small red kicker, big serif title, optional grey line. */
 function heading(page, fonts, { kicker, title, sub, top = A4.h - 64, titleSize = 34 }) {
+  if (currentSpot) {
+    const s = 72;
+    drawSpot(page, currentSpot, { x: 40, y: top - 52, w: s });
+    drawSpot(page, currentSpot, { x: A4.w - 40 - s, y: top - 52, w: s });
+  }
   if (kicker) centred(page, fonts.sans, kicker.toUpperCase(), { y: top, size: 8.5, color: RED });
   const ts = fitSize(fonts.serif, title, A4.w - 90, titleSize);
   centred(page, fonts.serif, title, { y: top - 34, size: ts, color: INK });
@@ -207,7 +237,7 @@ async function buildColouring(item) {
   const { doc, serif, sans } = await newDoc(item);
   const fonts = { serif, sans };
   const page = addPage(doc);
-  const img = await embedJpg(doc, lineArt(item.file));
+  const img = await doc.embedPng(fs.readFileSync(colouringArt(item.file)));
   const box = fit(img.width, img.height, A4.w - 64, A4.h - 112);
   page.drawImage(img, { x: (A4.w - box.w) / 2, y: A4.h - 40 - box.h, width: box.w, height: box.h });
   centredCaption(page, fonts, item.caption || printByFile[item.file].title, A4.h - 40 - box.h - 22);
@@ -241,9 +271,10 @@ async function buildSquareCards(item) {
     const [big, small, tiny] = cards[i];
     const cx = x + cw / 2, cy = y + cw / 2;
     sprinkleStars(page, [[x + 34, y + cw - 34, 6], [x + cw - 34, y + cw - 36, 4.5], [x + 30, y + 34, 4], [x + cw - 36, y + 32, 6]]);
+    if (item.spot) drawSpot(page, await spot(doc, item.spot), { x: cx - 30, y: y + cw - 88, w: 60 });
     if (big) {
-      const bs = fitSize(serif, big, cw - 60, big.length <= 2 ? 118 : 36);
-      centred(page, serif, big, { y: cy - bs * 0.28 + (small ? 22 : 0), size: bs, color: INK, x0: x, x1: x + cw });
+      const bs = fitSize(serif, big, cw - 60, big.length <= 2 ? 104 : 34);
+      centred(page, serif, big, { y: cy - bs * 0.28 + (small ? 12 : -8), size: bs, color: INK, x0: x, x1: x + cw });
     }
     if (small) centred(page, sans, small.toUpperCase(), { y: cy - 62, size: 9, color: RED, x0: x, x1: x + cw });
     if (tiny) centred(page, serif, tiny, { y: y + 30, size: 11, color: MUTED, x0: x, x1: x + cw });
@@ -308,17 +339,18 @@ async function buildNoteCards(item) {
     const slot = i % per;
     const x = margin + (slot % cols) * (cw + gap);
     const y = top - (Math.floor(slot / cols) + 1) * ch - Math.floor(slot / cols) * gap;
-    item.draw(page, fonts, { x, y, w: cw, h: ch, note: item.notes[i], i });
+    const spotImg = item.spot ? await spot(doc, item.spot) : null;
+    item.draw(page, fonts, { x, y, w: cw, h: ch, note: item.notes[i], i, spotImg });
   }
   return doc;
 }
 
-function lunchboxCard(page, fonts, { x, y, w, h, note, i }) {
+function lunchboxCard(page, fonts, { x, y, w, h, note, i, spotImg }) {
   page.drawRectangle({ x, y, width: w, height: h, color: i % 2 ? CREAM : WHITE });
   cutRect(page, x, y, w, h);
   page.drawRectangle({ x: x + 7, y: y + 7, width: w - 14, height: h - 14, borderColor: i % 3 === 0 ? RED : i % 3 === 1 ? GREEN : rgb(0.79, 0.41, 0.56), borderWidth: 0.8 });
-  const orn = i % 3 === 0 ? heartPath(7) : i % 3 === 1 ? starPath(8) : ellipsePath(6, 6);
-  drawPath(page, orn, x + w / 2, y + h - 24, { color: i % 3 === 0 ? RED : undefined, borderColor: i % 3 === 0 ? RED : GREEN, borderWidth: 0.9 });
+  if (spotImg) drawSpot(page, spotImg, { x: x + w / 2 - 17, y: y + h - 46, w: 34 });
+  else drawPath(page, heartPath(7), x + w / 2, y + h - 24, { color: RED, borderColor: RED, borderWidth: 0.9 });
   const size = note.length > 60 ? 10 : 11.5;
   const lines = wrap(fonts.serif, note, size, w - 36);
   const block = lines.length * size * 1.35;
@@ -327,7 +359,7 @@ function lunchboxCard(page, fonts, { x, y, w, h, note, i }) {
   centred(page, fonts.sans, 'love from', { y: y + 27, size: 6, color: MUTED, x0: x, x1: x + w });
 }
 
-function giftTag(page, fonts, { x, y, w, h, note, i }) {
+function giftTag(page, fonts, { x, y, w, h, note, i, spotImg }) {
   const pad = 6;
   const tx = x + pad, ty = y + pad, tw = w - pad * 2, th = h - pad * 2;
   page.drawRectangle({ x: tx, y: ty, width: tw, height: th, color: i % 2 ? WHITE : CREAM });
@@ -335,6 +367,7 @@ function giftTag(page, fonts, { x, y, w, h, note, i }) {
   page.drawCircle({ x: tx + tw / 2, y: ty + th - 14, size: 4, borderColor: MUTED, borderWidth: 0.8 });
   const colour = note.colour;
   const ornY = ty + th - 46;
+  if (note.orn === 'spot' && spotImg) drawSpot(page, spotImg, { x: tx + tw / 2 - 24, y: ornY - 24, w: 48 });
   if (note.orn === 'star') drawPath(page, starPath(12), tx + tw / 2, ornY, { color: colour, borderColor: colour, borderWidth: 1 });
   if (note.orn === 'heart') drawPath(page, heartPath(11), tx + tw / 2, ornY + 2, { color: colour, borderColor: colour, borderWidth: 1 });
   if (note.orn === 'tree') {
@@ -370,7 +403,7 @@ function giftTag(page, fonts, { x, y, w, h, note, i }) {
   });
 }
 
-function cupcakeTopper(page, fonts, { x, y, w, h, note, i }) {
+function cupcakeTopper(page, fonts, { x, y, w, h, note, i, spotImg }) {
   const r = Math.min(w, h) / 2 - 8;
   const cx = x + w / 2, cy = y + h / 2;
   page.drawCircle({ x: cx, y: cy, size: r, color: i % 2 ? CREAM : WHITE, borderColor: RULE, borderWidth: 0.6, borderDashArray: [3, 3] });
@@ -383,6 +416,7 @@ function cupcakeTopper(page, fonts, { x, y, w, h, note, i }) {
     });
   } else if (note.kind === 'star') drawPath(page, starPath(r * 0.5), cx, cy, { color: note.colour, borderColor: note.colour, borderWidth: 1 });
   else if (note.kind === 'heart') drawPath(page, heartPath(r * 0.42), cx, cy + 3, { color: note.colour, borderColor: note.colour, borderWidth: 1 });
+  else if (note.kind === 'cake' && spotImg) drawSpot(page, spotImg, { x: cx - r * 0.55, y: cy - r * 0.55, w: r * 1.1 });
   else if (note.kind === 'cake') {
     page.drawRectangle({ x: cx - 22, y: cy - 18, width: 44, height: 22, color: note.colour });
     page.drawRectangle({ x: cx - 26, y: cy + 2, width: 52, height: 6, color: PINK, borderColor: note.colour, borderWidth: 0.8 });
@@ -449,9 +483,7 @@ async function buildToothCertificate(item) {
   centred(page, sans, 'THE TOOTH FAIRY · OFFICIAL RECORDS OFFICE', { y: A4.h - 110, size: 8.5, color: RED });
   centred(page, serif, 'Certificate of a Lost Tooth', { y: A4.h - 160, size: 38, color: INK });
   // a tooth: a rounded crown with two little roots, as outline
-  const toothD = 'M -22 0 C -22 -26 22 -26 22 0 C 22 12 18 22 14 34 C 12 40 6 40 4 34 C 2 26 -2 26 -4 34 C -6 40 -12 40 -14 34 C -18 22 -22 12 -22 0 Z';
-  page.drawSvgPath(toothD, { x: A4.w / 2, y: A4.h - 200, color: WHITE, borderColor: INK, borderWidth: 1.4 });
-  sprinkleStars(page, [[A4.w / 2 - 46, A4.h - 206, 5], [A4.w / 2 + 48, A4.h - 214, 6], [A4.w / 2 + 34, A4.h - 250, 3.5], [A4.w / 2 - 38, A4.h - 246, 4]]);
+  drawSpot(page, await spot(doc, 'tooth'), { x: A4.w / 2 - 55, y: A4.h - 290, w: 110 });
   let y = A4.h - 300;
   centred(page, sans, 'This is to certify that', { y, size: 11, color: MUTED });
   y -= 44; rule(page, 120, y, A4.w - 120, y, { color: INK, thickness: 0.8 });
@@ -496,8 +528,7 @@ async function buildToothPocket(item) {
   rule(page, cx - s / 2, cy + s / 2, cx + s / 2, cy + s / 2, { dash: [2, 2], color: MUTED });
   rule(page, cx - s / 2, cy - s / 2, cx + s / 2, cy - s / 2, { dash: [2, 2], color: MUTED });
   // tooth and label on the body (which becomes the front)
-  const toothD = 'M -14 0 C -14 -17 14 -17 14 0 C 14 8 11 14 9 22 C 8 26 4 26 3 22 C 1 17 -1 17 -3 22 C -4 26 -8 26 -9 22 C -11 14 -14 8 -14 0 Z';
-  page.drawSvgPath(toothD, { x: cx, y: cy + 30, color: WHITE, borderColor: INK, borderWidth: 1.1 });
+  drawSpot(page, await spot(doc, 'tooth'), { x: cx - 32, y: cy - 10, w: 64 });
   centred(page, serif, 'For the Tooth Fairy', { y: cy - 36, size: 15, color: RED, x0: cx - s / 2, x1: cx + s / 2 });
   centred(page, sans, 'fold', { y: cy + s / 2 + 40, size: 7, color: MUTED, x0: cx - s / 2, x1: cx + s / 2 });
   // note card
@@ -530,7 +561,8 @@ async function buildSantaLetter(item) {
   const fonts = { serif, sans };
   const page = addPage(doc, WHITE);
   page.drawRectangle({ x: 30, y: 30, width: A4.w - 60, height: A4.h - 60, borderColor: RED, borderWidth: 1.2 });
-  [[70, A4.h - 70], [A4.w - 70, A4.h - 70], [70, 70], [A4.w - 70, 70]].forEach(([x, y]) => snowflake(page, x, y, 14, RED));
+  const holly = await spot(doc, 'holly');
+  [[44, A4.h - 112], [A4.w - 112, A4.h - 112], [44, 44], [A4.w - 112, 44]].forEach(([x, y]) => drawSpot(page, holly, { x, y, w: 68 }));
   centred(page, sans, 'EXPRESS DELIVERY · THE NORTH POLE', { y: A4.h - 76, size: 8.5, color: RED });
   centred(page, serif, 'Dear Santa,', { y: A4.h - 140, size: 40, color: INK });
   let y = A4.h - 186;
@@ -602,11 +634,12 @@ async function buildFoldCard(item) {
   page.drawText(back, { x: A4.w / 2 + bw / 2, y: A4.h - 44, size: 7, font: sans, color: MUTED, rotate: degrees(180) });
   // front
   const front = { x0: 0, x1: A4.w, yTop: mid - 30, yBottom: 40 };
-  item.drawFront(page, fonts, front);
+  await item.drawFront(page, fonts, front, doc);
   return doc;
 }
 
-function easterFront(page, fonts, { yTop, yBottom }) {
+async function easterFront(page, fonts, { yTop, yBottom }, doc) {
+  drawSpot(page, await spot(doc, 'chick'), { x: 54, y: yBottom + 40, w: 120 });
   const cx = A4.w / 2, cy = (yTop + yBottom) / 2 + 14;
   // the egg: an ellipse slightly fatter at the bottom, built from two half-ellipses
   const rx = 125, ryTop = 175, ryBot = 140;
@@ -661,39 +694,12 @@ function leaf(page, x, y, len, angle) {
   const a = ((angle + 90) * Math.PI) / 180;
   rule(page, x - Math.cos(a) * len * 0.4, y + Math.sin(a) * len * 0.4, x + Math.cos(a) * len * 0.4, y - Math.sin(a) * len * 0.4, { color: LINE, thickness: 0.8 });
 }
-function mothersFront(page, fonts, { yTop, yBottom }) {
-  const cx = A4.w / 2;
-  const base = yBottom + 70;
-  // vase
-  page.drawSvgPath('M -40 0 L 40 0 C 44 -40 56 -70 56 -110 L -56 -110 C -56 -70 -44 -40 -40 0 Z', { x: cx, y: base + 110, borderColor: LINE, borderWidth: 1.6 });
-  rule(page, cx - 56, base + 110, cx + 56, base + 110, { color: LINE, thickness: 1.6 });
-  for (let y = base + 20; y < base + 100; y += 20) rule(page, cx - 46 + (y - base) * 0.1, y, cx + 46 - (y - base) * 0.1, y, { color: LINE, thickness: 0.8 });
-  const top = base + 110;
-  // stems and flowers
-  const blooms = [[-90, 150, 30, 6], [-30, 200, 36, 7], [40, 180, 32, 5], [100, 140, 28, 6], [0, 120, 22, 8]];
-  blooms.forEach(([dx, h, r]) => stem(page, cx + dx * 0.2, top, cx + dx, top + h - r * 0.8));
-  blooms.forEach(([dx, h, r, p]) => flower(page, cx + dx, top + h, r, p));
-  leaf(page, cx - 50, top + 70, 44, -35);
-  leaf(page, cx + 52, top + 60, 44, 30);
-  leaf(page, cx - 10, top + 50, 36, 10);
-  sprinkleStars(page, [[cx - 150, yTop - 40, 6], [cx + 150, yTop - 60, 5], [cx - 130, base + 90, 4]]);
+async function mothersFront(page, fonts, { yTop, yBottom }, doc) {
+  drawSpot(page, await spot(doc, 'mothers-day'), { x: 40, y: yBottom + 50, w: A4.w - 80, h: yTop - yBottom - 60 });
   centred(page, fonts.serif, 'Happy Mother’s Day', { y: yBottom + 10, size: 30, color: INK });
 }
-function fathersFront(page, fonts, { yTop, yBottom }) {
-  const cx = A4.w / 2, cy = (yTop + yBottom) / 2 + 30;
-  // ribbon tails
-  page.drawSvgPath('M -28 0 L -52 90 L -30 78 L -14 96 L 0 10 Z', { x: cx, y: cy - 40, borderColor: LINE, borderWidth: 1.4 });
-  page.drawSvgPath('M 28 0 L 52 90 L 30 78 L 14 96 L 0 10 Z', { x: cx, y: cy - 40, borderColor: LINE, borderWidth: 1.4 });
-  // medal
-  page.drawCircle({ x: cx, y: cy, size: 92, borderColor: LINE, borderWidth: 2 });
-  page.drawCircle({ x: cx, y: cy, size: 78, borderColor: LINE, borderWidth: 1.1 });
-  for (let i = 0; i < 24; i++) {
-    const a = (i * Math.PI * 2) / 24;
-    rule(page, cx + Math.cos(a) * 80, cy + Math.sin(a) * 80, cx + Math.cos(a) * 90, cy + Math.sin(a) * 90, { color: LINE, thickness: 1 });
-  }
-  drawPath(page, starPath(44), cx, cy + 10, { borderWidth: 1.6 });
-  centred(page, fonts.serif, 'No. 1', { y: cy - 58, size: 20, color: INK });
-  sprinkleStars(page, [[cx - 140, cy + 100, 8], [cx + 140, cy + 80, 7], [cx - 150, cy - 60, 5], [cx + 150, cy - 90, 6], [cx - 100, yTop - 20, 4], [cx + 110, yTop - 30, 5]]);
+async function fathersFront(page, fonts, { yTop, yBottom }, doc) {
+  drawSpot(page, await spot(doc, 'fathers-day'), { x: 40, y: yBottom + 50, w: A4.w - 80, h: yTop - yBottom - 60 });
   centred(page, fonts.serif, 'Happy Father’s Day', { y: yBottom + 10, size: 30, color: INK });
 }
 
@@ -1008,52 +1014,52 @@ export const CATEGORIES = [
 
 const ITEMS = [
   ...COLOURING.map(([file, title, description, age]) => ({ slug: `colouring-${file.replace(/^\d+-/, '')}`, title: `${title} Colouring Page`, category: 'colouring', age, description, file, caption: title, build: buildColouring })),
-  { slug: 'baby-monthly-milestone-cards', title: 'Monthly Milestone Cards', category: 'baby', age: 'Babies', description: 'Hello World, one to eleven months, and One Whole Year. Fourteen cards to photograph beside your baby as they grow.', cards: MONTH_CARDS, build: buildSquareCards },
-  { slug: 'baby-firsts-cards', title: 'Baby Firsts Cards', category: 'baby', age: 'Babies', description: 'First smile, first tooth, first steps and nine more. Twelve cards with a space for the date.', cards: FIRSTS, build: buildSquareCards },
+  { slug: 'baby-monthly-milestone-cards', title: 'Monthly Milestone Cards', category: 'baby', age: 'Babies', description: 'Hello World, one to eleven months, and One Whole Year. Fourteen cards to photograph beside your baby as they grow.', cards: MONTH_CARDS, spot: 'bunny', build: buildSquareCards },
+  { slug: 'baby-firsts-cards', title: 'Baby Firsts Cards', category: 'baby', age: 'Babies', description: 'First smile, first tooth, first steps and nine more. Twelve cards with a space for the date.', cards: FIRSTS, spot: 'teddy', build: buildSquareCards },
   { slug: 'nursery-pennant-alphabet', title: 'Pennant Alphabet Banner', category: 'nursery', age: 'All ages', description: 'A to Z pennants plus a heart, a star and an ampersand. Print the letters you need, thread a ribbon, spell any name.', labels: bannerLetters, perPage: 6, build: buildPennants },
-  { slug: 'lunchbox-love-notes', title: 'Lunchbox Love Notes', category: 'lunchbox', age: '4–10 years', description: 'Twenty-four little notes to tuck into a lunchbox. Encouragement, hugs and a reminder to eat the crusts.', notes: LOVE_NOTES, grid: { cols: 3, rows: 4 }, draw: lunchboxCard, build: buildNoteCards },
-  { slug: 'lunchbox-jokes', title: 'Lunchbox Jokes', category: 'lunchbox', age: '5–10 years', description: 'Twenty-four groan-worthy jokes for the lunch table. One a day for nearly five school weeks.', notes: JOKES, grid: { cols: 3, rows: 4 }, draw: lunchboxCard, build: buildNoteCards },
-  { slug: 'star-reward-chart', title: 'Star Reward Chart', category: 'charts', age: '3–8 years', description: 'Write up to six goals, colour a star each time one is met. Ten stars a row, then the treat.', kicker: 'Reward chart', sub: 'Write a goal on each line. Colour in a star every time it happens. When a row is full, it is time for the reward you agreed on.', rows: ['', '', '', '', '', ''], cols: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], cell: 'star', labelW: 170, rightLabel: 'Reward', bottomNote: 'Tip: pick goals your child can finish in a day (shoes on without being asked, teeth brushed twice) and let them do the colouring in. The chart works because they see the row filling up.', build: buildChart },
-  { slug: 'morning-routine-chart', title: 'Morning Routine Chart', category: 'charts', age: '3–8 years', description: 'Seven morning jobs, seven days. Tick the circle and get out the door with fewer reminders.', kicker: 'Routine chart', sub: 'Tick each circle as the job is done. Stick it on the fridge at child height.', rows: ['Wake up and stretch', 'Get dressed', 'Eat breakfast', 'Brush teeth', 'Brush hair', 'Pack bag', 'Shoes on'], cols: dayCols, cell: 'circle', labelW: 160, build: buildChart },
-  { slug: 'bedtime-routine-chart', title: 'Bedtime Routine Chart', category: 'charts', age: '2–7 years', description: 'Bath, pyjamas, teeth, story, cuddle, lights out. The same six steps every night, in the same order.', kicker: 'Routine chart', sub: 'The same steps in the same order every night is what makes bedtime easier. Tick the circles together.', rows: ['Tidy up toys', 'Bath time', 'Pyjamas on', 'Brush teeth', 'Story time', 'Cuddle and goodnight', 'Lights out'], cols: dayCols, cell: 'circle', labelW: 160, build: buildChart },
-  { slug: 'weekly-chore-chart', title: 'Weekly Chore Chart', category: 'charts', age: '5–12 years', description: 'Eight blank rows for the jobs you choose, Monday to Sunday. Stars to colour when they are done.', kicker: 'Chore chart', sub: 'Write the jobs on the lines. Colour a star for each one done. Pocket money optional.', rows: ['', '', '', '', '', '', '', ''], cols: dayCols, cell: 'star', labelW: 170, build: buildChart },
-  { slug: 'potty-training-chart', title: 'Potty Training Chart', category: 'charts', age: '2–4 years', description: 'Seven days, six tries a day. A star for every sit, whatever happens. Gentle, no pressure.', kicker: 'Potty chart', sub: 'A star for every try, not just every success. Sitting down and giving it a go is the whole job at this age.', rows: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'], cols: ['Try 1', 'Try 2', 'Try 3', 'Try 4', 'Try 5', 'Try 6'], cell: 'star', labelW: 110, rightLabel: 'Prize', bottomNote: 'Tip: keep the chart beside the potty and let them put the colour on the star themselves. Accidents do not take stars away. Ever.', build: buildChart },
+  { slug: 'lunchbox-love-notes', title: 'Lunchbox Love Notes', category: 'lunchbox', age: '4–10 years', description: 'Twenty-four little notes to tuck into a lunchbox. Encouragement, hugs and a reminder to eat the crusts.', notes: LOVE_NOTES, grid: { cols: 3, rows: 4 }, spot: 'teddy', draw: lunchboxCard, build: buildNoteCards },
+  { slug: 'lunchbox-jokes', title: 'Lunchbox Jokes', category: 'lunchbox', age: '5–10 years', description: 'Twenty-four groan-worthy jokes for the lunch table. One a day for nearly five school weeks.', notes: JOKES, grid: { cols: 3, rows: 4 }, spot: 'rocket', draw: lunchboxCard, build: buildNoteCards },
+  { slug: 'star-reward-chart', title: 'Star Reward Chart', category: 'charts', age: '3–8 years', description: 'Write up to six goals, colour a star each time one is met. Ten stars a row, then the treat.', kicker: 'Reward chart', sub: 'Write a goal on each line. Colour in a star every time it happens. When a row is full, it is time for the reward you agreed on.', rows: ['', '', '', '', '', ''], cols: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], cell: 'star', labelW: 170, rightLabel: 'Reward', headingSpot: 'stars', bottomNote: 'Tip: pick goals your child can finish in a day (shoes on without being asked, teeth brushed twice) and let them do the colouring in. The chart works because they see the row filling up.', build: buildChart },
+  { slug: 'morning-routine-chart', title: 'Morning Routine Chart', category: 'charts', age: '3–8 years', description: 'Seven morning jobs, seven days. Tick the circle and get out the door with fewer reminders.', kicker: 'Routine chart', sub: 'Tick each circle as the job is done. Stick it on the fridge at child height.', rows: ['Wake up and stretch', 'Get dressed', 'Eat breakfast', 'Brush teeth', 'Brush hair', 'Pack bag', 'Shoes on'], cols: dayCols, cell: 'circle', labelW: 160, headingSpot: 'rocket', build: buildChart },
+  { slug: 'bedtime-routine-chart', title: 'Bedtime Routine Chart', category: 'charts', age: '2–7 years', description: 'Bath, pyjamas, teeth, story, cuddle, lights out. The same six steps every night, in the same order.', kicker: 'Routine chart', sub: 'The same steps in the same order every night is what makes bedtime easier. Tick the circles together.', rows: ['Tidy up toys', 'Bath time', 'Pyjamas on', 'Brush teeth', 'Story time', 'Cuddle and goodnight', 'Lights out'], cols: dayCols, cell: 'circle', labelW: 160, headingSpot: 'bunny', build: buildChart },
+  { slug: 'weekly-chore-chart', title: 'Weekly Chore Chart', category: 'charts', age: '5–12 years', description: 'Eight blank rows for the jobs you choose, Monday to Sunday. Stars to colour when they are done.', kicker: 'Chore chart', sub: 'Write the jobs on the lines. Colour a star for each one done. Pocket money optional.', rows: ['', '', '', '', '', '', '', ''], cols: dayCols, cell: 'star', labelW: 170, headingSpot: 'stars', build: buildChart },
+  { slug: 'potty-training-chart', title: 'Potty Training Chart', category: 'charts', age: '2–4 years', description: 'Seven days, six tries a day. A star for every sit, whatever happens. Gentle, no pressure.', kicker: 'Potty chart', sub: 'A star for every try, not just every success. Sitting down and giving it a go is the whole job at this age.', rows: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'], cols: ['Try 1', 'Try 2', 'Try 3', 'Try 4', 'Try 5', 'Try 6'], cell: 'star', labelW: 110, rightLabel: 'Prize', headingSpot: 'stars', bottomNote: 'Tip: keep the chart beside the potty and let them put the colour on the star themselves. Accidents do not take stars away. Ever.', build: buildChart },
   { slug: 'tooth-fairy-certificate', title: 'Tooth Fairy Certificate', category: 'party', age: '5–9 years', description: 'An official certificate of a lost tooth, signed by the Tooth Fairy herself. Fill in the name, date and the going rate.', build: buildToothCertificate },
-  { slug: 'tooth-fairy-pocket', title: 'Tooth Fairy Pocket', category: 'party', age: '5–9 years', description: 'A fold-up envelope for the tooth and a little note card to go under the pillow with it.', build: buildToothPocket },
+  { slug: 'tooth-fairy-pocket', title: 'Tooth Fairy Pocket', category: 'party', age: '5–9 years', description: 'A fold-up envelope for the tooth and a little note card to go under the pillow with it.', headingSpot: 'tooth', build: buildToothPocket },
   { slug: 'happy-birthday-bunting', title: 'Happy Birthday Bunting', category: 'party', age: 'All ages', description: 'HAPPY BIRTHDAY on fifteen big pennants, two to a page, plus two blank ones for a name. Thread on ribbon and hang.', labels: [...'HAPPY'.split(''), '♥', ...'BIRTHDAY'.split(''), '★', ' '], perPage: 2, build: buildPennants },
   { slug: 'birthday-number-pennants', title: 'Birthday Number Pennants', category: 'party', age: 'All ages', description: 'Numbers 0 to 9 as big pennants, so the bunting can say exactly how old. Two to a page.', labels: '0123456789'.split(''), perPage: 2, colour: GREEN, band: TEAL, build: buildPennants },
   { slug: 'cupcake-toppers', title: 'Cupcake Toppers', category: 'party', age: 'All ages', description: 'Twelve round toppers: Happy Birthday, Make a Wish, Hooray, and stars, hearts and cakes to mix in. Cut out and tape to a toothpick.', notes: [
     { kind: 'text', text: 'Happy\nBirthday', colour: RED }, { kind: 'star', colour: RED }, { kind: 'text', text: 'Make\na wish', colour: GREEN }, { kind: 'cake', colour: INK },
     { kind: 'heart', colour: RED }, { kind: 'text', text: 'Hooray!', colour: RED }, { kind: 'star', colour: GREEN }, { kind: 'text', text: 'Party\ntime', colour: INK },
     { kind: 'cake', colour: RED }, { kind: 'text', text: 'Happy\nBirthday', colour: GREEN }, { kind: 'heart', colour: GREEN }, { kind: 'text', text: 'Yay!', colour: RED },
-  ], grid: { cols: 3, rows: 4 }, draw: cupcakeTopper, footNote: 'cut around the dotted circle and tape to a toothpick', build: buildNoteCards },
+  ], grid: { cols: 3, rows: 4 }, spot: 'cupcake', draw: cupcakeTopper, footNote: 'cut around the dotted circle and tape to a toothpick', build: buildNoteCards },
   { slug: 'party-thank-you-tags', title: 'Party Thank-You Tags', category: 'party', age: 'All ages', description: 'Eight tags for party bags: thank you for coming, with a line for each guest’s name.', notes: [
-    { title: 'Thank you for coming', orn: 'balloon', colour: RED }, { title: 'Thanks for celebrating', orn: 'star', colour: GREEN }, { title: 'You made my day', orn: 'heart', colour: RED }, { title: 'Thank you for coming', orn: 'star', colour: RED },
-    { title: 'Thanks for the fun', orn: 'balloon', colour: GREEN }, { title: 'Thank you for coming', orn: 'heart', colour: GREEN }, { title: 'So glad you came', orn: 'star', colour: RED }, { title: 'Thanks for celebrating', orn: 'balloon', colour: RED },
-  ], grid: { cols: 2, rows: 4 }, draw: giftTag, build: buildNoteCards },
+    { title: 'Thank you for coming', orn: 'spot', colour: RED }, { title: 'Thanks for celebrating', orn: 'star', colour: GREEN }, { title: 'You made my day', orn: 'heart', colour: RED }, { title: 'Thank you for coming', orn: 'star', colour: RED },
+    { title: 'Thanks for the fun', orn: 'spot', colour: GREEN }, { title: 'Thank you for coming', orn: 'heart', colour: GREEN }, { title: 'So glad you came', orn: 'star', colour: RED }, { title: 'Thanks for celebrating', orn: 'spot', colour: RED },
+  ], grid: { cols: 2, rows: 4 }, spot: 'balloons', draw: giftTag, build: buildNoteCards },
   { slug: 'letter-to-santa', title: 'Letter to Santa', category: 'christmas', age: '3–9 years', description: 'A guided letter to the North Pole with prompts for the year’s kindnesses, a wish for someone else, and the reindeer snacks.', build: buildSantaLetter },
-  { slug: 'christmas-countdown', title: 'Sleeps Until Christmas', category: 'christmas', age: '2–8 years', description: 'Twenty-four baubles to colour, one a day through December.', build: buildCountdown },
+  { slug: 'christmas-countdown', title: 'Sleeps Until Christmas', category: 'christmas', age: '2–8 years', description: 'Twenty-four baubles to colour, one a day through December.', headingSpot: 'holly', build: buildCountdown },
   { slug: 'christmas-gift-tags', title: 'Christmas Gift Tags', category: 'christmas', age: 'All ages', description: 'Eight gift tags with trees, baubles, snowflakes and stars. To and from lines, hole mark for the ribbon.', notes: [
-    { title: 'Merry Christmas', orn: 'tree', colour: GREEN }, { title: 'For you', orn: 'bauble', colour: RED }, { title: 'Happy Christmas', orn: 'snowflake', colour: rgb(0.35, 0.55, 0.7) }, { title: 'With love', orn: 'star', colour: RED },
-    { title: 'Merry Christmas', orn: 'bauble', colour: GREEN }, { title: 'Do not open until Christmas', orn: 'tree', colour: RED }, { title: 'Season’s greetings', orn: 'star', colour: GREEN }, { title: 'From Santa', orn: 'snowflake', colour: RED },
-  ], grid: { cols: 2, rows: 4 }, draw: giftTag, build: buildNoteCards },
+    { title: 'Merry Christmas', orn: 'spot', colour: GREEN }, { title: 'For you', orn: 'bauble', colour: RED }, { title: 'Happy Christmas', orn: 'snowflake', colour: rgb(0.35, 0.55, 0.7) }, { title: 'With love', orn: 'star', colour: RED },
+    { title: 'Merry Christmas', orn: 'bauble', colour: GREEN }, { title: 'Do not open until Christmas', orn: 'spot', colour: RED }, { title: 'Season’s greetings', orn: 'star', colour: GREEN }, { title: 'From Santa', orn: 'snowflake', colour: RED },
+  ], grid: { cols: 2, rows: 4 }, spot: 'holly', draw: giftTag, build: buildNoteCards },
   ...XMAS_COLOURING.map(([file, title, description, age]) => ({ slug: `colouring-${file.replace(/^\d+-/, '')}`, title: `${title} Colouring Page`, category: 'christmas', age, description, file, caption: title, build: buildColouring })),
-  { slug: 'christmas-memory-match', title: 'Christmas Memory Match', category: 'christmas', age: '3–8 years', description: 'Twelve pairs of Little Poppin Christmas paintings on cut-out cards. Robins, reindeer, gingerbread and snow.', files: FILES_MEMORY_XMAS, build: buildMemory },
+  { slug: 'christmas-memory-match', title: 'Christmas Memory Match', category: 'christmas', age: '3–8 years', description: 'Twelve pairs of Little Poppin Christmas paintings on cut-out cards. Robins, reindeer, gingerbread and snow.', files: FILES_MEMORY_XMAS, headingSpot: 'holly', build: buildMemory },
   { slug: 'easter-card-to-colour', title: 'Easter Card to Colour', category: 'cards', age: '3–8 years', description: 'A fold-in-half card with a big patterned egg on the front. Colour it, fold it, write inside.', drawFront: easterFront, build: buildFoldCard },
   { slug: 'mothers-day-card-to-colour', title: 'Mother’s Day Card to Colour', category: 'cards', age: '3–9 years', description: 'A vase of flowers to colour on the front of a fold-in-half card. Blank inside for the message.', drawFront: mothersFront, build: buildFoldCard },
   { slug: 'fathers-day-card-to-colour', title: 'Father’s Day Card to Colour', category: 'cards', age: '3–9 years', description: 'A No. 1 Dad medal to colour on the front of a fold-in-half card. Blank inside.', drawFront: fathersFront, build: buildFoldCard },
-  { slug: 'easter-egg-patterns', title: 'Decorate the Eggs', category: 'cards', age: '3–8 years', description: 'Six Easter eggs with stripes, dots, zigzags, hearts and stars to colour, or cut out for an Easter tree.', build: buildEggSheet },
-  { slug: 'nursery-memory-match', title: 'Nursery Memory Match', category: 'games', age: '3–8 years', description: 'Twelve pairs of Little Poppin nursery paintings on cut-out cards. Bunnies, whales, owls and a unicorn.', files: FILES_MEMORY_NURSERY, build: buildMemory },
-  { slug: 'dot-to-dot-star-and-heart', title: 'Dot to Dot: Star and Heart', category: 'games', age: '3–6 years', description: 'Two easy dot-to-dots, 10 and 20 dots, then colour them in.', shapes: [{ title: 'A Star', points: STAR_PTS }, { title: 'A Heart', points: HEART_PTS }], build: buildDotToDot },
-  { slug: 'dot-to-dot-sailboat', title: 'Dot to Dot: Sailboat', category: 'games', age: '4–7 years', description: 'Twelve dots make a sailboat. Add the sea and the sun yourself.', shapes: [{ title: 'A Sailboat', points: BOAT_PTS }], build: buildDotToDot },
-  { slug: 'dot-to-dot-rocket', title: 'Dot to Dot: Rocket', category: 'games', age: '4–7 years', description: 'Fourteen dots to a rocket, ready for a window, flames and a planet or two.', shapes: [{ title: 'A Rocket', points: ROCKET_PTS }], build: buildDotToDot },
-  { slug: 'dot-to-dot-house', title: 'Dot to Dot: House', category: 'games', age: '3–6 years', description: 'Eleven dots to a little house with a chimney. Then draw who lives there.', shapes: [{ title: 'A House', points: HOUSE_PTS }], build: buildDotToDot },
-  { slug: 'baby-shower-predictions', title: 'Baby Predictions', category: 'shower', age: 'Grown-ups', description: 'Date, time, weight, hair, eyes and a name guess. One sheet per guest, kept until the big day.', build: buildPredictions },
-  { slug: 'baby-shower-wishes', title: 'Wishes for Baby', category: 'shower', age: 'Grown-ups', description: 'I hope you learn, I hope you laugh at, I hope you never forget. A keepsake sheet for every guest to fill in.', build: buildWishes },
-  { slug: 'baby-shower-word-scramble', title: 'Baby Word Scramble', category: 'shower', age: 'Grown-ups', description: 'Sixteen scrambled baby words with an answer page for the host.', words: SCRAMBLE_WORDS, build: buildScramble },
-  { slug: 'baby-shower-gift-bingo', title: 'Gift Bingo', category: 'shower', age: 'Grown-ups', description: 'Six different bingo cards. Cross off the presents as they are opened; first line wins.', words: BINGO_WORDS, cards: 6, build: buildBingo },
-  { slug: 'baby-shower-advice-cards', title: 'Advice for the New Parents', category: 'shower', age: 'Grown-ups', description: 'Two cards per sheet with three prompts each, for the advice that actually helps at 3 a.m.', build: buildAdviceCards },
-  { slug: 'baby-shower-nappy-raffle', title: 'Nappy Raffle Tickets', category: 'shower', age: 'Grown-ups', description: 'Numbered tickets with tear-off stubs. Bring nappies, take a ticket, win a prize.', build: buildRaffle },
+  { slug: 'easter-egg-patterns', title: 'Decorate the Eggs', category: 'cards', age: '3–8 years', description: 'Six Easter eggs with stripes, dots, zigzags, hearts and stars to colour, or cut out for an Easter tree.', headingSpot: 'chick', build: buildEggSheet },
+  { slug: 'nursery-memory-match', title: 'Nursery Memory Match', category: 'games', age: '3–8 years', description: 'Twelve pairs of Little Poppin nursery paintings on cut-out cards. Bunnies, whales, owls and a unicorn.', files: FILES_MEMORY_NURSERY, headingSpot: 'stars', build: buildMemory },
+  { slug: 'dot-to-dot-star-and-heart', title: 'Dot to Dot: Star and Heart', category: 'games', age: '3–6 years', description: 'Two easy dot-to-dots, 10 and 20 dots, then colour them in.', shapes: [{ title: 'A Star', points: STAR_PTS }, { title: 'A Heart', points: HEART_PTS }], headingSpot: 'stars', build: buildDotToDot },
+  { slug: 'dot-to-dot-sailboat', title: 'Dot to Dot: Sailboat', category: 'games', age: '4–7 years', description: 'Twelve dots make a sailboat. Add the sea and the sun yourself.', shapes: [{ title: 'A Sailboat', points: BOAT_PTS }], headingSpot: 'stars', build: buildDotToDot },
+  { slug: 'dot-to-dot-rocket', title: 'Dot to Dot: Rocket', category: 'games', age: '4–7 years', description: 'Fourteen dots to a rocket, ready for a window, flames and a planet or two.', shapes: [{ title: 'A Rocket', points: ROCKET_PTS }], headingSpot: 'rocket', build: buildDotToDot },
+  { slug: 'dot-to-dot-house', title: 'Dot to Dot: House', category: 'games', age: '3–6 years', description: 'Eleven dots to a little house with a chimney. Then draw who lives there.', shapes: [{ title: 'A House', points: HOUSE_PTS }], headingSpot: 'teddy', build: buildDotToDot },
+  { slug: 'baby-shower-predictions', title: 'Baby Predictions', category: 'shower', age: 'Grown-ups', description: 'Date, time, weight, hair, eyes and a name guess. One sheet per guest, kept until the big day.', headingSpot: 'rattle', build: buildPredictions },
+  { slug: 'baby-shower-wishes', title: 'Wishes for Baby', category: 'shower', age: 'Grown-ups', description: 'I hope you learn, I hope you laugh at, I hope you never forget. A keepsake sheet for every guest to fill in.', headingSpot: 'rattle', build: buildWishes },
+  { slug: 'baby-shower-word-scramble', title: 'Baby Word Scramble', category: 'shower', age: 'Grown-ups', description: 'Sixteen scrambled baby words with an answer page for the host.', words: SCRAMBLE_WORDS, headingSpot: 'rattle', build: buildScramble },
+  { slug: 'baby-shower-gift-bingo', title: 'Gift Bingo', category: 'shower', age: 'Grown-ups', description: 'Six different bingo cards. Cross off the presents as they are opened; first line wins.', words: BINGO_WORDS, cards: 6, headingSpot: 'rattle', build: buildBingo },
+  { slug: 'baby-shower-advice-cards', title: 'Advice for the New Parents', category: 'shower', age: 'Grown-ups', description: 'Two cards per sheet with three prompts each, for the advice that actually helps at 3 a.m.', headingSpot: 'rattle', build: buildAdviceCards },
+  { slug: 'baby-shower-nappy-raffle', title: 'Nappy Raffle Tickets', category: 'shower', age: 'Grown-ups', description: 'Numbered tickets with tear-off stubs. Bring nappies, take a ticket, win a prize.', headingSpot: 'rattle', build: buildRaffle },
 ];
 
 // ============================================================================
