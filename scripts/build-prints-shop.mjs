@@ -9,6 +9,7 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { PRINT_META } from '../lib/print-meta.js';
 import { SERIES, SERIES_IDS, listSeriesMasters, pngSize } from './print-series.mjs';
+import { pinterestClaimTag } from './site-config.mjs';
 
 // The repo is wherever this script lives. It used to be a hard-coded path to a checkout
 // that no longer exists, which made the build write into thin air.
@@ -461,6 +462,7 @@ const page = `<!DOCTYPE html>
   <title>Art Prints. Instant Digital Downloads | Little Poppin</title>
   <meta name="description" content="Dreamy magical art prints. Instant high-resolution digital downloads. Nursery art, star-sign prints, magical academia and festive collections." />
   <link rel="canonical" href="${SITE}/prints.html" />
+  ${pinterestClaimTag()}
   <!-- Open Graph / social sharing -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Little Poppin" />

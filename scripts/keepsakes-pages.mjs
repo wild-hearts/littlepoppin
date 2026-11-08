@@ -3,6 +3,7 @@
 // a crawler can follow. Called by build-keepsakes.mjs; the catalogue it reads is keepsakes/designs.js.
 import fs from 'node:fs';
 import path from 'node:path';
+import { pinterestClaimTag } from './site-config.mjs';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const FONTS = 'https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Serif+Display&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Italiana&family=Lato:wght@300;400;700&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Syne:wght@400..800&display=swap';
@@ -10,7 +11,9 @@ const FONTS = 'https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wg
 // `up` is the relative prefix back to the site root ('' at the root, '../' one level down). Pages reached
 // by a rewrite (/c/<slug>, /i/<slug>, /manage/<id>, /sent/<key>) sit at the root but are served one
 // level down, so they use absolute paths.
-const head = ({ title, description, canonical, image, jsonLd = [], up, noindex = false, extraCss = '' }) => `<!DOCTYPE html>
+// `price` (AUD cents) makes the page a product for Rich Pins: og:type product plus the price tags Pinterest
+// reads. `image` should be the 2:3 pin (images/pins) where one exists; pinImage() below picks it.
+const head = ({ title, description, canonical, image, jsonLd = [], up, noindex = false, extraCss = '', price = null }) => `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -18,12 +21,16 @@ const head = ({ title, description, canonical, image, jsonLd = [], up, noindex =
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />
   ${noindex ? '<meta name="robots" content="noindex, nofollow" />\n  <meta name="referrer" content="no-referrer" />' : `<link rel="canonical" href="${canonical}" />`}
-  <meta property="og:type" content="website" />
+  ${pinterestClaimTag()}
+  <meta property="og:type" content="${price ? 'product' : 'website'}" />
   <meta property="og:site_name" content="Little Poppin" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
   ${canonical ? `<meta property="og:url" content="${canonical}" />` : ''}
-  <meta property="og:image" content="${image}" />
+  <meta property="og:image" content="${image}" />${price ? `
+  <meta property="og:price:amount" content="${(price / 100).toFixed(2)}" />
+  <meta property="og:price:currency" content="AUD" />
+  <meta property="og:availability" content="instock" />` : ''}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(description)}" />
@@ -139,6 +146,8 @@ export async function buildPages({ REPO, SITE }) {
   const { CARD_OCCASIONS, cardsFor, CARDS, card, INVITE_OCCASIONS, invitesFor, INVITES, money, CARD_PRICE, INVITE_PRICE } = D;
   const write = (rel, html) => { const f = path.join(REPO, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, html); };
   const img = (p) => `${SITE}${p}`;
+  // The 2:3 pin rendered by scripts/build-pins.mjs, when it exists; else the 4:5 artwork.
+  const pinImage = (slug, fallback) => fs.existsSync(path.join(REPO, 'images', 'pins', `${slug}.jpg`)) ? `${SITE}/images/pins/${slug}.jpg` : img(fallback);
   const cardPrice = money(CARD_PRICE), invPrice = money(INVITE_PRICE);
   const written = [];
 
@@ -211,7 +220,7 @@ ${footer('../')}
     // the editor, one page per card
     for (const c of CARDS) {
       const o = D.cardOccasion(c.occasion);
-      write(`card/${c.slug}.html`, `${head({ title: `${c.front}: ${c.name} e-card | Little Poppin`, description: `Send the ${c.name} ${o.name.toLowerCase()} e-card with your own message, opened like a real envelope on their phone. ${cardPrice}.`, canonical: `${SITE}/card/${c.slug}.html`, image: img(c.design.preview), up: '../', jsonLd: [{ '@context': 'https://schema.org', '@type': 'Product', name: `${c.name} ${o.name} e-card`, description: `${c.front}: a Little Poppin e-card on the ${c.name} print, with your message inside.`, image: img(c.design.preview), brand: { '@type': 'Brand', name: 'Little Poppin' }, offers: { '@type': 'Offer', price: (CARD_PRICE / 100).toFixed(2), priceCurrency: 'AUD', availability: 'https://schema.org/InStock', url: `${SITE}/card/${c.slug}.html` } }, crumbs([['Home', `${SITE}/`], ['E-cards', `${SITE}/cards.html`], [o.name, `${SITE}/cards/${o.slug}.html`], [c.name, `${SITE}/card/${c.slug}.html`]])] })}
+      write(`card/${c.slug}.html`, `${head({ title: `${c.front}: ${c.name} e-card | Little Poppin`, description: `Send the ${c.name} ${o.name.toLowerCase()} e-card with your own message, opened like a real envelope on their phone. ${cardPrice}.`, canonical: `${SITE}/card/${c.slug}.html`, image: pinImage(`card-${c.slug}`, c.design.preview), price: CARD_PRICE, up: '../', jsonLd: [{ '@context': 'https://schema.org', '@type': 'Product', name: `${c.name} ${o.name} e-card`, description: `${c.front}: a Little Poppin e-card on the ${c.name} print, with your message inside.`, image: img(c.design.preview), brand: { '@type': 'Brand', name: 'Little Poppin' }, offers: { '@type': 'Offer', price: (CARD_PRICE / 100).toFixed(2), priceCurrency: 'AUD', availability: 'https://schema.org/InStock', url: `${SITE}/card/${c.slug}.html` } }, crumbs([['Home', `${SITE}/`], ['E-cards', `${SITE}/cards.html`], [o.name, `${SITE}/cards/${o.slug}.html`], [c.name, `${SITE}/card/${c.slug}.html`]])] })}
 ${nav('../')}
   <header class="kp-hero" style="padding-bottom:0">
     <div class="container">
@@ -278,7 +287,7 @@ ${footer('../')}
     }
     for (const d of INVITES) {
       const o = D.inviteOccasion(d.occasion);
-      write(`invitation/${d.slug}.html`, `${head({ title: `${d.name} ${o.name} invitation | Little Poppin`, description: `Make a ${o.name.toLowerCase()} invitation on the ${d.name} print: a wax-sealed envelope, your details, a countdown and replies on your private host page. ${invPrice}.`, canonical: `${SITE}/invitation/${d.slug}.html`, image: img(d.preview), up: '../', jsonLd: [{ '@context': 'https://schema.org', '@type': 'Product', name: `${d.name} ${o.name} invitation`, description: `A Little Poppin online invitation on the ${d.name} print, with replies and a guest list.`, image: img(d.preview), brand: { '@type': 'Brand', name: 'Little Poppin' }, offers: { '@type': 'Offer', price: (INVITE_PRICE / 100).toFixed(2), priceCurrency: 'AUD', availability: 'https://schema.org/InStock', url: `${SITE}/invitation/${d.slug}.html` } }, crumbs([['Home', `${SITE}/`], ['Invitations', `${SITE}/invitations.html`], [o.name, `${SITE}/invitations/${o.slug}.html`], [d.name, `${SITE}/invitation/${d.slug}.html`]])] })}
+      write(`invitation/${d.slug}.html`, `${head({ title: `${d.name} ${o.name} invitation | Little Poppin`, description: `Make a ${o.name.toLowerCase()} invitation on the ${d.name} print: a wax-sealed envelope, your details, a countdown and replies on your private host page. ${invPrice}.`, canonical: `${SITE}/invitation/${d.slug}.html`, image: pinImage(`invitation-${d.slug}`, d.preview), price: INVITE_PRICE, up: '../', jsonLd: [{ '@context': 'https://schema.org', '@type': 'Product', name: `${d.name} ${o.name} invitation`, description: `A Little Poppin online invitation on the ${d.name} print, with replies and a guest list.`, image: img(d.preview), brand: { '@type': 'Brand', name: 'Little Poppin' }, offers: { '@type': 'Offer', price: (INVITE_PRICE / 100).toFixed(2), priceCurrency: 'AUD', availability: 'https://schema.org/InStock', url: `${SITE}/invitation/${d.slug}.html` } }, crumbs([['Home', `${SITE}/`], ['Invitations', `${SITE}/invitations.html`], [o.name, `${SITE}/invitations/${o.slug}.html`], [d.name, `${SITE}/invitation/${d.slug}.html`]])] })}
 ${nav('../')}
   <header class="kp-hero" style="padding-bottom:0">
     <div class="container">

@@ -1067,12 +1067,17 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://littlepoppin.com/cards/birthday.html</loc>
+    <loc>https://littlepoppin.com/cards/christmas.html</loc>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://littlepoppin.com/cards/christmas.html</loc>
+    <loc>https://littlepoppin.com/cards/first-christmas.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/cards/birthday.html</loc>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -1148,11 +1153,6 @@
   </url>
   <url>
     <loc>https://littlepoppin.com/cards/halloween.html</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://littlepoppin.com/cards/first-christmas.html</loc>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -2557,6 +2557,431 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-under-the-reef.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-owl-night.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-llama-fiesta.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-wizard-school.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-secret-agent.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-robot-factory.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-monster-trucks.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-little-bakers.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-disco-dance.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-rainbow-day.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-panda-bamboo.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-kitten-cafe.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-sloth-slow-day.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-moon-base.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-explorer-expedition.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-time-machine.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-monster-mash.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-magic-show.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-enchanted-forest.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-boats-and-buoys.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-outback-stars.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-jungle-trek.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-bike-rally.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-tram-city.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-lemonade-stand.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-taco-fiesta.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-popcorn-movie.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-slime-lab.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-skate-park.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-sushi-roll.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-flip-out.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-water-balloon.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-surf-club.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-karaoke-night.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-build-it.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-trampoline.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-bowling.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-mini-golf.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-zoo-keeper.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-beach-day.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-autumn-leaves.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-spring-garden.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-starry-night.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-sunflower-field.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-cherry-blossom.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-sausage-sizzle.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-donut-day.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-pizza-party.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-pool-party.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-backyard-bbq.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-dinosaur-dig.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-rocket-launch.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-unicorn-meadow.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-construction-crew.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-pony-paddock.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-puddle-jumpers.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-pirate-cove.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-mermaid-lagoon.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-ice-cream-parlour.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-fire-station.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-race-day.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-science-lab.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-art-studio.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-sleepy-moon.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-woodland-picnic.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-rock-pool.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-little-farmhands.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-dragons-keep.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-superhero-hq.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-train-station.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-little-aviators.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-tea-party.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-soccer-cup.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-butterfly-meadow.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-arctic-friends.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-puppy-party.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-garbage-truck.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-cupcake-kitchen.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-circus-big-top.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-snow-day.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-fairy-door.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-gaming-level-up.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-posies.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-campfire-kid.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-birthday--wc-neon-nights.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://littlepoppin.com/invitation/kids-birthday--birthday-cake-bear.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -2717,6 +3142,46 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://littlepoppin.com/invitation/first-birthday--wc-watermelon-picnic.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/first-birthday--wc-splash-pad.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/first-birthday--wc-water-play.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/first-birthday--wc-bush-babies.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/first-birthday--wc-busy-bees.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/first-birthday--wc-hot-air-balloon.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/first-birthday--wc-one-big-year.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/first-birthday--wc-half-birthday.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://littlepoppin.com/invitation/first-birthday--one-candle-cake.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -2793,6 +3258,16 @@
   </url>
   <url>
     <loc>https://littlepoppin.com/invitation/first-birthday--sleepy-lamb-on-a-cloud.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/baby-shower--wc-little-cloud.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/baby-shower--wc-sprinkle.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -2907,6 +3382,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://littlepoppin.com/invitation/meet-the-baby--wc-sip-and-see.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://littlepoppin.com/invitation/meet-the-baby--moses-basket-fawn.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -3017,6 +3497,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://littlepoppin.com/invitation/christening--wc-christening.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://littlepoppin.com/invitation/christening--dove-and-font.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -3082,6 +3567,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://littlepoppin.com/invitation/gender-reveal--wc-balloon-pop.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://littlepoppin.com/invitation/gender-reveal--pea-in-a-pod.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -3133,6 +3623,46 @@
   </url>
   <url>
     <loc>https://littlepoppin.com/invitation/gender-reveal--hot-air-balloon-voyage.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/teddy-bears-picnic--wc-woodland-picnic.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/teddy-bears-picnic--wc-tea-party.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/teddy-bears-picnic--wc-butterfly-meadow.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/teddy-bears-picnic--wc-watermelon-picnic.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/teddy-bears-picnic--wc-spring-garden.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/teddy-bears-picnic--wc-sunflower-field.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/teddy-bears-picnic--wc-busy-bees.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/teddy-bears-picnic--wc-bush-babies.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -3222,6 +3752,31 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://littlepoppin.com/invitation/sleepover--wc-sleepy-moon.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/sleepover--wc-popcorn-movie.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/sleepover--wc-starry-night.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/sleepover--wc-owl-night.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/sleepover--wc-karaoke-night.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://littlepoppin.com/invitation/sleepover--rainy-window-cat.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -3283,6 +3838,31 @@
   </url>
   <url>
     <loc>https://littlepoppin.com/invitation/sleepover--owl-family.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/wizard-party--wc-wizard-school.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/wizard-party--wc-magic-show.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/wizard-party--wc-dragons-keep.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/wizard-party--wc-enchanted-forest.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/wizard-party--wc-fairy-door.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -3372,6 +3952,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://littlepoppin.com/invitation/halloween--wc-monster-mash.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://littlepoppin.com/invitation/halloween--pumpkin-patch-kitten.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -3443,6 +4028,16 @@
   </url>
   <url>
     <loc>https://littlepoppin.com/invitation/halloween--lantern-path.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-christmas--wc-snow-day.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://littlepoppin.com/invitation/kids-christmas--wc-arctic-friends.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
   </url>
