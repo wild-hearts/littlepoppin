@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-08T00:45:36.228Z",
+ "generated": "2026-11-08T01:31:25.126Z",
  "site": "https://littlepoppin.com",
  "utm": "utm_source=pinterest&utm_medium=social&utm_campaign=catalogue",
  "start": "2026-11-09",
@@ -17,34 +17,76 @@
  ],
  "batches": [
   {
-   "file": "pinterest/littlepoppin-pins-01-of-05.csv",
-   "pins": 200,
+   "file": "pinterest/littlepoppin-pins-01-of-09.csv",
+   "pins": 100,
    "first": "2026-11-09",
-   "last": "2026-11-21"
+   "last": "2026-11-15",
+   "uploadFrom": "2026-11-09",
+   "status": "in Pinterest since 8 Nov 2026"
   },
   {
-   "file": "pinterest/littlepoppin-pins-02-of-05.csv",
-   "pins": 200,
+   "file": "pinterest/littlepoppin-pins-02-of-09.csv",
+   "pins": 91,
+   "first": "2026-11-15",
+   "last": "2026-11-20",
+   "uploadFrom": "2026-11-15",
+   "status": "to upload"
+  },
+  {
+   "file": "pinterest/littlepoppin-pins-03-of-09.csv",
+   "pins": 96,
    "first": "2026-11-21",
-   "last": "2026-12-04"
+   "last": "2026-11-26",
+   "uploadFrom": "2026-11-21",
+   "status": "to upload"
   },
   {
-   "file": "pinterest/littlepoppin-pins-03-of-05.csv",
-   "pins": 200,
-   "first": "2026-12-04",
-   "last": "2026-12-16"
+   "file": "pinterest/littlepoppin-pins-04-of-09.csv",
+   "pins": 96,
+   "first": "2026-11-27",
+   "last": "2026-12-02",
+   "uploadFrom": "2026-11-27",
+   "status": "to upload"
   },
   {
-   "file": "pinterest/littlepoppin-pins-04-of-05.csv",
-   "pins": 200,
-   "first": "2026-12-16",
-   "last": "2026-12-29"
+   "file": "pinterest/littlepoppin-pins-05-of-09.csv",
+   "pins": 96,
+   "first": "2026-12-03",
+   "last": "2026-12-08",
+   "uploadFrom": "2026-12-03",
+   "status": "to upload"
   },
   {
-   "file": "pinterest/littlepoppin-pins-05-of-05.csv",
-   "pins": 51,
-   "first": "2026-12-29",
-   "last": "2027-01-01"
+   "file": "pinterest/littlepoppin-pins-06-of-09.csv",
+   "pins": 96,
+   "first": "2026-12-09",
+   "last": "2026-12-14",
+   "uploadFrom": "2026-12-09",
+   "status": "to upload"
+  },
+  {
+   "file": "pinterest/littlepoppin-pins-07-of-09.csv",
+   "pins": 96,
+   "first": "2026-12-15",
+   "last": "2026-12-20",
+   "uploadFrom": "2026-12-15",
+   "status": "to upload"
+  },
+  {
+   "file": "pinterest/littlepoppin-pins-08-of-09.csv",
+   "pins": 96,
+   "first": "2026-12-21",
+   "last": "2026-12-26",
+   "uploadFrom": "2026-12-21",
+   "status": "to upload"
+  },
+  {
+   "file": "pinterest/littlepoppin-pins-09-of-09.csv",
+   "pins": 84,
+   "first": "2026-12-27",
+   "last": "2027-01-01",
+   "uploadFrom": "2026-12-27",
+   "status": "to upload"
   }
  ],
  "pins": [

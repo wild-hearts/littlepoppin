@@ -7,8 +7,8 @@ What is in the repo after `npm run build:pins`:
 
 | Thing | Where | What it is |
 |-------|-------|------------|
-| Pin images | `images/pins/<slug>.jpg` | 802 pins, 1000×1500 (Pinterest's 2:3), the artwork with a caption strip in the house fonts |
-| Bulk-upload spreadsheets | `pinterest/littlepoppin-pins-01-of-04.csv` … `04-of-04.csv` | 796 Little Poppin pins, 200 a file, in Pinterest's own column layout |
+| Pin images | `images/pins/<slug>.jpg` | 857 pins, 1000×1500 (Pinterest's 2:3), the artwork with a caption strip in the house fonts |
+| Bulk-upload spreadsheets | `pinterest/littlepoppin-pins-01-of-09.csv` … `09-of-09.csv` | 851 Little Poppin pins, 100 a file or fewer (Pinterest's scheduled-pin cap), in Pinterest's own column layout |
 | Tadavite's calendars | `pinterest/tadavite-advent.csv` | 6 pins for tadavite.com/advent (The Unhinged Elf, Luxury Christmas Advent, 24 Days of Us, Rude Christmas, Support for Ukraine, the for-kids page) |
 | RSS feed | `https://littlepoppin.com/pinterest.xml` | The newest 50 items, for Pinterest's auto-publish |
 | Manifest | `pinterest/pins.json` | Every pin's title, board, date and links; the test suite checks it |
@@ -23,13 +23,14 @@ The boards the spreadsheets create (Pinterest makes a board or section the first
 - **Baby Shower** (baby shower, gender reveal, meet-the-baby and christening invitations)
 - **Printables**, and **Free Printables** once the free library has its pages
 
-Publish dates run from the day after the script was run, 15 pins a day for eight weeks, between 13:00 and
-01:00 UTC (US daytime, where most of Pinterest is). The Tadavite pins go one a day from tomorrow.
+Publish dates run from 9 Nov 2026, 16 pins a day for eight weeks, between 13:00 and 01:00 UTC (US daytime, where
+most of Pinterest is). The Tadavite pins go one a day from 15 Nov.
 
 ## Naomi's steps
 
-Pinterest's rules that shape these steps (help.pinterest.com, read 8 Nov 2026): the bulk tool takes 200
-pins a file; a scheduled pin can be at most 30 days ahead; a scheduled pin's date is read as UTC.
+Pinterest's rules that shape these steps (help.pinterest.com, read 8 Nov 2026, plus what the account did that day): the bulk
+tool takes 200 rows a file but the account holds at most 100 scheduled pins; a scheduled pin can be at most 30 days
+ahead; a scheduled pin's date is read as UTC.
 
 ### 1. Open Pinterest Business
 
@@ -76,32 +77,39 @@ profile picture, then **+** → **Board**, and make the seven boards named above
 (capital letters matter: `Nursery Art`, `Magical Academia Art`, `Christmas`, `E-cards`, `Kids' Party
 Invitations`, `Baby Shower`, `Printables`).
 
-### 5. Upload the spreadsheets, one every two weeks
+### 5. Upload the spreadsheets, one a week
 
-Pinterest will only schedule 30 days ahead, so upload each file when its first date is within the month:
+**Pinterest keeps at most 100 scheduled pins on an account.** We learned this on 8 Nov 2026: a 200-row file
+created exactly 100 pins and a second upload created none. So the files are now cut at 100 rows or fewer, each
+covering about six days, and a file goes up on the morning of its first date, when the previous file's pins have
+all published and the queue is empty. Uploading early does nothing: the rows over the cap are silently dropped.
 
-| File | First pin | Last pin | Upload it |
-|------|-----------|----------|-----------|
-| `pinterest/littlepoppin-pins-01-of-04.csv` | 9 Nov 2026 | 22 Nov 2026 | now |
-| `pinterest/littlepoppin-pins-02-of-04.csv` | 22 Nov 2026 | 5 Dec 2026 | now, or from 8 Nov |
-| `pinterest/littlepoppin-pins-03-of-04.csv` | 5 Dec 2026 | 19 Dec 2026 | from 20 Nov |
-| `pinterest/littlepoppin-pins-04-of-04.csv` | 19 Dec 2026 | 1 Jan 2027 | from 5 Dec |
-| `pinterest/tadavite-advent.csv` | 9 Nov 2026 | 14 Nov 2026 | now, before December |
+| File | Pins | First pin (UTC) | Last pin (UTC) | Upload on |
+|------|------|-----------------|----------------|-----------|
+| `pinterest/littlepoppin-pins-01-of-09.csv` | 100 | 9 Nov 2026 | 15 Nov 2026 | **already in Pinterest** (uploaded 8 Nov 2026), do not upload again |
+| `pinterest/littlepoppin-pins-02-of-09.csv` | 91 | 15 Nov 2026 | 20 Nov 2026 | 15 Nov 2026 |
+| `pinterest/littlepoppin-pins-03-of-09.csv` | 96 | 21 Nov 2026 | 26 Nov 2026 | 21 Nov 2026 |
+| `pinterest/littlepoppin-pins-04-of-09.csv` | 96 | 27 Nov 2026 | 2 Dec 2026 | 27 Nov 2026 |
+| `pinterest/littlepoppin-pins-05-of-09.csv` | 96 | 3 Dec 2026 | 8 Dec 2026 | 3 Dec 2026 |
+| `pinterest/littlepoppin-pins-06-of-09.csv` | 96 | 9 Dec 2026 | 14 Dec 2026 | 9 Dec 2026 |
+| `pinterest/littlepoppin-pins-07-of-09.csv` | 96 | 15 Dec 2026 | 20 Dec 2026 | 15 Dec 2026 |
+| `pinterest/littlepoppin-pins-08-of-09.csv` | 96 | 21 Dec 2026 | 26 Dec 2026 | 21 Dec 2026 |
+| `pinterest/littlepoppin-pins-09-of-09.csv` | 84 | 27 Dec 2026 | 1 Jan 2027 | 27 Dec 2026 |
+| `pinterest/tadavite-advent.csv` | 6 | 15 Nov 2026 | 20 Nov 2026 | with file 02, on 15 Nov 2026 |
 
-The dates above are what the script wrote on 8 Nov 2026. If you upload later than that, ask Winston to re-run
-the build so the dates start tomorrow (or run it yourself: `npm run build:pins -- --start 2026-11-20`,
-then `git add pinterest pinterest.xml && git commit`): Pinterest refuses a date in the past. The pin images
-must be live on littlepoppin.com before you upload, so this branch has to be merged and deployed first.
+Dates are UTC; on Pinterest's profile they show in your own time zone, so the 9 Nov pins read as "Tue 10/11, 12:00 am".
+If a file's upload day has passed, ask Winston to re-run the build with a later `--start` (the whole schedule moves;
+file 01 must then be regenerated too and will no longer match what is in Pinterest, which is fine once those 100 have
+published). Winston can do the uploads from your signed-in Chrome; say "upload the next CSV".
 
-1. Go to https://www.pinterest.com/pin-builder/bulk-create/ (or on https://www.pinterest.com/ click **Create**
-   at the top left, then **Bulk create Pins**).
-2. Click **Upload** next to "Upload .csv or .txt file" and choose the file from the `pinterest/` folder of the
-   repo on your Mac (`/Users/naomi/Sites/littlepoppin/pinterest/`).
-3. Wait. You will see a progress bar and then "Pins created" with a count; a file of 200 can take a couple of
-   hours to finish, and Pinterest emails you when it has. Rows it could not read are listed with the reason.
-4. Check https://www.pinterest.com/ → your profile → **Scheduled**: the pins appear there, newest first,
-   each on its board, with the date it will go out.
-5. Repeat for the next file on the date in the table.
+1. Go to https://au.pinterest.com/settings/bulk-create-pins/ (Settings → **Bulk create Pins**).
+2. Click the grey **Drop your .csv file here or click to upload a file** box and choose the file from
+   `/Users/naomi/Sites/littlepoppin-pinterest/pinterest/` (or the repo's `pinterest/` folder).
+3. You will see **Upload successful** straight away; the pins appear within an hour or two under your profile →
+   **Created** → **Scheduled Pins** (https://au.pinterest.com/littlepoppin/scheduled-pins/), each with its date and board.
+   Pinterest emails you if any row failed.
+4. Check the count there is about 100. If it is still 100 the day before the next upload, the previous batch has not
+   drained yet: wait a day.
 
 ### 6. Add the RSS feed for auto-publish
 
@@ -123,7 +131,7 @@ picks it up from the feed within 24 hours and pins it to the board you choose he
 
 ## How it works (for whoever opens this next)
 
-- `scripts/build-pins.mjs` (`npm run build:pins`) reads the catalogues (`data/prints.json`, `keepsakes/designs.js`
+- `scripts/build-pins.mjs` (`npm run build:pins -- --start 2026-11-09`, the date the live schedule starts from) reads the catalogues (`data/prints.json`, `keepsakes/designs.js`
   for cards and invitations, `lib/extras-products.generated.js` for the paid printables, `data/free-printables.json`
   for the free ones once each has a `page`), renders a pin per item into `images/pins/`, writes the CSVs, the
   manifest and `pinterest.xml`. A pin is only re-rendered when its artwork is newer (`--force` redraws all);

@@ -127,7 +127,7 @@ shop art), scheduled sending.
 ## Pinterest (added 8 Nov 2026)
 
 Every print, e-card, invitation and printable has a 2:3 pin (`images/pins/<slug>.jpg`), Pinterest bulk-upload
-CSVs (`pinterest/`, 200 a file, Pinterest's exact header) and an RSS feed for auto-publish (`pinterest.xml` at
+CSVs (`pinterest/`, 100 a file or fewer because Pinterest holds at most 100 scheduled pins, Pinterest's exact header) and an RSS feed for auto-publish (`pinterest.xml` at
 the site root). `npm run build:pins` makes all three from the catalogues; `npm run build:pins:tadavite` writes
 one CSV for Tadavite's live advent calendars. Product pages carry Rich Pin tags (`og:type product`, AUD price,
 the pin as `og:image`) from the page builders, and the site-claim tag comes from `PINTEREST_DOMAIN_VERIFY` in

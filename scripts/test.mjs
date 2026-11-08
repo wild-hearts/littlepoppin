@@ -556,7 +556,7 @@ group('Pinterest');
   for (const f of csvs) {
     const rows = parseCsv(fs.readFileSync(path.join('pinterest', f), 'utf8'));
     if (rows[0].join(',') !== HEADER) problems.push(`${f}: header is "${rows[0].join(',')}"`);
-    if (rows.length - 1 > 200) problems.push(`${f}: ${rows.length - 1} pins, Pinterest takes 200 a file`);
+    if (rows.length - 1 > 100) problems.push(`${f}: ${rows.length - 1} pins, Pinterest holds at most 100 scheduled pins`);
     for (const r of rows.slice(1)) {
       pinRows++;
       const [title, media, board, thumb, desc, link, when, keywords] = r;
@@ -572,7 +572,7 @@ group('Pinterest');
       if (!keywords) problems.push(`${f}: no keywords: ${title}`);
     }
   }
-  check(`${pinRows} pins across ${csvs.length} CSVs: exact header, ≤200 a file, every Media URL and Link a file in the repo, titles ≤100, descriptions ≤500, UTC dates`, problems.length === 0, problems.slice(0, 5).join('\n      '));
+  check(`${pinRows} pins across ${csvs.length} CSVs: exact header, ≤100 a file, every Media URL and Link a file in the repo, titles ≤100, descriptions ≤500, UTC dates`, problems.length === 0, problems.slice(0, 5).join('\n      '));
   const manifest = JSON.parse(fs.readFileSync('pinterest/pins.json', 'utf8'));
   const unpinned = [...fs.readdirSync('print').map((f) => `/print/${f}`), ...fs.readdirSync('card').map((f) => `/card/${f}`), ...fs.readdirSync('invitation').map((f) => `/invitation/${f}`)]
     .filter((pg) => !manifest.pins.some((p) => p.link.includes(pg)));

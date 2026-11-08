@@ -6,9 +6,9 @@
 //   images/pins/<slug>.jpg      A 1000×1500 (2:3) pin per item: the artwork with a quiet caption
 //                               strip in the house fonts. Pinterest's preferred shape, and the
 //                               page builders use it as og:image so Rich Pins get the same picture.
-//   pinterest/*.csv             Pinterest's bulk-upload spreadsheets, 200 pins a file, with the
-//                               exact header Pinterest documents. Publish dates stagger the whole
-//                               catalogue over eight weeks, a handful a day, in UTC.
+//   pinterest/*.csv             Pinterest's bulk-upload spreadsheets, 100 pins a file or fewer (Pinterest
+//                               keeps at most 100 scheduled pins), with the exact header Pinterest
+//                               documents. Publish dates run 16 a day over eight weeks, in UTC.
 //   pinterest.xml               An RSS feed of the newest 50 items (with enclosure images) at the
 //                               site root, for Pinterest's auto-publish.
 //
@@ -21,8 +21,9 @@
 // Pinterest's rules (help.pinterest.com, "Bulk upload Pins", read 8 Nov 2026): Title ≤ 100 chars,
 // Description ≤ 500, Media URL a public link to the image file, board created if missing (a
 // "Board/Section" path makes a section), Publish date "YYYY-MM-DDTHH:MM:SS" in UTC or blank to
-// publish now, Keywords comma-separated. Scheduling is allowed up to 30 days ahead, so each CSV
-// covers about two weeks and docs/PINTEREST.md says when to upload each one.
+// publish now, Keywords comma-separated. Scheduling is allowed up to 30 days ahead and the account
+// holds at most 100 scheduled pins, so each CSV covers about a week and docs/PINTEREST.md says when
+// to upload each one.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,8 +37,9 @@ const args = process.argv.slice(2);
 const FORCE = args.includes('--force');
 const startArg = args.includes('--start') ? args[args.indexOf('--start') + 1] : undefined;
 const UTM = 'utm_source=pinterest&utm_medium=social&utm_campaign=catalogue';
-const PER_FILE = 200;                                     // Pinterest's bulk-upload limit
+const PER_FILE = 100;                                     // Pinterest accepts 200 rows a file but keeps at most 100 scheduled pins
 const DAYS = 56;                                          // eight weeks
+const PER_DAY = 16;                                       // fixed, so re-running reproduces the dates of pins already in Pinterest
 const FEED_SIZE = 50;
 
 // ---------------------------------------------------------------- the catalogue → pins
@@ -165,7 +167,7 @@ for (let i = 0; groups.some((g) => i < g.length); i++) for (const g of groups) i
 
 const start = startArg ? new Date(`${startArg}T00:00:00Z`) : new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1));
 if (Number.isNaN(start.getTime())) throw new Error(`--start wants YYYY-MM-DD, got ${startArg}`);
-const perDay = Math.ceil(all.length / DAYS);
+const perDay = PER_DAY;
 // Spread each day's pins from 13:00 to 01:00 UTC: US daytime and evening, where most of Pinterest is.
 all.forEach((item, i) => {
   const day = Math.floor(i / perDay), slot = i % perDay;
@@ -183,18 +185,31 @@ const queue = [...all];
 await Promise.all(Array.from({ length: 6 }, async () => { for (let it; (it = queue.shift());) if (await renderPin({ src: path.join(REPO, it.image.replace(/^\//, '')), out: path.join(REPO, 'images', 'pins', `${it.slug}.jpg`), caption: it.caption, force: FORCE })) rendered++; }));
 
 // ---------------------------------------------------------------- CSVs
+// Pinterest keeps at most 100 scheduled pins on an account (seen 8 Nov 2026: a 200-row file created exactly 100,
+// a second upload created none), so a file is uploaded only when the previous one has published. The first file is
+// the 100 rows already in Pinterest (uploaded 8 Nov 2026); every later file is cut at a day boundary, 100 rows or
+// fewer, so it can go up on the morning of its first date with the queue empty.
 const HEADER = ['Title', 'Media URL', 'Pinterest board', 'Thumbnail', 'Description', 'Link', 'Publish date', 'Keywords'];
 const cell = (s) => `"${String(s ?? '').replace(/"/g, '""')}"`;
 const row = (it) => [it.title, it.media, it.board, '', it.description, it.link, it.publish, it.keywords.join(', ')].map(cell).join(',');
 for (const f of fs.readdirSync(path.join(REPO, 'pinterest'))) if (/^littlepoppin-pins-\d+-of-\d+\.csv$/.test(f)) fs.unlinkSync(path.join(REPO, 'pinterest', f));
-const files = Math.ceil(all.length / PER_FILE);
-const batches = [];
-for (let b = 0; b < files; b++) {
-  const items = all.slice(b * PER_FILE, (b + 1) * PER_FILE);
+const dayOf = (it) => it.publish.slice(0, 10);
+const fileGroups = [all.slice(0, PER_FILE)];
+let cur = [];
+const rest = all.slice(PER_FILE);
+for (let i = 0; i < rest.length;) {
+  let j = i; while (j < rest.length && dayOf(rest[j]) === dayOf(rest[i])) j++;   // one whole day
+  const day = rest.slice(i, j);
+  if (cur.length && cur.length + day.length > PER_FILE) { fileGroups.push(cur); cur = []; }
+  cur.push(...day); i = j;
+}
+if (cur.length) fileGroups.push(cur);
+const files = fileGroups.length;
+const batches = fileGroups.map((items, b) => {
   const name = `littlepoppin-pins-${String(b + 1).padStart(2, '0')}-of-${String(files).padStart(2, '0')}.csv`;
   fs.writeFileSync(path.join(REPO, 'pinterest', name), `${HEADER.join(',')}\n${items.map(row).join('\n')}\n`);
-  batches.push({ file: `pinterest/${name}`, pins: items.length, first: items[0].publish.slice(0, 10), last: items.at(-1).publish.slice(0, 10) });
-}
+  return { file: `pinterest/${name}`, pins: items.length, first: dayOf(items[0]), last: dayOf(items.at(-1)), uploadFrom: dayOf(items[0]), status: b === 0 ? 'in Pinterest since 8 Nov 2026' : 'to upload' };
+});
 
 // ---------------------------------------------------------------- manifest
 const boards = [...new Set(all.map((i) => i.board.split('/')[0]))];
@@ -239,5 +254,6 @@ ${feedItems.join('\n')}
 `);
 
 console.log(`${all.length} pins (${printPins.length} prints, ${setPins.length} sets, ${cardPins.length} cards, ${invitePins.length} invitations, ${printablePins.length} printables, ${freePins.length} free); ${rendered} images rendered, ${all.length - rendered} kept.`);
-console.log(`${files} CSV file(s) in pinterest/, ${perDay} pins a day from ${batches[0].first} to ${batches.at(-1).last}; pinterest.xml carries ${feedItems.length} items.`);
+console.log(`${files} CSV file(s) in pinterest/ (${PER_FILE} rows or fewer, cut at day boundaries), ${perDay} pins a day from ${batches[0].first} to ${batches.at(-1).last}; pinterest.xml carries ${feedItems.length} items.`);
+for (const b of batches) console.log(`  ${b.file}: ${b.pins} pins, ${b.first} → ${b.last}, upload from ${b.uploadFrom} (${b.status})`);
 console.log(`Boards: ${boards.join(', ')}`);

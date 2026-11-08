@@ -44,7 +44,11 @@ async function fetchBuffer(url) { const r = await fetch(url); if (!r.ok) throw n
 fs.mkdirSync(path.join(REPO, 'images', 'pins'), { recursive: true });
 fs.mkdirSync(path.join(REPO, 'pinterest'), { recursive: true });
 const rows = [];
-const start = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1, 14));
+// Dates: one a day at 14:00 UTC from --start YYYY-MM-DD, else tomorrow. Upload this file together with a Little Poppin
+// file that has room under the 100-scheduled-pins cap (docs/PINTEREST.md).
+const startArg = process.argv.includes('--start') ? process.argv[process.argv.indexOf('--start') + 1] : null;
+const start = startArg ? new Date(`${startArg}T14:00:00Z`) : new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1, 14));
+if (Number.isNaN(start.getTime())) throw new Error(`--start wants YYYY-MM-DD, got ${startArg}`);
 for (const [i, cal] of CALENDARS.entries()) {
   const page = `${TADAVITE}/advent/${cal.slug}`;
   const html = await fetchText(page);
