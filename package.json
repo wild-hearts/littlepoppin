@@ -17,9 +17,13 @@
     "publish:prints": "node scripts/publish-prints.mjs",
     "publish:extras": "node scripts/publish-extras.mjs",
     "build:keepsakes": "node scripts/build-keepsakes.mjs",
-    "dev:keepsakes": "node scripts/dev/keepsakes-server.mjs"
+    "dev:keepsakes": "node scripts/dev/keepsakes-server.mjs",
+    "build:pins": "node scripts/build-pins.mjs",
+    "build:pins:tadavite": "node scripts/build-tadavite-pins.mjs"
   },
   "devDependencies": {
-    "jpeg-js": "^0.4.4"
+    "jpeg-js": "^0.4.4",
+    "opentype.js": "^2.0.0",
+    "sharp": "^0.35.5"
   }
 }

@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { GENERATED_EXTRAS } from '../lib/extras-products.generated.js';
+import { pinterestClaimTag } from './site-config.mjs';
 import { PRINTIFY_CONFIG } from '../lib/printify-config.generated.js';
 import { GUIDES } from './guides-content.mjs';
 
@@ -177,10 +178,14 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const slugOf = (sku) => sku.replace(/^(print|set)-/, '');
 const money = (cents) => (cents / 100).toFixed(2);
+// The 2:3 pin rendered by scripts/build-pins.mjs, when it exists (Pinterest's preferred shape); else the artwork.
+const pinImage = (slug, fallback) => fs.existsSync(path.join(REPO, 'images', 'pins', `${slug}.jpg`)) ? `${SITE}/images/pins/${slug}.jpg` : fallback;
 
 // Shared chrome so product pages look and navigate exactly like the rest of the site.
 // `up` is the relative prefix back to the site root (product pages live one level down).
-const head = ({ title, description, canonical, image, jsonLd, up }) => `<!DOCTYPE html>
+// `price` (AUD cents) adds the price tags Pinterest reads for product Rich Pins; listing pages leave it out
+// and are plain `website` pages.
+const head = ({ title, description, canonical, image, jsonLd, up, price = null }) => `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -188,12 +193,16 @@ const head = ({ title, description, canonical, image, jsonLd, up }) => `<!DOCTYP
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />
   <link rel="canonical" href="${canonical}" />
-  <meta property="og:type" content="product" />
+  ${pinterestClaimTag()}
+  <meta property="og:type" content="${price ? 'product' : 'website'}" />
   <meta property="og:site_name" content="Little Poppin" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
   <meta property="og:url" content="${canonical}" />
-  <meta property="og:image" content="${image}" />
+  <meta property="og:image" content="${image}" />${price ? `
+  <meta property="og:price:amount" content="${(price / 100).toFixed(2)}" />
+  <meta property="og:price:currency" content="AUD" />
+  <meta property="og:availability" content="instock" />` : ''}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(description)}" />
@@ -440,7 +449,7 @@ ${infoBlocks(p)}
 ${relatedGrid(related, up)}`;
 
   fs.writeFileSync(path.join(REPO, 'print', `${slug}.html`),
-    head({ title, description: p.description, canonical: url, image: img, jsonLd, up }) + body + foot(up, p.sku));
+    head({ title, description: p.description, canonical: url, image: pinImage(`print-${slug}`, img), price: p.price, jsonLd, up }) + body + foot(up, p.sku));
   written++;
 }
 
@@ -539,7 +548,7 @@ ${infoBlocks(s, { isSet: true })}
 ${relatedGrid(comps, up)}`;
 
   fs.writeFileSync(path.join(REPO, 'set', `${slug}.html`),
-    head({ title, description: s.description, canonical: url, image: img, jsonLd, up }) + body + foot(up, s.sku));
+    head({ title, description: s.description, canonical: url, image: pinImage(`set-${slug}`, img), price: s.price, jsonLd, up }) + body + foot(up, s.sku));
   written++;
 }
 

@@ -529,6 +529,76 @@ group('Cards and invitations');
 }
 
 // ---------------------------------------------------------------------------
+group('Pinterest');
+{
+  // scripts/build-pins.mjs writes the pins, the bulk-upload CSVs and the RSS feed; this checks what Pinterest
+  // will check, so a broken Media URL or an over-long title is caught here and not at upload time.
+  const { PINTEREST_DOMAIN_VERIFY } = await import('../scripts/site-config.mjs');
+  const HEADER = 'Title,Media URL,Pinterest board,Thumbnail,Description,Link,Publish date,Keywords';
+  const parseCsv = (text) => {   // RFC 4180: quoted cells, doubled quotes, no newlines inside cells (the builder strips them)
+    const rows = [];
+    for (const line of text.split('\n').filter(Boolean)) {
+      const cells = []; let cur = '', q = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (q) { if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; } else if (ch === '"') q = false; else cur += ch; }
+        else if (ch === '"') q = true; else if (ch === ',') { cells.push(cur); cur = ''; } else cur += ch;
+      }
+      cells.push(cur); rows.push(cells);
+    }
+    return rows;
+  };
+  const local = (url) => path.join(REPO, url.replace(/^https:\/\/littlepoppin\.com/, '').split('?')[0].split('#')[0]);
+  const csvs = fs.existsSync('pinterest') ? fs.readdirSync('pinterest').filter((f) => f.endsWith('.csv')) : [];
+  check('pinterest/ holds the bulk-upload CSVs and the manifest (run `npm run build:pins`)', csvs.length >= 2 && fs.existsSync('pinterest/pins.json'));
+  const problems = [];
+  let pinRows = 0;
+  for (const f of csvs) {
+    const rows = parseCsv(fs.readFileSync(path.join('pinterest', f), 'utf8'));
+    if (rows[0].join(',') !== HEADER) problems.push(`${f}: header is "${rows[0].join(',')}"`);
+    if (rows.length - 1 > 200) problems.push(`${f}: ${rows.length - 1} pins, Pinterest takes 200 a file`);
+    for (const r of rows.slice(1)) {
+      pinRows++;
+      const [title, media, board, thumb, desc, link, when, keywords] = r;
+      if (r.length !== 8) problems.push(`${f}: a row has ${r.length} cells: ${title}`);
+      if (!title || title.length > 100) problems.push(`${f}: title missing or over 100 chars: ${title}`);
+      if (desc.length > 500) problems.push(`${f}: description over 500 chars: ${title}`);
+      if (!board) problems.push(`${f}: no board: ${title}`);
+      if (thumb) problems.push(`${f}: thumbnail set on an image pin: ${title}`);
+      if (!/^https:\/\/littlepoppin\.com\/images\/pins\/[a-z0-9-]+\.jpg$/.test(media) || !fs.existsSync(local(media))) problems.push(`${f}: Media URL not in the repo: ${media}`);
+      if (f.startsWith('littlepoppin') && (!link.startsWith('https://littlepoppin.com/') || !fs.existsSync(local(link)))) problems.push(`${f}: Link is not a page in the repo: ${link}`);
+      if (!link.includes('utm_source=pinterest&utm_medium=social&utm_campaign=catalogue')) problems.push(`${f}: Link has no UTM tag: ${link}`);
+      if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(when)) problems.push(`${f}: Publish date not YYYY-MM-DDTHH:MM:SS: ${when}`);
+      if (!keywords) problems.push(`${f}: no keywords: ${title}`);
+    }
+  }
+  check(`${pinRows} pins across ${csvs.length} CSVs: exact header, ≤200 a file, every Media URL and Link a file in the repo, titles ≤100, descriptions ≤500, UTC dates`, problems.length === 0, problems.slice(0, 5).join('\n      '));
+  const manifest = JSON.parse(fs.readFileSync('pinterest/pins.json', 'utf8'));
+  const unpinned = [...fs.readdirSync('print').map((f) => `/print/${f}`), ...fs.readdirSync('card').map((f) => `/card/${f}`), ...fs.readdirSync('invitation').map((f) => `/invitation/${f}`)]
+    .filter((pg) => !manifest.pins.some((p) => p.link.includes(pg)));
+  check(`every print, card and invitation page has a pin (${manifest.pins.length} pins)`, unpinned.length === 0, unpinned.slice(0, 5).join(', '));
+  const feed = fs.existsSync('pinterest.xml') ? fs.readFileSync('pinterest.xml', 'utf8') : '';
+  const items = [...feed.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((m) => m[1]);
+  const encl = items.map((it) => it.match(/<enclosure url="([^"]+)"/)?.[1]).filter(Boolean);
+  const badEncl = encl.filter((u) => !fs.existsSync(local(u)));
+  const bare = (feed.match(/&(?!amp;|lt;|gt;|quot;|apos;|#\d+;)/g) || []).length;
+  check(`pinterest.xml is an RSS 2.0 feed of ${items.length} items (≤50), each with an enclosure image in the repo, no unescaped &`, feed.startsWith('<?xml') && feed.includes('<rss version="2.0"') && items.length > 0 && items.length <= 50 && encl.length === items.length && badEncl.length === 0 && bare === 0, badEncl.slice(0, 3).join(', '));
+  // Rich Pins: product pages carry og:type product, a price and the 2:3 pin as og:image; every built page carries the claim.
+  const samples = ['print/butterfly-garden.html', fs.readdirSync('card')[0] && `card/${fs.readdirSync('card')[0]}`, fs.readdirSync('invitation')[0] && `invitation/${fs.readdirSync('invitation')[0]}`, 'set/bundle-nursery.html'].filter(Boolean);
+  const notRich = samples.filter((pg) => {
+    const html = fs.readFileSync(pg, 'utf8');
+    const img = html.match(/<meta property="og:image" content="([^"]+)"/)?.[1] || '';
+    return !html.includes('<meta property="og:type" content="product" />') || !/og:price:amount" content="\d+\.\d{2}"/.test(html) || !html.includes('og:price:currency" content="AUD"') || !img.includes('/images/pins/') || !fs.existsSync(local(img));
+  });
+  check('product pages are Rich Pin ready: og:type product, AUD price, 2:3 pin as og:image', notRich.length === 0, notRich.join(', '));
+  if (PINTEREST_DOMAIN_VERIFY) {
+    const tag = `<meta name="p:domain_verify" content="${PINTEREST_DOMAIN_VERIFY}" />`;
+    const unclaimed = ['index.html', 'prints.html', 'cards.html', 'invitations.html', 'printables.html', ...samples].filter((pg) => !fs.readFileSync(pg, 'utf8').includes(tag));
+    check('the Pinterest site claim tag is on the home page and every built page (PINTEREST_DOMAIN_VERIFY)', unclaimed.length === 0, unclaimed.join(', '));
+  }
+}
+
+// ---------------------------------------------------------------------------
 group('Free printables library');
 // scripts/build-printables.mjs writes the PDFs, previews and manifest; build-product-pages.mjs
 // turns the manifest into printables.html and one landing page each. A manifest entry whose
