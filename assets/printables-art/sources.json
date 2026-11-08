@@ -1,0 +1,39 @@
+{
+  "note": "Canva media ids of the generated line art (generate-image, 8 Nov 2026). Files beside this manifest are the exported PNGs, cleaned to pure black and white by scripts/printables-art.py clean.",
+  "colouring": {
+    "butterfly-garden": "MAHaSfl8t5g",
+    "sleepy-bunny": "MAHaSUVrW3o",
+    "hot-air-balloon-dreams": "MAHaSTuj6xQ",
+    "under-the-sea": "MAHaSXe1-jg",
+    "teddy-bears-picnic": "MAHaSXrXg7I",
+    "rainbow-and-clouds": "MAHaSeyxIH8",
+    "unicorn-dreams": "MAHaSf7w7sw",
+    "cuddly-elephant": "MAHaSbsS2c0",
+    "little-dinosaurs": "MAHaSZBer5s",
+    "dreamy-space-adventure": "MAHaSRrc-p8",
+    "little-sailboat": "MAHaSdeNEl4",
+    "sleepy-koala": "MAHaSf3dQ78",
+    "owl-family": "MAHaSf3PUn0",
+    "mushroom-hollow": "MAHaSSKrSDA",
+    "dreamy-bear-cub": "MAHaSerTbCw",
+    "sleepy-lamb-on-a-cloud": "MAHaScYSCsc",
+    "christmas-robin": "MAHaSQgit2E",
+    "little-reindeer": "MAHaSd5ZVds",
+    "skating-penguins": "MAHaSSl3Y-Q",
+    "polar-bear-s-first-christmas": "MAHaSX2p-LQ"
+  },
+  "spots": {
+    "stars": "MAHaSf_T5ZA",
+    "bunny": "MAHaSdk0lGU",
+    "balloons": "MAHaSWgpvpg",
+    "holly": "MAHaSYUMsNY",
+    "chick": "MAHaSYliAkg",
+    "teddy": "MAHaSV5aZaQ",
+    "rocket": "MAHaSTog5Co",
+    "rattle": "MAHaSQavfBo",
+    "cupcake": "MAHaSf0Zys4",
+    "tooth": "MAHaSRPyeIQ",
+    "mothers-day": "MAHaSTEF7ac",
+    "fathers-day": "MAHaSdx5GBg"
+  }
+}
